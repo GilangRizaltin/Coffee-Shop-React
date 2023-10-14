@@ -3,7 +3,7 @@ import React from 'react'
 function filter() {
   return (
     <div
-              className="hidden lg:block w-[301px] lg:w-[388px] h-fit bg-black p-6 flex flex-col gap-4 rounded-3xl text-white"
+              className="hidden  w-[301px] lg:w-[388px] h-fit bg-black p-6 lg:flex flex-col gap-4 rounded-3xl text-white"
             >
               <div className="flex items-center h-[45px]">
                 <p className="flex-1 text-2xl">Filter</p>
@@ -20,13 +20,6 @@ function filter() {
                 />
               </div>
               <p className="text-xl h-[45px]">Category</p>
-              <div className="flex items-center gap-4 h-[45px]">
-                <input
-                  type="checkbox"
-                  className="h-5 w-5 border rounded-LG focus:ring-0 appearance-none checked:bg-orange-500 checked:border-none rounded-md checked:text-black"
-                />
-                <p>Favourite Product</p>
-              </div>
               <div className="relative flex items-center gap-4 h-[45px]">
                 <input
                   type="checkbox"
@@ -49,41 +42,27 @@ function filter() {
                 />
                 <p>Foods</p>
               </div>
-              <div className="flex items-center gap-4 h-[45px]">
-                <input
-                  type="checkbox"
-                  className="h-5 w-5 border rounded-LG focus:ring-0 appearance-none checked:bg-orange-500 checked:border-none rounded-md checked:text-black"
-                />
-                <p>Add-On</p>
-              </div>
               <p className="text-xl h-[45px]">Sort By</p>
               <div className="flex items-center gap-4 h-[45px]">
                 <input
                   type="checkbox"
                   className="h-5 w-5 border rounded-LG focus:ring-0 appearance-none checked:bg-orange-500 checked:border-none rounded-md checked:text-black"
                 />
-                <p>Buy 1 get 1</p>
+                <p>Cheapest</p>
               </div>
               <div className="flex items-center gap-4 h-[45px]">
                 <input
                   type="checkbox"
                   className="h-5 w-5 border rounded-LG focus:ring-0 appearance-none checked:bg-orange-500 checked:border-none rounded-md checked:text-black"
                 />
-                <p>Flash Sale</p>
+                <p>Most Expensive</p>
               </div>
               <div className="flex items-center gap-4 h-[45px]">
                 <input
                   type="checkbox"
                   className="h-5 w-5 border rounded-LG focus:ring-0 appearance-none checked:bg-orange-500 checked:border-none rounded-md checked:text-black"
                 />
-                <p>Birthday Package</p>
-              </div>
-              <div className="flex items-center gap-4 h-[45px]">
-                <input
-                  type="checkbox"
-                  className="h-5 w-5 border rounded-LG focus:ring-0 appearance-none checked:bg-orange-500 checked:border-none rounded-md checked:text-black"
-                />
-                <p>Cheap</p>
+                <p>New Product</p>
               </div>
               <p className="text-xl h-[45px]">Range Price</p>
               <div className="flex items-center h-[45px]">

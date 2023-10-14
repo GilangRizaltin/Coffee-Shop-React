@@ -1,9 +1,11 @@
 import React from 'react'
 import Header  from '../components/header';
-import Footer from "../components/footer";
+// import Footer from "../components/footer";
 import { productCard } from "../components/productCard";
+// import { useUserContext } from '../context/context';
 
 function home() {
+  // const {user} = useUserContext();
   return (
     <>
     <Header />
@@ -238,7 +240,7 @@ function home() {
         </div>
       </section>
     </main>
-    <Footer />
+    {/* <Footer /> */}
     </>
   )
 }

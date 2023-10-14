@@ -8,9 +8,11 @@ import Login from "./pages/login";
 import Register from "./pages/register";
 import ResetPwd from "./pages/resetpassword";
 import Profile from "./pages/profile";
+import DetailProduct from "./pages/detailProduct";
+import DetailOrder from "./pages/detailOrder";
 
 
-import Test from "./components/filter";
+// import Test from "./pages/login";
 
 
 const router = createBrowserRouter([
@@ -35,10 +37,40 @@ const router = createBrowserRouter([
     // errorElement: "",
   },
   {
-    path: "/test",
-    element: <Test />,
+    path: "/profile",
+    element: <Profile />,
     // errorElement: "",
   },
+  {
+    path: "/login",
+    element: <Login />,
+    // errorElement: "",
+  },
+  {
+    path: "/register",
+    element: <Register />,
+    // errorElement: "",
+  },
+  {
+    path: "/resetpassword",
+    element: <ResetPwd />,
+    // errorElement: "",
+  },
+  {
+    path: "/detailorder",
+    element: <DetailOrder />,
+    // errorElement: "",
+  },
+  {
+    path: "/detailproduct",
+    element: <DetailProduct />,
+    // errorElement: "",
+  },
+  // {
+  //   path: "/test",
+  //   element: <Test />,
+  //   // errorElement: "",
+  // },
 ]);
 
 export default router;

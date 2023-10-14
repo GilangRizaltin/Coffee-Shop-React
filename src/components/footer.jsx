@@ -1,7 +1,7 @@
 function footer() {
   return (
     <footer
-      class="relative bg-order pt-[67px] pb-8 flex flex-col gap-8 pl-2 pr-2 md:pl-10 md:pr-10 desk:pl-def desk:pr-def md:flex-row text-footer"
+      class="relative bg-order pt-[67px] pb-8 flex flex-col gap-8 pl-2 pr-2 md:pl-10 md:pr-10 desk:pl-def desk:pr-def md:flex-row text-footer font-primary"
     >
       <section class="flex-1">
         <div class="flex gap-2">
