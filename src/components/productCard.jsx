@@ -1,8 +1,13 @@
 import React from 'react'
+import { useState } from 'react'
 
 export function productCard() {
+  const [cancelProduct, setCancel] = useState(false)
+  const setCancelOrderPorduct = () => {
+    setCancel((state) => !state)
+  };
   return (
-    <div class="min-w-[25%] md:min-w-fit">
+    <div class='min-w-[25%] md:min-w-fit'>
               <div class="relative w-[158px] lg:w-[210px] desk:w-[280px]">
                 <div class="relative">
                   <img
@@ -130,11 +135,11 @@ export function productOrder() {
   )
 }
 
-export function productWithRating() {
+export function productWithRating(props) {
   return (
     <div class="w-fit">
                 <div
-                  class="relative mobile_m:w-[158px] lg:w-[307px] desk:w-[377px] lg:h-[520px] flex flex-col gap-y-3"
+                  class="relative  mobile_m:w-[158px] lg:w-[307px] desk:w-[377px] lg:h-[520px] flex flex-col gap-y-3"
                 >
                   <img
                     src="/webp/image 27 (1).webp"
@@ -145,11 +150,10 @@ export function productWithRating() {
                     class="bg-white p-2.5 flex flex-col gap-y-1 lg:w-[90%] lg:absolute lg:left-[15.5px] lg:top-[240px] lg:shadow-md"
                   >
                     <p class="text-base font-bold lg:text-xl desk:text-2xl">
-                      Hazelnut Latte
+                      {props.title}
                     </p>
                     <p class="text-sm">
-                      You can explore the menu that we provide with fun and have
-                      their own taste and make your day better.
+                      {props.desc}
                     </p>
                     <div class="flex gap-3">
                       <ul class="flex gap-0.5">
@@ -182,7 +186,7 @@ export function productWithRating() {
                       <p>5.0</p>
                     </div>
                     <div>
-                      <p class="text-base text-primary">IDR 20.000</p>
+                      <p class="text-base text-primary">IDR {props.price}</p>
                     </div>
                     <div class="flex flex-col gap-y-1 lg:flex-row lg:gap-2">
                       <button

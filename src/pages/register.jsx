@@ -91,29 +91,29 @@ function register() {
           </p>
         </div>
         <p className='text-xl'>Register</p>
-        <p className='text-sm'>Fill out the form correctly</p>
-        <p className='text-sm'>Full Name</p>
+        <p className='text-sm lg:text-base'>Fill out the form correctly</p>
+        <p className='text-sm lg:text-base'>Full Name</p>
         <div className="w-full border-2 border-solid border-order p-3 flex items-center gap-2 rounded-lg">
           <ion-icon name="person-outline"></ion-icon>
-          <input type="text" placeholder="Enter your Full Name" name='user_name' className='flex-1 outline-none'/>
+          <input type="text" placeholder="Enter your Full Name" name='user_name' className='flex-1 outline-none text-sm lg:text-base'/>
         </div>
-        <p className='text-sm'>Email</p>
+        <p className='text-sm lg:text-base'>Email</p>
         <div className="w-full border-2 border-solid border-order p-3 flex items-center gap-2 rounded-lg">
           <ion-icon name="mail-outline"></ion-icon>
-          <input type="text" placeholder="Enter your Email" name='user_email' className='flex-1 outline-none'/>
+          <input type="text" placeholder="Enter your Email" name='user_email' className='flex-1 outline-none text-sm lg:text-base'/>
         </div>
-        <p className='text-sm'>Password</p>
+        <p className='text-sm lg:text-base'>Password</p>
         <div className="w-full border-2 border-solid border-order p-3 flex items-center gap-2 rounded-lg">
           <ion-icon name="bag-outline"></ion-icon>
-          <input type={isPwdShown ? "text" : "password"} placeholder="Enter your password" name="pwd_one"  className='flex-1 outline-none' onChange={handleFirstPwdChange}/>          
+          <input type={isPwdShown ? "text" : "password"} placeholder="Enter your password" name="pwd_one"  className='flex-1 outline-none text-sm lg:text-base' onChange={handleFirstPwdChange}/>          
           <div onClick={showPwdHandler}>
             <ion-icon name="eye-off-outline"></ion-icon>
           </div>
         </div>
-        <p className='text-sm'>Confirm Password</p>
+        <p className='text-sm lg:text-base'>Confirm Password</p>
         <div className="w-full border-2 border-solid border-order p-3 flex items-center gap-2 rounded-lg">
           <ion-icon name="bag-outline"></ion-icon>
-          <input type={isPwdShown ? "text" : "password"} placeholder="Enter your password" name="pwdTwo"  className='flex-1 outline-none' onChange={handleSecondPwdChange}/>          
+          <input type={isPwdShown ? "text" : "password"} placeholder="Enter your password" name="pwdTwo"  className='flex-1 outline-none  text-sm lg:text-base' onChange={handleSecondPwdChange}/>          
           <div onClick={showPwdHandler}>
             <ion-icon name="eye-off-outline"></ion-icon>
           </div>
@@ -123,10 +123,10 @@ function register() {
           <button type='submit' className='w-full bg-primary p-3 flex items-center justify-center rounded-lg outline-none'>Register</button>
         </div>
         <div className='flex justify-center gap-2'>
-          <p  className='text-sm flex justify-center gap-2'>
+          <p  className='text-sm flex justify-center gap-2 lg:text-base'>
           Have An Account? 
         </p>
-        <p className='text-sm text-primary cursor-pointer' >Login</p>
+        <p className='text-sm text-primary cursor-pointer lg:text-base' >Login</p>
         </div>
         <p className="flex justify-center">or</p>
         <div className="flex gap-4">

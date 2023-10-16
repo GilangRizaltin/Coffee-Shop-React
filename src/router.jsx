@@ -11,7 +11,6 @@ import Profile from "./pages/profile";
 import DetailProduct from "./pages/detailProduct";
 import DetailOrder from "./pages/detailOrder";
 
-
 // import Test from "./pages/login";
 
 
@@ -33,7 +32,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/product",
-    element: <Product />,
+    element: <Product /> ,
     // errorElement: "",
   },
   {

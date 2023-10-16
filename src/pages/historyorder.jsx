@@ -55,7 +55,7 @@ function historyorder() {
           <div class="bg-order w-full pl-2 pr-2 pt-7 pb-7 mb-4">
             <div class="flex gap-4">
               <img
-                src="/assets/webp/image 31.webp"
+                src="/webp/image 31.webp"
                 alt="product-photo"
                 class="hidden md:block w-[111px] h-[105px]"
               />
@@ -114,7 +114,7 @@ function historyorder() {
           <div class="bg-order w-full pl-2 pr-2 pt-7 pb-7 mb-4">
             <div class="flex gap-4">
               <img
-                src="/assets/webp/image 31.webp"
+                src="/webp/image 31.webp"
                 alt="product-photo"
                 class="hidden md:block w-[111px] h-[105px]"
               />
@@ -173,7 +173,7 @@ function historyorder() {
           <div class="bg-order w-full pl-2 pr-2 pt-7 pb-7 mb-4">
             <div class="flex gap-4">
               <img
-                src="/assets/webp/image 31.webp"
+                src="/webp/image 31.webp"
                 alt="product-photo"
                 class="hidden md:block w-[111px] h-[105px]"
               />
@@ -232,7 +232,7 @@ function historyorder() {
           <div class="bg-order w-full pl-2 pr-2 pt-7 pb-7 mb-4">
             <div class="flex gap-4">
               <img
-                src="/assets/webp/image 31.webp"
+                src="/webp/image 31.webp"
                 alt="product-photo"
                 class="hidden md:block w-[111px] h-[105px]"
               />

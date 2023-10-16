@@ -36,6 +36,7 @@ export default {
         mobile_l: "425px",
         mobile: "465px",
         mobile_m:"375px",
+        detailProduct: "872px"
       },
       gap: {
         19: "19px",

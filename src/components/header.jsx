@@ -2,6 +2,8 @@ import { useState } from 'react'
 import React from 'react'
 import {useNavigate} from "react-router-dom"
 import { useUserContext } from '../context/context';
+import { searchProduct } from '../https/product';
+import { useProductContext } from '../context/productContext';
 // function headertwo() {
 //   const [dropdown, showDropdown] = useState(false);
 //   const setShowDropdown = () => {
@@ -214,19 +216,24 @@ import { useUserContext } from '../context/context';
 
 function header() {
   const navigate = useNavigate();
+  const {changeProduct} = useProductContext();
   const [toggle, changeToggle] = useState(false);
   const setToggle = () => {
-    changeToggle((state) => !state)
+    changeToggle((state) => !state);
+    showSearchBar(false)
   };
   const [searchBar, showSearchBar] = useState(false);
   const setSearchingBar = () => {
-    showSearchBar((state) => !state)
+    showSearchBar((state) => !state);
+    changeToggle(false)
   };
   const [modalLogout, showModalLogout] = useState(false);
   const setShowModalLogout = () => {
     showModalLogout((state) => !state)
   };
   const {user, changeUser} = useUserContext();
+  const url = import.meta.env.VITE_BACKEND_HOST
+  let imageUrl = (user.userInfo ? url + user.userInfo.photo : url + "/img/user_image-1695737375917-95805558.jpeg")
   const onLogOutHandler = () => {
     delete user.userInfo;
     changeUser({
@@ -234,7 +241,30 @@ function header() {
     });
     setShowModalLogout();
   }
-  return (
+  const submitSearch = (e) => {
+    e.preventDefault();
+    const queryParams = {
+      search: e.target.search_bar.value
+    };
+    // console.log(queryParams)
+     let URL = `http://localhost:9000/products?search=`;
+     URL = URL + queryParams.search
+    //  console.log(URL)
+    //  console.log(queryParams.search)
+     searchProduct(URL)
+     .then((res) => {
+      //  navigate("/product");
+        // console.log(res.data);
+        changeProduct({isProductAvailable: true,
+          productInfo: res.data.result,
+          page: res.data.meta});
+        navigate("/product");
+      })
+      .catch((err) => {
+        console.log(err)
+      });
+  }
+   return (
     <>
     <header
       className="flex bg-black text-white font-primary h-header items-center sticky top-0 z-50 gap-4 px-2 md:px-10 desk:px-def"
@@ -262,9 +292,12 @@ function header() {
           <p onClick={() => navigate("/product")}>Product</p>
           </div>
         </div>
-        <div className='flex-1 flex items-center'>
-          <input type="text" placeholder="Search Product" name='user_email' className={`${searchBar ? "block" : "hidden"} px-3 outline-none bg-white border-2 border-solid border-order rounded-lg w-full text-black`}/>
-        </div>
+        <form onSubmit={submitSearch} className='flex-1 flex items-center'>
+          <div className={`hidden md:${!searchBar ? "hidden" : "flex"} justify-center bg-white border-2 border-solid border-order rounded-lg w-full text-black`}>
+          <input type="text" placeholder="Search Product" name='search_bar' className={`${searchBar ? "block" : "hidden"} flex-1 px-3 outline-none`}/>
+          <button type='submit' className='border-none pr-2'>Search</button>
+          </div>
+        </form>
         <div className="cursor-pointer text-2xl" onClick={setSearchingBar}>
           <ion-icon name="search-outline"></ion-icon>
         </div>
@@ -272,7 +305,7 @@ function header() {
             <ion-icon name="cart-outline"></ion-icon>
         </div>
         <div className="hidden md:block cursor-pointer">
-          <img src="/svg/Ellipse 185.svg" alt="profile-photo" />
+          <img src={imageUrl}  className='h-[48px] w-[48px] rounded-full' alt="profile-photo"  onClick={() => navigate("/profile")}/>
         </div>
         <div className="hidden md:block cursor-pointer relative">
           <button
@@ -303,9 +336,9 @@ function header() {
     className={`${toggle ? "block" : "hidden"} fixed z-50 top-[76px] bg-black w-full flex flex-col items-center overflow-auto h-screen md:hidden transition-all duration-300 ease-in`}
   >
     <div className="flex items-center px-2 py-4 gap-4">
-      <img src="/svg/Ellipse 185.svg" alt="profile-photo" />
+      <img src={imageUrl} alt="profile-photo" className='h-[48px] w-[48px]  rounded-full' onClick={() => navigate("/profile")}/>
       <div className="text-sm text-white font-semibold">
-        {user.isUserAvailable && (<p className='text-lg'>{user.userInfo}</p>)}
+        {user.isUserAvailable && (<p className='text-lg'>{user.userInfo.userName}</p>)}
         {!user.isUserAvailable && (<p className='text-lg'>Guest</p>)}
       </div>
     </div>
@@ -339,6 +372,25 @@ function header() {
         </div>
       </div>
     </div>
+    <form onSubmit={submitSearch} className={`${!searchBar ? "hidden" : "flex"} md:hidden bg-white border-b-2 border-solid border-black sticky top-[76px] z-50`}>
+      <div className="p-5 md:hidden w-full flex items-center gap-2">
+        <div
+          className="flex items-center gap-2 border-2 border-solid border-order p-3 flex-1 rounded-xl"
+        >
+          <ion-icon name="search-outline"></ion-icon>
+          <input
+            type="text"
+            name='search_bar'
+            id=""
+            placeholder="Search Product"
+            className="outline-none w-full"
+          />
+        </div>
+        <button className="bg-primary h-12 w-12 rounded-xl">
+          <ion-icon name="search-outline"></ion-icon>
+        </button>
+      </div>
+    </form>
   </>
   )
 }

@@ -27,7 +27,7 @@ function login() {
     .then((res) => {
       //   console.log(res.data); 
         changeUser({isUserAvailable: true,
-                    userInfo: res.data.data.name});
+                    userInfo: res.data.data});
         navigate("/");
       })
       .catch((err) => {
@@ -55,16 +55,16 @@ function login() {
           </p>
         </div>
         <p className='text-xl'>Login</p>
-        <p className='text-sm'>Fill out the form correctly</p>
-        <p className='text-sm'>Email</p>
+        <p className='text-sm lg:text-base'>Fill out the form correctly</p>
+        <p className='text-sm lg:text-base'>Email</p>
         <div className="w-full border-2 border-solid border-order p-3 flex items-center gap-2 rounded-lg">
           <ion-icon name="mail-outline"></ion-icon>
-          <input type="text" placeholder="Enter your Email" name='user_email' className='flex-1 outline-none'/>
+          <input type="text" placeholder="Enter your Email" name='user_email' className='flex-1 outline-none text-sm lg:text-base'/>
         </div>
-        <p className='text-sm'>Password</p>
+        <p className='text-sm lg:text-base'>Password</p>
         <div className="w-full border-2 border-solid border-order p-3 flex items-center gap-2 rounded-lg">
           <ion-icon name="bag-outline"></ion-icon>
-          <input type={isPwdShown ? "text" : "password"} placeholder="Enter your password" name='pwd'  className='flex-1 outline-none'/>          
+          <input type={isPwdShown ? "text" : "password"} placeholder="Enter your password" name='pwd'  className='flex-1 outline-none text-sm lg:text-base'/>          
           <div onClick={showPwdHandler}>
             <ion-icon name="eye-off-outline"></ion-icon>
           </div>
@@ -77,10 +77,10 @@ function login() {
           <button type='submit' className='w-full bg-primary p-3 flex items-center justify-center rounded-lg'>Log In</button>
         </div>
         <div className='flex gap-2 justify-center'>
-          <p  className='text-sm flex justify-center gap-2'>
+          <p  className='text-sm lg:text-base flex justify-center gap-2'>
             Not Have An Account? 
           </p>
-          <p className='text-sm text-primary cursor-pointer' onClick={() => navigate("/register")}>Register</p>
+          <p className='text-sm lg:text-base text-primary cursor-pointer' onClick={() => navigate("/register")}>Register</p>
         </div> 
         <p className="flex justify-center">or</p>
         <div className="flex gap-4">

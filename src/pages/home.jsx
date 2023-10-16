@@ -1,6 +1,6 @@
 import React from 'react'
 import Header  from '../components/header';
-// import Footer from "../components/footer";
+import Footer from "../components/footer";
 import { productCard } from "../components/productCard";
 // import { useUserContext } from '../context/context';
 
@@ -19,7 +19,7 @@ function home() {
           />
         </div>
         <div
-          className="w-full bottom-0 border-none bg-gradient-to-t from-black to-zinc-700 text-white px-2 py-5 flex flex-col gap-[25px] sm:relative sm:opacity-100 md:pl-10 desk:pl-def  lg:flex-1 lg:justify-center"
+          className="w-full bottom-0 border-none bg-gradient-to-t from-black to-zinc-700 text-white px-2 pb-5 pt-[38px] md:py-[58px] flex flex-col gap-[25px] sm:relative sm:opacity-100 md:px-10 desk:pl-def  lg:flex-1 lg:justify-center"
         >
           <p className="text-2xl lg:text-3xl desk:text-5xl">
             Start Your Day with Coffee and Good Meals
@@ -36,17 +36,17 @@ function home() {
           <div className="text-2xl lg:text-3xl flex gap-x-5 sm:gap-x-10">
             <div>
               <p className="text-primary">90+</p>
-              <p>Staff</p>
+              <p className='text-sm lg:text-base'>Staff</p>
             </div>
-            <hr className="h-16 w-0.5 bg-white lg:h-20" />
+            <hr className="h-14 w-0.5 bg-white lg:h-16" />
             <div>
               <p className="text-primary">30+</p>
-              <p>Stores</p>
+              <p className='text-sm lg:text-base'>Stores</p>
             </div>
-            <hr className="h-16 w-0.5 bg-white lg:h-20" />
+            <hr className="h-14 w-0.5 bg-white lg:h-16" />
             <div>
               <p className="text-primary">800+</p>
-              <p>Customer</p>
+              <p className='text-sm lg:text-base'>Customer</p>
             </div>
           </div>
         </div>
@@ -60,7 +60,7 @@ function home() {
           />
         </div>
         <div
-          className="bg-white text-black p-5 flex flex-col gap-[25px] sm:relative md:pl-10 desk:pl-def lg:flex-1 lg:justify-center"
+          className="bg-white text-black px-2 flex flex-col gap-[25px] pb-5 pt-[38px] md:py-[58px] sm:relative md:px-10 desk:pl-def lg:flex-1 lg:justify-center"
         >
           <div className="flex gap-5 items-center">
             <hr className="w-1 h-10 desk:h-20 bg-primary" />
@@ -160,9 +160,9 @@ function home() {
       </section>
       <section className="bg-order pt-16 pb-16">
         <div
-          className="pl-5 pr-5 md:pl-10 md:pr-10 desk:pl-def desk:pr-def flex flex-col gap-y-4"
+          className="px-2 md:px-10 desk:px-def flex flex-col gap-y-4"
         >
-          <p className="flex justify-center text-2xl desk:text-5xl">
+          <p className="flex text-center text-2xl desk:text-5xl">
             Visit Our People in The Spot on The Map Below
           </p>
           <div className="w-full flex justify-center">
@@ -240,7 +240,7 @@ function home() {
         </div>
       </section>
     </main>
-    {/* <Footer /> */}
+    <Footer />
     </>
   )
 }

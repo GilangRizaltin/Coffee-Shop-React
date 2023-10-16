@@ -22,11 +22,11 @@ function resetpassword() {
           </p>
         </div>
         <p className='text-xl text-brown'>Fill out the form correctly</p>
-        <p className='text-sm text-brown'>We will send new password to your email</p>
-        <p className='text-sm'>Email</p>
+        <p className='text-sm lg:text-base text-brown'>We will send new password to your email</p>
+        <p className='text-sm lg:text-base'>Email</p>
         <div className="w-full border-2 border-solid border-order p-3 flex items-center gap-2 rounded-lg">
           <ion-icon name="mail-outline"></ion-icon>
-          <input type="text" placeholder="Enter your Email" name='user_email' className='flex-1 outline-none'/>
+          <input type="text" placeholder="Enter your Email" name='user_email' className='flex-1 outline-none text-sm lg:text-base'/>
         </div>
         <div className="">
           <button type='submit' className='w-full bg-primary p-3 flex items-center justify-center rounded-lg'>Submit</button>

@@ -1,9 +1,14 @@
 import React from 'react';
 import Header from "../components/header";
 import { productOrder } from "../components/productCard";
+import { useState } from 'react';
 import Footer from "../components/footer";
 
 function checkout() {
+  const [showModalCheckout, setModalCheckout] = useState(false);
+  const setShowModalCheckout = () => {
+    setModalCheckout((state) => !state)
+  };
   return (
 <>
     <Header />
@@ -34,7 +39,6 @@ function checkout() {
             {productOrder()}
             {productOrder()}
             {productOrder()}
-            
           </div>
           <div className="pb-[31px]">
             <div className="mb-9">
@@ -131,13 +135,14 @@ function checkout() {
                 className="w-full p-2.5 flex justify-center bg-primary rounded-xl font-semibold"
                 id="myBtn"
                 aria-label="checkout"
+                onClick={setShowModalCheckout}
               >
                 Checkout
               </button>
 
               <div
                 id="myModal"
-                className="hidden fixed inset-0 flex z-50 outline-none modal w-full h-full bg-zinc-600/90 items-center justify-center"
+                className={`${showModalCheckout ? "block" : "hidden"} fixed inset-0 flex z-50 outline-none modal w-full h-full bg-zinc-600/90 items-center justify-center`}
               >
                 <div
                   className="flex flex-col gap-7 modal-content bg-white p-8 rounded shadow-lg w-[300px]"
@@ -147,7 +152,7 @@ function checkout() {
                     <button
                       id="close"
                       className="border-2 border-solid border-order py-1 px-2.5 rounded-xl hover:border-primary"
-                      aria-label="cancel checkout"
+                      aria-label="cancel checkout" onClick={setShowModalCheckout}
                     >
                       Cancel
                     </button>
