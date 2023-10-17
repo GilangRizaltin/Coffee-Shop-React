@@ -269,7 +269,7 @@ function header() {
     <header
       className="flex bg-black text-white font-primary h-header items-center sticky top-0 z-50 gap-4 px-2 md:px-10 desk:px-def"
     >
-        <div className="flex items-center gap-2.5 cursor-pointer">
+        <div className="flex items-center gap-2.5 cursor-pointer" onClick={() => navigate("/login")}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="32"
@@ -329,6 +329,8 @@ function header() {
           <div id="dropdownHamburger" className="border-0 bg-none cursor-pointer  text-2xl" onClick={setToggle}>
             <ion-icon name="menu-outline" className='text-white'></ion-icon>
           </div>
+        </div>
+        <div>
         </div>
     </header>
     <div
