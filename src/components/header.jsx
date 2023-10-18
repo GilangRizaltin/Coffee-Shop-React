@@ -4,6 +4,8 @@ import {useNavigate} from "react-router-dom"
 import { useUserContext } from '../context/context';
 import { searchProduct } from '../https/product';
 import { useProductContext } from '../context/productContext';
+import { getUserProfile } from '../https/profile';
+
 // function headertwo() {
 //   const [dropdown, showDropdown] = useState(false);
 //   const setShowDropdown = () => {
@@ -241,33 +243,23 @@ function header() {
     });
     setShowModalLogout();
   }
-  const submitSearch = (e) => {
-    e.preventDefault();
-    const queryParams = {
-      search: e.target.search_bar.value
-    };
-    // console.log(queryParams)
-     let URL = `http://localhost:9000/products?search=`;
-     URL = URL + queryParams.search
-    //  console.log(URL)
-    //  console.log(queryParams.search)
-     searchProduct(URL)
-     .then((res) => {
-      //  navigate("/product");
-        // console.log(res.data);
-        changeProduct({isProductAvailable: true,
-          productInfo: res.data.result,
-          page: res.data.meta});
-        navigate("/product");
+  const toProfile = () => {
+    const jwt = localStorage.getItem("token")
+    console.log(jwt)
+    if (jwt) {
+      getUserProfile(jwt)
+      .then((res) => {
+        console.log(res)
       })
       .catch((err) => {
         console.log(err)
-      });
+      })
+    }
   }
    return (
     <>
     <header
-      className="flex bg-black text-white font-primary h-header items-center sticky top-0 z-50 gap-4 px-2 md:px-10 desk:px-def"
+      className="flex bg-black text-white font-primary h-header items-center sticky top-0 z-50 gap-8 px-2 sm:px-10 desk:px-def"
     >
         <div className="flex items-center gap-2.5 cursor-pointer" onClick={() => navigate("/login")}>
           <svg
@@ -284,7 +276,7 @@ function header() {
           </svg>
           <p className="font-logo text-xl">Coffee Shop</p>
         </div>
-        <div className="hidden md:flex items-center gap-4">
+        <div className="hidden md:flex items-center gap-8">
           <div className="nav-item cursor-pointer">
             <p onClick={() => navigate("/")}>Home</p>
           </div>
@@ -292,22 +284,17 @@ function header() {
           <p onClick={() => navigate("/product")}>Product</p>
           </div>
         </div>
-        <form onSubmit={submitSearch} className='flex-1 flex items-center'>
-          <div className={`hidden md:${!searchBar ? "hidden" : "flex"} justify-center bg-white border-2 border-solid border-order rounded-lg w-full text-black`}>
-          <input type="text" placeholder="Search Product" name='search_bar' className={`${searchBar ? "block" : "hidden"} flex-1 px-3 outline-none`}/>
-          <button type='submit' className='border-none pr-2'>Search</button>
-          </div>
-        </form>
-        <div className="cursor-pointer text-2xl" onClick={setSearchingBar}>
+        <div className='flex-1 flex items-center justify-end'>
+        <div className="cursor-pointer text-2xl  pl-8" onClick={() => navigate("/product")}>
           <ion-icon name="search-outline"></ion-icon>
         </div>
-        <div className="hidden md:block cursor-pointer text-2xl">
+        <div className="hidden md:block cursor-pointer text-2xl  pl-8">
             <ion-icon name="cart-outline"></ion-icon>
         </div>
-        <div className="hidden md:block cursor-pointer">
-          <img src={imageUrl}  className='h-[48px] w-[48px] rounded-full' alt="profile-photo"  onClick={() => navigate("/profile")}/>
+        <div className="hidden md:block cursor-pointer  pl-8">
+          <img src={imageUrl}  className='h-[48px] w-[48px] rounded-full' alt="profile-photo"  onClick={toProfile}/>
         </div>
-        <div className="hidden md:block cursor-pointer relative">
+        <div className="hidden md:block cursor-pointer relative pl-8">
           <button
           onClick={setToggle}
             id="dropdownArrow"
@@ -325,12 +312,13 @@ function header() {
             <p className="text-white px-3 py-4 block hover:bg-gray-300" onClick={setShowModalLogout}>log Out</p>
           </div>
         </div>
-        <div className="block md:hidden">
+        <div className="block md:hidden pl-8">
           <div id="dropdownHamburger" className="border-0 bg-none cursor-pointer  text-2xl" onClick={setToggle}>
             <ion-icon name="menu-outline" className='text-white'></ion-icon>
           </div>
         </div>
         <div>
+        </div>
         </div>
     </header>
     <div
@@ -374,7 +362,7 @@ function header() {
         </div>
       </div>
     </div>
-    <form onSubmit={submitSearch} className={`${!searchBar ? "hidden" : "flex"} md:hidden bg-white border-b-2 border-solid border-black sticky top-[76px] z-50`}>
+    {/* <form onSubmit={submitSearch} className={`${!searchBar ? "hidden" : "flex"} md:hidden bg-white border-b-2 border-solid border-black sticky top-[76px] z-50`}>
       <div className="p-5 md:hidden w-full flex items-center gap-2">
         <div
           className="flex items-center gap-2 border-2 border-solid border-order p-3 flex-1 rounded-xl"
@@ -392,7 +380,7 @@ function header() {
           <ion-icon name="search-outline"></ion-icon>
         </button>
       </div>
-    </form>
+    </form> */}
   </>
   )
 }

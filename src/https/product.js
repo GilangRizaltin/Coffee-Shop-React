@@ -6,3 +6,7 @@ import axios from "axios";
 export const searchProduct = (URL) => {
     return axios.get(URL)
 }
+
+export const getDetailProduct = (id) => {
+    return axios.get(import.meta.env.VITE_BACKEND_HOST + "/products/" + id)
+}

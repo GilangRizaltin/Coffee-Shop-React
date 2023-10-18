@@ -14,9 +14,6 @@ function profile() {
   let imageUrl = (user.userInfo ? url + user.userInfo.photo : url + "/img/user_image-1695737375917-95805558.jpeg")
   const submitUpdateImage = (e) => {
     e.preventDefault();
-    // const id = user.userInfo.userId
-    // const user_Image = e.target.a.files[0];
-    // user_Image.append("user_photo_profile", e.target.a.files[0]);
     const body = {
       id: user.userInfo.userId,
       user_photo_profile: e.target.a.files[0],
@@ -29,20 +26,37 @@ function profile() {
         console.log(err)
       });
   }
+  // const [previewUrl, setPreviewUrl] = useState('');
+  // const handleFileSelect = (event) => {
+  //   event.preventDefault();
+  //   const file = event.target.image.files;
+  //   setSelectedFile(file);
+  //   const reader = new FileReader();
+  //   reader.onloadend = () => {
+  //     setPreviewUrl(reader.result);
+  //   };
+
+  //   if (file) {
+  //     reader.readAsDataURL(file);
+  //   } else {
+  //     setPreviewUrl('');
+  //   }
+  // };
   return (
     <>
     <Header/>
     <main className='px-2 md:px-10 desk:px-def font-primary'>
+      <form>
     <p className='pt-[38px] pb-[31px] md:pt-[58px] md:pb-[40px] desk:pt-[78px] desk:pb-[58px] font-semibold text-2xl lg:text-3xl desk:text-5xl'>Profile</p>
       <div className='flex flex-col gap-[19px] md:flex-row'>
       <div className="w-full md:w-[428px] h-fit border-2 border-solid border-order py-3 flex flex-col items-center gap-y-4 rounded-lg">
         {/* <div class="name-photo"> */}
           <p className='text-lg font-bold lg:text-2xl'>{user.userInfo ? `${user.userInfo.fullName}` : " . . . "}</p>
           <p className='text-sm text-footer'>{user.userInfo ? `${user.userInfo.email}` : " . . . "}</p>
-          <div class="image lg:w-[80px] lg:h-[80px] my-4">
+          <div className="image lg:w-[80px] lg:h-[80px] my-4"  onClick={setUploadImage}>
             <img height={"80px"} width={"80px"} src={imageUrl} className='rounded-full h-[80px] w-[80px]' alt="photo-profile" />
           </div>
-          <button className='w-[226px] px-[18px] py-3 bg-primary font-semibold flex justify-center items-center rounded-lg' onClick={setUploadImage}>Upload New Photo</button>
+          <button className='w-[226px] px-[18px] py-3 bg-primary font-semibold flex justify-center items-center rounded-lg' >Upload New Photo</button>
           <p className='text-base text-footer'>Since <strong>July 2023</strong></p>
         {/* </div> */}
       </div>
@@ -80,15 +94,14 @@ function profile() {
         </div>
       </div>
       </div>
+      </form>
     </main>
     <div
       className={`${isUploadImage ? "block" : "hidden"} fixed inset-0 flex items-center justify-center z-50 outline-none modal w-full h-full bg-zinc-600/90`}
       id="modalsImage"
     >
-      <form
-        onSubmit={submitUpdateImage} className="flex flex-col gap-7 modal-content bg-white p-8 rounded shadow-lg w-[300px] justify-center"
-      >
-        <input type="file" name="image" id="a" />
+      <form onSubmit={handleFileSelect} className="flex flex-col gap-7 modal-content bg-white p-8 rounded shadow-lg w-[300px] justify-center">
+        <input type="file" name="image" />
         <div className="flex justify-end items-center gap-4 text-black">
           <button
             className="flex-1 hover:border-primary text-base border-2 border-solid border-order rounded-xl"
@@ -100,7 +113,7 @@ function profile() {
             className="flex-1 hover:border-primary text-base border-2 border-solid border-order rounded-xl"
             id="sendModalBtn" type='submit'
           >
-            Send
+            Set
           </button>
         </div>
       </form>

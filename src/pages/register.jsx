@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import { registerUser } from '../https/register';
+import { registerUser, verifyUser } from '../https/register';
 
 function register() {
   const navigate = useNavigate();
@@ -26,6 +26,12 @@ function register() {
   const setShowFailedModal = () => {
     setRegisterFailed((state) => !state);
   }
+  const [isSuccessVerify, setVerifySuccess] = useState(false);
+  const setShowVerifySuccess = () => {
+    setVerifySuccess((state) => !state);
+  }
+  const [email, setEmail] = useState('')
+  
   const [msg, setMsg] = useState('');
   const handleFormSubmit = (e) => {
     e.preventDefault();
@@ -40,36 +46,31 @@ function register() {
     };
     registerUser(body)
     .then((res) => {
-         console.log(res);
-        setMsg(res.data.msg)
+        //  console.log(res);
+        // setMsg(res.data.msg)
          setShowSuccessModal();
+         setEmail(body.email)
     })
       .catch((err) => {
         // console.log(err.response.data.msg);
          setMsg(err.response.data.msg)
          setShowFailedModal()});
   };
-  // let fwd = []
-  // let swd = []
-  // const firstPwd = (e) => {
-  //   e.preventDefault();
-  //   const verifyPwd = e.target.value;
-  //   fwd.push(verifyPwd)
-  // };
-  // const secondPwd= (e) => {
-  //   e.preventDefault();
-  //   const verifyPwd = e.target.value;
-  //   swd.push(verifyPwd)
-  // };
-  // const correctPwd = (e) => {
-  //   e.preventDefault();
-  //   if (fwd[0] !== swd[0]) {
-  //     setPwdCorrection(true)
-  //   } else {
-  //     setPwdCorrection(false);
-  //   }
-  //   console.log(fwd,swd)
-  //   }
+  const verifySubmit = (e) => {
+    e.preventDefault();
+    const body = email
+    const otp = e.target.otp.value
+    const url= import.meta.env.VITE_BACKEND_HOST + "/users/verification/?email=" + body + "&OTP=" + otp
+    verifyUser(url)
+    .then((res) => {
+        setMsg(res.data.msg)
+        setShowVerifySuccess();
+    })
+      .catch((err) => {
+        // console.log(err.response.data.msg);
+         setMsg(err.response.data.msg)
+         setShowFailedModal()});
+  };
 
   return (
     <>
@@ -139,7 +140,7 @@ function register() {
           </div>
           <div className="cursor-pointer flex-1 h-10 w-10 border-2 border-solid border-order rounded-lg flex justify-center items-center gap-2">
             <img src="/webp/flat-color-icons_google.webp" alt="google" />
-            <p className='hidden mobile:block'>Google</p>
+            <p className='hidden mobile:block' onClick={setShowSuccessModal}>Google</p>
           </div>
         </div>
       </form>
@@ -164,24 +165,41 @@ function register() {
     </div>
     <div
       className={`${isSuccessRegister ? "block" : "hidden"} fixed inset-0 flex items-center justify-center z-50 outline-none modal w-full h-full bg-zinc-600/90`}
-      id="modalsSuccess"
+      id="otpModal"
     >
       <div
         className="flex flex-col gap-7 modal-content bg-white p-8 rounded shadow-lg w-[300px] justify-center"
       >
-        <p className="text-black">{msg}</p>
+        <p className="text-black flex text-center">Input Otp that send to your E-mail</p>
+        <form onSubmit={verifySubmit}>
+          <input type="number" className='w-full p-2 mb-4 text-base border-2 border-solid border-black rounded-lg' name="otp" id="otp" />
+          <p className='hidden text-red-700 text-base mb-4'>OTP is wrong</p>
+          <p className='hidden text-red-700 text-base mb-4'>Fill OTP</p>
         <div className="flex justify-end items-center gap-4 text-black">
-        <button
-            className="flex-1 hover:border-primary text-base border-2 border-solid border-order rounded-xl"
-            id="closeModalBtn" onClick={setShowSuccessModal}
+          <button
+            className="flex-1 hover:border-primary text-base bg-primary rounded-lg"
+            id="sendOtp" 
           >
-            cancel
+            Submit
           </button>
+        </div>
+        </form>
+      </div>
+    </div>
+    <div
+      className={`${isSuccessVerify ? "block" : "hidden"} fixed inset-0 flex items-center justify-center z-50 outline-none modal w-full h-full bg-zinc-600/90`}
+      id="successRegister"
+    >
+      <div
+        className="flex flex-col gap-7 modal-content bg-white p-8 rounded shadow-lg w-[300px] justify-center"
+      >
+        <p className="text-red-700">{msg}</p>
+        <div className="flex justify-end items-center gap-4 text-black">
           <button
             className="flex-1 hover:border-primary text-base border-2 border-solid border-order rounded-xl"
             id="closeModalBtn" onClick={() => navigate("/login")}
           >
-            Log In
+            Login Page
           </button>
         </div>
       </div>

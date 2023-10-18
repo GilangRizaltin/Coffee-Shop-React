@@ -28,6 +28,7 @@ function login() {
       //   console.log(res.data); 
         changeUser({isUserAvailable: true,
                     userInfo: res.data.data});
+        localStorage.setItem("token", res.data.data.token)
         navigate("/");
       })
       .catch((err) => {

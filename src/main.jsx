@@ -9,10 +9,10 @@ import { ProductProvider } from "./context/productContext";
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <UserProvider>
-    <ProductProvider > 
+    <UserProvider> 
+    <ProductProvider> 
     <RouterProvider router={router} />
-    </ProductProvider>
+    </ProductProvider> 
     </UserProvider>
   </React.StrictMode>,
 )
