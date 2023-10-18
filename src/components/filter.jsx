@@ -1,12 +1,9 @@
 import React from 'react'
-import { useSearchParams } from "react-router-dom";
-import { useProductContext } from '../context/productContext';
-import { searchProduct } from '../https/product';
+import { useSearchParams, Link  } from "react-router-dom";
 import { useState } from 'react';
 
 function filter() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const {product, changeProduct} = useProductContext();
   // { search: e.target.value }
   const handleInputChange = (e) => {
     e.preventDefault();
@@ -59,30 +56,13 @@ function filter() {
   };
   const resetFilters = () => {
     setSearchParams({
-      search: '',   // Reset search input to an empty string
-      category: '', // Reset category filter to an empty string or default category value
-      sort: '',     // Reset sort filter to an empty string or default sort value
-      // Add more filter parameters and reset their values as needed
+      search: '',
+      category: '',
+      sort: '',
     });
   };
-  const baseUrl = import.meta.env.VITE_BACKEND_HOST;
-  const submitFilter = () => {
-      const url = baseUrl + "/products?" + searchParams.toString();
-      searchProduct(url)
-    .then((res) => {
-        console.log(res.data);
-        changeProduct({isProductAvailable: true,
-          productInfo: res.data.result,
-          page: res.data.meta});
-      })
-      .catch((err) => {
-        console.log(err)
-        delete product.productInfo;
-        changeProduct({
-            isProductAvailable: false,
-          });
-      });
-  }
+  // const baseUrl = import.meta.env.VITE_BACKEND_HOST;
+  // const url = baseUrl + "/products?" + searchParams.toString();
   return (
     <div
               className="hidden  w-[301px] lg:w-[388px] h-fit bg-black p-6 lg:flex flex-col gap-4 rounded-3xl text-white"
@@ -100,8 +80,8 @@ function filter() {
                   id="search"
                   className="flex-1 outline-none"
                   // defaultValue={searchParams.get("search")}
-                  value={searchParams.get('search') || ''}
-                  onChange={handleInputChange}
+                  // value={searchParams.get('search') || ''}
+                  // onChange={handleInputChange}
                 />
               </form>
               <form>
@@ -109,9 +89,9 @@ function filter() {
                 <input
                   type="radio"
                   name="category" 
-                  onChange={setNewCategory}
+                  // onChange={setNewCategory}
                   value="1"
-                  checked={isCategoryChecked(1)}
+                  // checked={isCategoryChecked(1)}
                   className="cursor-pointer h-5 w-5 border rounded-LG focus:ring-0 appearance-none checked:bg-orange-500 checked:border-none rounded-md checked:text-black"
                 />
                 <p>Coffee</p>
@@ -120,9 +100,9 @@ function filter() {
                 <input
                   type="radio"
                   name="category" 
-                  onChange={setNewCategory}
+                  // onChange={setNewCategory}
                   value="2"
-                  checked={isCategoryChecked(2)}
+                  // checked={isCategoryChecked(2)}
                   className="cursor-pointer h-5 w-5 border rounded-LG focus:ring-0 appearance-none checked:bg-orange-500 checked:border-none rounded-md checked:text-black"
                 />
                 <p>Non Coffee</p>
@@ -131,9 +111,9 @@ function filter() {
                 <input
                   type="radio"
                   name="category"
-                  onChange={setNewCategory}
+                  // onChange={setNewCategory}
                   value="3"
-                  checked={isCategoryChecked(3)}
+                  // checked={isCategoryChecked(3)}
                   className="cursor-pointer h-5 w-5 border rounded-LG focus:ring-0 appearance-none checked:bg-orange-500 checked:border-none rounded-md checked:text-black"
                 />
                 <p>Foods</p>
@@ -145,9 +125,9 @@ function filter() {
                 <input
                   type="radio"
                   name="sort" 
-                  onChange={setSort}
+                  // onChange={setSort}
                   value='Cheapest'
-                  checked={isSortChecked('Cheapest')}
+                  // checked={isSortChecked('Cheapest')}
                   className="cursor-pointer h-5 w-5 border rounded-LG focus:ring-0 appearance-none checked:bg-orange-500 checked:border-none rounded-md checked:text-black"
                 />
                 <p>Cheapest</p>
@@ -156,9 +136,9 @@ function filter() {
                 <input
                   type="radio"
                   name="sort" 
-                  onChange={setSort}
+                  // onChange={setSort}
                   value="Most Expensive"
-                  checked={isSortChecked("Most Expensive")}
+                  // checked={isSortChecked("Most Expensive")}
                   className="cursor-pointer h-5 w-5 border rounded-LG focus:ring-0 appearance-none checked:bg-orange-500 checked:border-none rounded-md checked:text-black"
                 />
                 <p>Most Expensive</p>
@@ -167,9 +147,9 @@ function filter() {
                 <input
                   type="radio"
                   name="sort"
-                  onChange={setSort}
+                  // onChange={setSort}
                   value="New Product"
-                  checked={isSortChecked("New Product")}
+                  // checked={isSortChecked("New Product")}
                   className="cursor-pointer h-5 w-5 border rounded-LG focus:ring-0 appearance-none checked:bg-orange-500 checked:border-none rounded-md checked:text-black"
                 />
                 <p>New Product</p>
@@ -194,12 +174,12 @@ function filter() {
                 />
               </div>
               </form>
-              <button
+              <Link 
                 className="text-sm w-full bg-primary pl-5 pr-5 pt-3 pb-3 flex justify-center rounded-xl"
-                onClick={submitFilter}
+                to={`/product?${searchParams.toString()}`}
               >
                 Apply Filter
-              </button>
+              </Link >
             </div>
   )
 }

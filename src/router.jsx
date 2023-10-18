@@ -56,7 +56,7 @@ const router = createBrowserRouter([
     // errorElement: "",
   },
   {
-    path: "/detailorder",
+    path: `/detailorder`,
     element: <DetailOrder />,
     // errorElement: "",
   },

@@ -5,22 +5,15 @@ const ProductContext = createContext();
 export const useProductContext = () => useContext(ProductContext);
 
 export const ProductProvider = ({ children }) => {
-    // sediakan value yang akan di provide
-    const [product, setProduct] = useState({
-      isProductAvailable: false,
-    });
-    const changeProduct = (data) => {
-        setProduct((product) => ({
-        ...product,
-        ...data,
-      }));
+    const [product, setProduct] = useState([])
+    const addProduct = (order) => {
+      setProduct([...product, order]);
     };
-  
     return (
       <ProductContext.Provider
         value={{
           product,
-          changeProduct,
+          addProduct,
         }}
       >
         {children}

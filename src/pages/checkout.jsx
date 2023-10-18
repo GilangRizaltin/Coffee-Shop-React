@@ -1,14 +1,36 @@
 import React from 'react';
 import Header from "../components/header";
-import { productOrder } from "../components/productCard";
+import { productOrder } from '../components/productCard';
 import { useState } from 'react';
 import Footer from "../components/footer";
+import { useProductContext } from '../context/productContext';
+import { useNavigate } from 'react-router-dom';
 
 function checkout() {
   const [showModalCheckout, setModalCheckout] = useState(false);
   const setShowModalCheckout = () => {
     setModalCheckout((state) => !state)
   };
+  const navigate = useNavigate()
+  const addMenu = () => {
+    navigate("/product")
+  }
+  const {product} = useProductContext();
+  const totalPrice = product.reduce((accumulator, order) => {
+    const orderPrice = parseFloat(order.price);
+    return accumulator + orderPrice;
+  }, 0);
+  const [serve, setServe] = useState('')
+  const [typeServe , setTypeServe] = useState('')
+  const chooseServing = (e) => {
+    e.preventDefault();
+    const newServe = e.target.value;
+    const newTypeServe = e.target.name;
+    setServe(newServe);
+    setTypeServe(newTypeServe)
+    console.log(newServe);
+    console.log(newTypeServe);
+  }
   return (
 <>
     <Header />
@@ -29,17 +51,32 @@ function checkout() {
                 <div className="flex flex-1 justify-end">
                   <button
                     className="text-sm p-2.5 bg-primary rounded-md font-semibold"
-                    aria-label="add menu"
+                    aria-label="add menu" onClick={addMenu}
                   >
                     + Add Menu
                   </button>
                 </div>
               </div>
             </div>
-            {productOrder()}
-            {productOrder()}
-            {productOrder()}
-          </div>
+            {product ? (
+                    product.map((order, index) => (
+                    <div key={index}>
+                    {productOrder({
+                      title: order.product_name,
+                      hot: order.hot_or_not,
+                      price: order.price,
+                      size: order.size_id,
+                      quantity: order.quantity,
+                      serve_id: typeServe
+                    })}
+                  </div>
+                  ))
+                  ) : (
+              <div className='absolute text-xl md:text-2xl lg:text-4xl justify-center font-semibold text-footer'>
+                  No product information available.
+              </div>
+              )}
+            </div>
           <div className="pb-[31px]">
             <div className="mb-9">
               <p className="flex flex-1 items-center text-xl desk:text-2xl">
@@ -81,26 +118,26 @@ function checkout() {
                 />
               </div>
               <p>Delivery</p>
-              <div className="flex gap-2">
+              <form className="flex gap-2">
                 <button
-                  className="flex-1 p-2.5 border-solid border-2 border-border rounded-xl hover:border-primary"
-                  aria-label="dine in"
+                  className="flex-1 p-2.5 border-solid border-2 border-border rounded-xl focus:border-primary"
+                  aria-label="dine in" value='5000' name='Dine In' onClick={chooseServing}
                 >
                   Dine In
                 </button>
                 <button
-                  className="flex-1 p-2.5 border-solid border-2 border-border rounded-xl hover:border-primary"
-                  aria-label="delivery"
+                  className="flex-1 p-2.5 border-solid border-2 border-border rounded-xl focus:border-primary"
+                  aria-label="delivery" value='20000' name='Delivery' onClick={chooseServing}
                 >
                   Door Delivery
                 </button>
                 <button
-                  className="flex-1 p-2.5 border-solid border-2 border-border rounded-xl hover:border-primary"
-                  aria-label="pick up"
+                  className="flex-1 p-2.5 border-solid border-2 border-border rounded-xl focus:border-primary"
+                  aria-label="pick up" value='0' name='Pick Up' onClick={chooseServing}
                 >
                   Pick Up
                 </button>
-              </div>
+              </form>
             </div>
           </div>
         </section>
@@ -114,11 +151,11 @@ function checkout() {
             >
               <div className="flex">
                 <p className="flex-1">Order</p>
-                <p className="flex-1 flex justify-end">IDR 40.000</p>
+                <p className="flex-1 flex justify-end">IDR {totalPrice}</p>
               </div>
               <div className="flex">
                 <p className="flex-1">Delivery</p>
-                <p className="flex-1 flex justify-end">IDR 0</p>
+                <p className="flex-1 flex justify-end">IDR {serve}</p>
               </div>
               <div className="flex">
                 <p className="flex-1">Tax</p>

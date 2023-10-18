@@ -3,25 +3,44 @@ import Header from '../components/header';
 import Promo from '../components/promo';
 import Filter from '../components/filter';
 import Footer from '../components/footer';
+import { useSearchParams } from "react-router-dom";
 import { productWithRating } from '../components/productCard';
-import { useProductContext } from '../context/productContext';
+import { searchProduct } from '../https/product';
 
 function product() {
-  const { product } = useProductContext();
-  // const [productData, setProductData] = useState([]);
-
-  // useEffect(() => {
-  //   if (product.isProductAvailable) {
-  //     setProductData(product);
-  //   } else {
-  //     setProductData([]);
-  //   }
-  // }, [product.isProductAvailable, product.productInfo]);
-
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [dataProduct, setDataProduct] = useState(null)
+  const [pages , setPage] = useState(null)
+  // console.log(searchParams.toString())
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+  const url = import.meta.env.VITE_BACKEND_HOST + "/products?" + searchParams.toString()
+  useEffect(() => {
+    // Fetch data only once after the component is mounted
+    searchProduct(url)
+      .then((res) => {
+        setDataProduct(res.data.result);
+        setPage(res.data.meta);
+        // console.log(page);
+        // console.log(dataProduct);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
+  const consol = () => {
+    console.log(pages);
+    console.log(dataProduct)
+  }
   return (
     <>
       <Header />
       <main className="px-2 md:pl-10 desk:pl-def md:pr-10 desk:pr-def">
+      <div className='hidden lg:block w-full' >
+        <img src="./webp/Rectangle 299.webp" alt="product" className='w-full' />
+        {/* <p className='text-2xl desk:text-5xl absolute text-white top-0 left-2'>We Provide Good Coffee and Healthy Meals</p> */}
+      </div>
         <section className="flex flex-col gap-y-5 mb-10 mt-10">
           <p className="text-2xl lg:text-5xl">Today Promo</p>
           <div className="w-full overflow-scroll">
@@ -34,8 +53,8 @@ function product() {
           </div>
         </section>
         <section>
-          <div className="flex flex-col gap-y-5">
-            <p className="text-2xl lg:text-5xl">Our Product</p>
+          <div className="flex flex-col gap-y-5 mb-8">
+            <p className="text-2xl lg:text-5xl" onClick={consol}>Our Product</p>
             <div className="flex gap-5 w-full">
               <Filter />
               <div className="w-full relative">
@@ -53,23 +72,27 @@ function product() {
                     id: productInfo[0].No,
                   })}
                 </div> */}
-                <div className={` w-full grid mobile_m:grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 justify-items-center mb-8`}>
-                  {product.isProductAvailable === true ? (
-                  product.productInfo.map((product, index) => (
-                  <div key={index}>
-                  {productWithRating({
-                    title: product.Product,
-                    desc: product.Description,
-                    price: product.Price,
-                    id: product.No,
-                  })}
+                <div className={`w-full grid mobile_m:grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 justify-items-center mb-8`}>
+                  {dataProduct ? (
+                    dataProduct.map((product, index) => (
+                    <div key={index}>
+                    {productWithRating({
+                      title: product.Product,
+                      desc: product.Description,
+                      price: product.Price,
+                      id: product.No,
+                    })}
+                  </div>
+                  ))
+                  ) : (
+                  <div className='absolute text-xl md:text-2xl lg:text-4xl justify-center font-semibold text-footer'>
+                      No product information available.
+                  </div>
+                   )}
                 </div>
-                ))
-                ) : (
-                <div className='absolute text-xl md:text-2xl lg:text-4xl justify-center font-semibold text-footer' >No product information available.</div>
-              )}
-              </div>
-                <div className="w-full flex justify-center">{/* Add pagination here */}</div>
+                <div className="w-full flex justify-center">
+                  <button className='h-12 w-12 bg-order text-black rounded-full flex justify-center items-center'>{}</button>
+                </div>
               </div>
             </div>
           </div>

@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState } from 'react'
 import {useNavigate} from "react-router-dom"
-import { getDetailProduct } from '../https/product'
+import { Link } from "react-router-dom";
 
 export function productCard() {
   const [cancelProduct, setCancel] = useState(false)
@@ -53,7 +53,7 @@ export function productCard() {
   )
 }
 
-export function productOrder() {
+export function productOrder(props) {
   return (
     <div className="mb-4">
               <div className="relative flex items-center bg-order p-2.5">
@@ -73,22 +73,22 @@ export function productOrder() {
                   >
                     FLASH SALE!
                   </p>
-                  <p className="text-lg font-bold">Hazelnut Latte</p>
+                  <p className="text-lg font-bold">{props.title}</p>
                   <div
                     className="grid grid-cols-[auto_auto] sm:grid-cols-[auto_2px_auto_2px_auto_2px_auto] text-sm text-center text-detail desk:text-xl"
                   >
-                    <p>2pcs</p>
+                    <p>{props.quantity} pcs</p>
                     <hr className="hidden sm:block h-5 desk:h-8 w-0.5 bg-detail" />
-                    <p>Regular</p>
+                    <p>{props.size}</p>
                     <hr className="hidden sm:block h-5 desk:h-8 w-0.5 bg-detail" />
-                    <p>Ice</p>
+                    <p>{props.hot}</p>
                     <hr className="hidden sm:block h-5 desk:h-8 w-0.5 bg-detail" />
-                    <p>Dine In</p>
+                    <p>{props.serve_id}</p>
                   </div>
                   <div className="sm:flex items-center gap-x-3 font-semibold">
                     <p className="text-xs text-red-700"><del>IDR 40.000</del></p>
                     <p className="text-base mobile:text-subtitle text-primary">
-                      IDR 20.000
+                      IDR {props.price}
                     </p>
                   </div>
                 </div>
@@ -138,17 +138,6 @@ export function productOrder() {
 }
 
 export function productWithRating(props) {
-  const navigate = useNavigate();
-  const getProduct = async() => {
-    const id = props.id
-      getDetailProduct(id)
-      .then((res) => {
-        navigate("/detailproduct")
-        console.log(res.data.result[0])
-      }) .catch((err) => {
-        console.log(err)
-      })
-  }
   return (
     <div className="w-fit">
                 <div
@@ -202,12 +191,11 @@ export function productWithRating(props) {
                       <p className="text-base text-primary">IDR {props.price}</p>
                     </div>
                     <div className="flex flex-col gap-y-1 lg:flex-row lg:gap-2">
-                      <button
+                      <Link to={`/detailproduct?id=${props.id}`}
                         className="flex justify-center text-base p-1 w-full bg-primary rounded-xl"
-                        onClick={getProduct} 
                       >
                         Buy
-                      </button>
+                      </Link>
                       <button
                         className="flex justify-center text-primary text-xl p-1 w-full border-2 border-solid border-primary rounded-xl lg:w-[20%]"
                       >
