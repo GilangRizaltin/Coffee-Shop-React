@@ -5,12 +5,15 @@ import { useState } from 'react';
 import Footer from "../components/footer";
 import { useProductContext } from '../context/productContext';
 import { useNavigate } from 'react-router-dom';
+import { createOrder } from '../https/order';
 
 function checkout() {
   const [showModalCheckout, setModalCheckout] = useState(false);
   const setShowModalCheckout = () => {
     setModalCheckout((state) => !state)
   };
+  const [successCheckout, setSuccessCheckout] = useState(false);
+
   const navigate = useNavigate()
   const addMenu = () => {
     navigate("/product")
@@ -24,12 +27,36 @@ function checkout() {
   const [typeServe , setTypeServe] = useState('')
   const chooseServing = (e) => {
     e.preventDefault();
-    const newServe = e.target.value;
+    // const newServe = e.target.value;
     const newTypeServe = e.target.name;
-    setServe(newServe);
+    // setServe(newServe);
     setTypeServe(newTypeServe)
-    console.log(newServe);
+    // console.log(newServe);
     console.log(newTypeServe);
+  }
+  const [msg , setMsg] = useState('')
+  const totalTransactions = totalPrice + serve
+  const submitCheckout = () => {
+    const jwt = localStorage.getItem("token")
+    const body = {
+      "subtotal": totalPrice,
+      "promo_id": 1,
+      "serve_id": `${typeServe}`,
+      "total_transactions": (parseInt(totalTransactions)),
+      "payment_type": 2,
+      "products": product
+    }
+    // console.log(body);
+    // console.log(jwt);
+    createOrder(jwt, body)
+    .then((res) => {
+      console.log(res)
+      setSuccessCheckout(true)
+      // setMsg(res)
+    })
+    .catch((err) => {
+      console.log(err)
+    })
   }
   return (
 <>
@@ -67,7 +94,8 @@ function checkout() {
                       price: order.price,
                       size: order.size_id,
                       quantity: order.quantity,
-                      serve_id: typeServe
+                      serve_id: typeServe,
+                      idx: index,
                     })}
                   </div>
                   ))
@@ -129,7 +157,7 @@ function checkout() {
                   className="flex-1 p-2.5 border-solid border-2 border-border rounded-xl focus:border-primary"
                   aria-label="delivery" value='20000' name='Delivery' onClick={chooseServing}
                 >
-                  Door Delivery
+                  Delivery
                 </button>
                 <button
                   className="flex-1 p-2.5 border-solid border-2 border-border rounded-xl focus:border-primary"
@@ -196,7 +224,26 @@ function checkout() {
                     <button
                       id="confirm"
                       className="border-2 border-solid border-order py-1 px-2.5 rounded-xl hover:border-primary"
-                      aria-label="confirm checkout"
+                      aria-label="confirm checkout" onClick={submitCheckout}
+                    >
+                      Ok
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div
+                id="successCheckoutModal"
+                className={`${successCheckout ? "block" : "hidden"} fixed inset-0 flex z-50 outline-none modal w-full h-full bg-zinc-600/90 items-center justify-center`}
+              >
+                <div
+                  className="flex flex-col gap-7 modal-content bg-white p-8 rounded shadow-lg w-[300px]"
+                >
+                  <p className="flex justify-center">Checkout Success</p>
+                  <div className="flex justify-center">
+                    <button
+                      id="confirm"
+                      className="border-2 border-solid border-order py-1 px-2.5 rounded-xl hover:border-primary"
+                      aria-label="confirm checkout" onClick={() => navigate("/product")}
                     >
                       Ok
                     </button>

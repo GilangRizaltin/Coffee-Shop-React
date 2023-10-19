@@ -33,7 +33,7 @@ function login() {
       })
       .catch((err) => {
         // console.log(err);
-        setMsg(err.response.data.msg)
+        setMsg(err.response)
         setShowPwdWrongModal()});
   };
   return (
@@ -106,7 +106,7 @@ function login() {
       <div
         className="flex flex-col gap-7 modal-content bg-white p-8 rounded shadow-lg w-[300px] justify-center"
       >
-        <p className="text-red-700">{msg}</p>
+        <p className="text-red-700">p</p>
         <div className="flex justify-end items-center gap-4 text-black">
           <button
             className="flex-1 hover:border-primary text-base border-2 border-solid border-order rounded-xl"

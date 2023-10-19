@@ -5,13 +5,14 @@ import Footer from "../components/footer";
 import { productWithRating } from "../components/productCard";
 import { useLocation } from 'react-router-dom';
 import { getDetailProduct } from '../https/product';
-import {useNavigate} from "react-router-dom"
+import {useNavigate, useParams} from "react-router-dom"
 import { useProductContext } from '../context/productContext';
 
 function detailProduct() {
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  const id = searchParams.get('id');
+  // const location = useLocation();
+  // const searchParams = new URLSearchParams(location.search);
+  // const id = searchParams.get('id');
+  let { id } = useParams();
   // console.log(id);
   const [data, setData] = useState('')
   getDetailProduct(id)
@@ -46,7 +47,7 @@ function detailProduct() {
   };
   const dataOrder = {
     image: "...",
-    product_id: id,
+    product_id: (parseInt(id)),
     product_name: data.Product,
     hot_or_not: hotOrNot,
     size_id: size,

@@ -2,6 +2,7 @@ import React from 'react'
 import { useState } from 'react'
 import {useNavigate} from "react-router-dom"
 import { Link } from "react-router-dom";
+import { useProductContext } from '../context/productContext';
 
 export function productCard() {
   const [cancelProduct, setCancel] = useState(false)
@@ -54,6 +55,12 @@ export function productCard() {
 }
 
 export function productOrder(props) {
+  const {deleteData} = useProductContext();
+  const index = props.idx;
+
+  // const deleteFromOrder = () => {
+  //   delete product[index]
+  // };
   return (
     <div className="mb-4">
               <div className="relative flex items-center bg-order p-2.5">
@@ -95,7 +102,7 @@ export function productOrder(props) {
                 <div className="">
                   <button
                     className="absolute top-2 right-2 md:relative md:right-0 cursor-pointer"
-                    aria-label="cancel"
+                    aria-label="cancel" onClick={() => deleteData(index)}
                   >
                     <svg
                       width="24"
@@ -191,7 +198,7 @@ export function productWithRating(props) {
                       <p className="text-base text-primary">IDR {props.price}</p>
                     </div>
                     <div className="flex flex-col gap-y-1 lg:flex-row lg:gap-2">
-                      <Link to={`/detailproduct?id=${props.id}`}
+                      <Link to={`/detailproduct/${props.id}`}
                         className="flex justify-center text-base p-1 w-full bg-primary rounded-xl"
                       >
                         Buy

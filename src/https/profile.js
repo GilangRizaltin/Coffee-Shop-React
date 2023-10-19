@@ -1,10 +1,14 @@
 import axios from "axios";
 
 
-//  const baseUrl = import.meta.env.VITE_BACKEND_HOST + "/products"
+ const url = import.meta.env.VITE_BACKEND_HOST + "/users/profile"
 
-export const getUser = (URL) => {
-    return axios.get(URL)
+export const getUser = (jwt) => {
+    return axios.get(url, {
+        headers: {
+          'Authorization': 'Bearer ' + jwt,
+        },
+    })
 }
 
 const urlUpdateProfile = import.meta.env.VITE_BACKEND_HOST + "/users"

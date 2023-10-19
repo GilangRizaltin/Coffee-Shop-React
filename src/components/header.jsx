@@ -1,10 +1,9 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import React from 'react'
 import {useNavigate} from "react-router-dom"
 import { useUserContext } from '../context/context';
 import { searchProduct } from '../https/product';
-import { useProductContext } from '../context/productContext';
-import { getUserProfile } from '../https/profile';
+import { getUser } from '../https/profile';
 
 // function headertwo() {
 //   const [dropdown, showDropdown] = useState(false);
@@ -218,16 +217,9 @@ import { getUserProfile } from '../https/profile';
 
 function header() {
   const navigate = useNavigate();
-  const {changeProduct} = useProductContext();
   const [toggle, changeToggle] = useState(false);
   const setToggle = () => {
     changeToggle((state) => !state);
-    showSearchBar(false)
-  };
-  const [searchBar, showSearchBar] = useState(false);
-  const setSearchingBar = () => {
-    showSearchBar((state) => !state);
-    changeToggle(false)
   };
   const [modalLogout, showModalLogout] = useState(false);
   const setShowModalLogout = () => {
@@ -242,20 +234,22 @@ function header() {
       isUserAvailable: false,
     });
     setShowModalLogout();
+    localStorage.removeItem("token")
   }
-  const toProfile = () => {
-    const jwt = localStorage.getItem("token")
-    console.log(jwt)
-    if (jwt) {
-      getUserProfile(jwt)
-      .then((res) => {
-        console.log(res)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-    }
-  }
+  const jwt = localStorage.getItem("token")
+  const [profileData, setProfileData] = useState({})
+  useEffect(() => {
+  getUser(jwt)
+    .then((res) => {
+      setProfileData(res.data.res[0]);
+      // console.log(profileData)
+      console.log(res.data.res[0])
+        setImage(import.meta.env.VITE_BACKEND_HOST + res.data.res[0].user_photo_profile)
+    })
+    .catch((err) => {
+      console.error(err);
+      });
+  }, []);
    return (
     <>
     <header
@@ -292,7 +286,7 @@ function header() {
             <ion-icon name="cart-outline"></ion-icon>
         </div>
         <div className="hidden md:block cursor-pointer  pl-8">
-          <img src={imageUrl}  className='h-[48px] w-[48px] rounded-full' alt="profile-photo"  onClick={toProfile}/>
+          <img src={imageUrl}  className='h-[48px] w-[48px] rounded-full' alt="profile-photo"/>
         </div>
         <div className="hidden md:block cursor-pointer relative pl-8">
           <button
