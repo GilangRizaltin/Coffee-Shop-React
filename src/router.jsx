@@ -8,10 +8,11 @@ import Login from "./pages/login";
 import Register from "./pages/register";
 import ResetPwd from "./pages/resetpassword";
 import Profile from "./pages/profile";
-import DetailProduct from "./pages/detailProduct";
+import DetailProduct from "./pages/DetailProduct";
 import DetailOrder from "./pages/detailOrder";
 
 // import Test from "./pages/login";
+import Sidebar from "./components/Sidebar";
 
 
 const router = createBrowserRouter([
@@ -56,7 +57,7 @@ const router = createBrowserRouter([
     // errorElement: "",
   },
   {
-    path: `/detailorder`,
+    path: `/detailorder/:id`,
     element: <DetailOrder />,
     // errorElement: "",
   },
@@ -65,11 +66,12 @@ const router = createBrowserRouter([
     element: <DetailProduct />,
     // errorElement: "",
   },
-  // {
-  //   path: "/test",
-  //   element: <Test />,
-  //   // errorElement: "",
-  // },
+  {
+    path: "/test",
+    element: <Sidebar />,
+    // errorElement: "",
+  },
+  
 ]);
 
 export default router;

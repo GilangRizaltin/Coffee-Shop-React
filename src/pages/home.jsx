@@ -2,10 +2,8 @@ import React from 'react'
 import Header  from '../components/header';
 import Footer from "../components/footer";
 import { productCard } from "../components/productCard";
-// import { useUserContext } from '../context/context';
 
 function home() {
-  // const {user} = useUserContext();
   return (
     <>
     <Header />
@@ -19,7 +17,7 @@ function home() {
           />
         </div>
         <div
-          className="w-full bottom-0 border-none bg-gradient-to-t from-black to-zinc-700 text-white px-2 pb-5 pt-[38px] md:py-[58px] flex flex-col gap-[25px] sm:relative sm:opacity-100 md:px-10 desk:pl-def  lg:flex-1 lg:justify-center"
+          className="w-full bottom-0 border-none bg-gradient-to-t from-black to-zinc-700 text-white px-2 pb-5 pt-[38px] md:py-[58px] flex flex-col gap-[25px] sm:relative sm:opacity-100 sm:px-10 desk:pl-def  lg:flex-1 lg:justify-center"
         >
           <p className="text-2xl lg:text-3xl desk:text-5xl">
             Start Your Day with Coffee and Good Meals
@@ -60,7 +58,7 @@ function home() {
           />
         </div>
         <div
-          className="bg-white text-black px-2 flex flex-col gap-[25px] pb-5 pt-[38px] md:py-[58px] sm:relative md:px-10 desk:pl-def lg:flex-1 lg:justify-center"
+          className="bg-white text-black px-2 flex flex-col gap-[25px] pb-5 pt-[38px] md:py-[58px] sm:relative sm:px-10 desk:pl-def lg:flex-1 lg:justify-center"
         >
           <div className="flex gap-5 items-center">
             <hr className="w-1 h-10 desk:h-20 bg-primary" />
@@ -138,7 +136,7 @@ function home() {
       </section>
       <section className="mb-10 mt-10 desk:mb-20 desk:mt-20 desk:h-[650px]">
         <div
-          className="pl-5 pr-5 md:pl-10 md:pr-10 desk:pl-def desk:pr-def flex flex-col gap-y-[9px] desk:gap-y-[25px]"
+          className="px-2 sm:px-10 desk:px-def flex flex-col gap-y-[9px] desk:gap-y-[25px]"
         >
           <p className="flex justify-center text-2xl desk:text-5xl">
             Here Is People Favorite

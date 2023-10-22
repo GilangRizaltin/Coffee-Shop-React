@@ -7,24 +7,33 @@ import { useProductContext } from '../context/productContext';
 import { useNavigate } from 'react-router-dom';
 import { createOrder } from '../https/order';
 
+import { useSelector, useDispatch } from 'react-redux';
+
 function checkout() {
+  //redux
+  const dispatch = useDispatch();
+  const reduxData = useSelector((state) => {
+    return state.productInfo;
+  })
+  //Toggle Modals
   const [showModalCheckout, setModalCheckout] = useState(false);
   const setShowModalCheckout = () => {
     setModalCheckout((state) => !state)
   };
   const [successCheckout, setSuccessCheckout] = useState(false);
-
+  //Add Menu Button
   const navigate = useNavigate()
   const addMenu = () => {
     navigate("/product")
   }
-  const {product} = useProductContext();
-  const totalPrice = product.reduce((accumulator, order) => {
+  //Transaction process
+  const [serve, setServe] = useState('')
+  const [typeServe , setTypeServe] = useState('')
+  const totalPrice = reduxData.reduce((accumulator, order) => {
     const orderPrice = parseFloat(order.price);
     return accumulator + orderPrice;
   }, 0);
-  const [serve, setServe] = useState('')
-  const [typeServe , setTypeServe] = useState('')
+  const totalTransactions = totalPrice + serve
   const chooseServing = (e) => {
     e.preventDefault();
     // const newServe = e.target.value;
@@ -34,25 +43,21 @@ function checkout() {
     // console.log(newServe);
     console.log(newTypeServe);
   }
-  const [msg , setMsg] = useState('')
-  const totalTransactions = totalPrice + serve
+  const getUserData = JSON.parse(localStorage.getItem('dataUser'))
+  const jwt = getUserData.token
   const submitCheckout = () => {
-    const jwt = localStorage.getItem("token")
     const body = {
       "subtotal": totalPrice,
       "promo_id": 1,
       "serve_id": `${typeServe}`,
       "total_transactions": (parseInt(totalTransactions)),
       "payment_type": 2,
-      "products": product
+      "products": reduxData
     }
-    // console.log(body);
-    // console.log(jwt);
     createOrder(jwt, body)
     .then((res) => {
       console.log(res)
       setSuccessCheckout(true)
-      // setMsg(res)
     })
     .catch((err) => {
       console.log(err)
@@ -85,8 +90,8 @@ function checkout() {
                 </div>
               </div>
             </div>
-            {product ? (
-                    product.map((order, index) => (
+            {reduxData ? (
+                    reduxData.map((order, index) => (
                     <div key={index}>
                     {productOrder({
                       title: order.product_name,

@@ -221,40 +221,32 @@ function header() {
   const setToggle = () => {
     changeToggle((state) => !state);
   };
+  const [notLogin, setNotLogin] = useState(false);
+  const setShowModalNotLogin = () => {
+    setNotLogin((state) => !state);
+  };
   const [modalLogout, showModalLogout] = useState(false);
   const setShowModalLogout = () => {
     showModalLogout((state) => !state)
   };
-  const {user, changeUser} = useUserContext();
-  const url = import.meta.env.VITE_BACKEND_HOST
-  let imageUrl = (user.userInfo ? url + user.userInfo.photo : url + "/img/user_image-1695737375917-95805558.jpeg")
-  const onLogOutHandler = () => {
-    delete user.userInfo;
-    changeUser({
-      isUserAvailable: false,
-    });
-    setShowModalLogout();
-    localStorage.removeItem("token")
-  }
-  const jwt = localStorage.getItem("token")
-  const [profileData, setProfileData] = useState({})
+
+  const getUserData = JSON.parse(localStorage.getItem('dataUser'))
+  const [urlImage, setUrlImage] = useState("/img/user_image-1695737375917-95805558.jpeg")
+  const imageAccess = import.meta.env.VITE_BACKEND_HOST + urlImage
   useEffect(() => {
-  getUser(jwt)
-    .then((res) => {
-      setProfileData(res.data.res[0]);
-      // console.log(profileData)
-      console.log(res.data.res[0])
-        setImage(import.meta.env.VITE_BACKEND_HOST + res.data.res[0].user_photo_profile)
-    })
-    .catch((err) => {
-      console.error(err);
-      });
+    if (getUserData) return setUrlImage(getUserData.photo);
   }, []);
+  const onLogOutHandler = () => {
+    setShowModalLogout();
+    localStorage.removeItem("dataUser")
+    navigate("/")
+  }
    return (
     <>
     <header
       className="flex bg-black text-white font-primary h-header items-center sticky top-0 z-50 gap-8 px-2 sm:px-10 desk:px-def"
     >
+      <section className="flex items-center gap-8">
         <div className="flex items-center gap-2.5 cursor-pointer" onClick={() => navigate("/login")}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -278,15 +270,18 @@ function header() {
           <p onClick={() => navigate("/product")}>Product</p>
           </div>
         </div>
-        <div className='flex-1 flex items-center justify-end'>
+      </section>
+      <section className='flex-1 flex items-center justify-end'>
         <div className="cursor-pointer text-2xl  pl-8" onClick={() => navigate("/product")}>
           <ion-icon name="search-outline"></ion-icon>
         </div>
         <div className="hidden md:block cursor-pointer text-2xl  pl-8">
             <ion-icon name="cart-outline"></ion-icon>
         </div>
+        {getUserData !== null ? (
+      <div className='flex items-center' id='navbarIfLogin'>
         <div className="hidden md:block cursor-pointer  pl-8">
-          <img src={imageUrl}  className='h-[48px] w-[48px] rounded-full' alt="profile-photo"/>
+          <img src={imageAccess}  className='h-[48px] w-[48px] rounded-full' alt="profile-photo"/>
         </div>
         <div className="hidden md:block cursor-pointer relative pl-8">
           <button
@@ -311,19 +306,34 @@ function header() {
             <ion-icon name="menu-outline" className='text-white'></ion-icon>
           </div>
         </div>
+      </div>
+      ) : (
+      <div className='text-sm flex items-center md:gap-8 md:ml-8' id='navbarIfNotLoginYet'>
         <div>
+          <button className='hidden md:block border-2 border-solid border-white rounded-lg p-2.5' onClick={() => navigate("login")}>Sign In</button>
         </div>
+        <div>
+          <button className='hidden md:block bg-primary rounded-lg text-black p-2.5' onClick={() => navigate("register")}>Sign Up</button>
         </div>
+        <div className="block md:hidden pl-8">
+          <div id="dropdownHamburger" className="border-0 bg-none cursor-pointer  text-2xl" onClick={setShowModalNotLogin}>
+            <ion-icon name="menu-outline" className='text-white'></ion-icon>
+          </div>
+        </div>
+      </div>
+      )}
+      </section>
     </header>
     <div
     id="dropdownSmallScreen"
     className={`${toggle ? "block" : "hidden"} fixed z-50 top-[76px] bg-black w-full flex flex-col items-center overflow-auto h-screen md:hidden transition-all duration-300 ease-in`}
   >
     <div className="flex items-center px-2 py-4 gap-4">
-      <img src={imageUrl} alt="profile-photo" className='h-[48px] w-[48px]  rounded-full' onClick={() => navigate("/profile")}/>
+      <img src={imageAccess} alt="profile-photo" className='h-[48px] w-[48px]  rounded-full' onClick={() => navigate("/profile")}/>
       <div className="text-sm text-white font-semibold">
-        {user.isUserAvailable && (<p className='text-lg'>{user.userInfo.userName}</p>)}
-        {!user.isUserAvailable && (<p className='text-lg'>Guest</p>)}
+      <p className='text-lg'>{getUserData ? getUserData.userName : ""}</p>
+        {/* {user.isUserAvailable && (<p className='text-lg'>{user.userInfo.userName}</p>)}
+        {!user.isUserAvailable && (<p className='text-lg'>Guest</p>)} */}
       </div>
     </div>
     <p className="text-white px-3 py-4 hover:border-b-2 hover:border-b-solid hover:border-b-primary cursor-pointer" onClick={() => navigate("/")}>Home</p>
@@ -331,6 +341,13 @@ function header() {
     <p className="text-white px-3 py-4 hover:border-b-2 hover:border-b-solid hover:border-b-primary cursor-pointer" onClick={() => navigate("/history")}>History</p>
     <p className="text-white px-3 py-4 hover:border-b-2 hover:border-b-solid hover:border-b-primary cursor-pointer" onClick={() => navigate("/profile")}>Profile</p>
     <p className="text-white px-3 py-4 hover:border-b-2 hover:border-b-solid hover:border-b-primary cursor-pointer " onClick={setShowModalLogout}>log Out</p>
+  </div>
+  <div
+    id="dropdownSmallScreenNotLogin"
+    className={`${notLogin ? "block" : "hidden"} fixed z-50 top-[76px] bg-black w-full flex flex-col items-center overflow-auto h-screen md:hidden transition-all duration-300 ease-in`}
+  >
+    <p className="text-white px-3 py-4 hover:border-b-2 hover:border-b-solid hover:border-b-primary cursor-pointer" onClick={() => navigate("/")}>Sign In</p>
+    <p className="text-white px-3 py-4 hover:border-b-2 hover:border-b-solid hover:border-b-primary cursor-pointer" onClick={() => navigate("/product")}>Sign Up</p>
   </div>
   <div
       className={`${modalLogout ? "block" : "hidden"} fixed inset-0 flex items-center justify-center z-50 outline-none modal w-full h-full bg-zinc-600/90`}
@@ -356,25 +373,6 @@ function header() {
         </div>
       </div>
     </div>
-    {/* <form onSubmit={submitSearch} className={`${!searchBar ? "hidden" : "flex"} md:hidden bg-white border-b-2 border-solid border-black sticky top-[76px] z-50`}>
-      <div className="p-5 md:hidden w-full flex items-center gap-2">
-        <div
-          className="flex items-center gap-2 border-2 border-solid border-order p-3 flex-1 rounded-xl"
-        >
-          <ion-icon name="search-outline"></ion-icon>
-          <input
-            type="text"
-            name='search_bar'
-            id=""
-            placeholder="Search Product"
-            className="outline-none w-full"
-          />
-        </div>
-        <button className="bg-primary h-12 w-12 rounded-xl">
-          <ion-icon name="search-outline"></ion-icon>
-        </button>
-      </div>
-    </form> */}
   </>
   )
 }

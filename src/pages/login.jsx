@@ -3,6 +3,7 @@ import React from 'react'
 import {useNavigate} from "react-router-dom"
 import { useUserContext } from "../context/context";
 import { loginUser } from '../https/login';
+import useLocalStorage from '../utils/hooks/useLocalStorage';
 
 function login() {
   const navigate = useNavigate();
@@ -14,8 +15,9 @@ function login() {
   const showPwdHandler = () => {
     setIsPwdShown((state) => !state);
   }
+  //login axios
   const [msg, setMsg] = useState('');
-  const {changeUser} = useUserContext();
+  const [userData, setUserData] = useLocalStorage("dataUser", null, "json")
   const submitHandler = (e) => {
     e.preventDefault();
     const body = {
@@ -25,15 +27,21 @@ function login() {
     // console.log(loginInformation);
     loginUser(body)
     .then((res) => {
-      //   console.log(res.data); 
-        changeUser({isUserAvailable: true,
-                    userInfo: res.data.data});
-        localStorage.setItem("token", res.data.data.token)
-        navigate("/");
-      })
+      const newData = res.data.data;
+      if (userData) {
+        // If dataUser already exists, merge the new data with the existing data
+        setUserData({ ...userData, ...newData });
+      } else {
+        // If dataUser doesn't exist, set the new data
+        setUserData(newData);
+      }
+      console.log(res.data);
+      // localStorage.setItem("token", res.data.data.token)
+      navigate("/");
+    })
       .catch((err) => {
-        // console.log(err);
-        setMsg(err.response)
+        console.log(err);
+        setMsg(err.response.data.msg)
         setShowPwdWrongModal()});
   };
   return (
@@ -106,7 +114,7 @@ function login() {
       <div
         className="flex flex-col gap-7 modal-content bg-white p-8 rounded shadow-lg w-[300px] justify-center"
       >
-        <p className="text-red-700">p</p>
+        <p className="text-red-700">{msg}</p>
         <div className="flex justify-end items-center gap-4 text-black">
           <button
             className="flex-1 hover:border-primary text-base border-2 border-solid border-order rounded-xl"

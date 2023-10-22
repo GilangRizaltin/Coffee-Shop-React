@@ -10,3 +10,21 @@ export const createOrder = (jwt, body) => {
         },
     })
 }
+
+export const getOrderDetail = (orderDetailUrl, jwt) => {
+    return axios.get(orderDetailUrl, {
+        headers: {
+            'Authorization': 'Bearer ' + jwt,
+        },
+    })
+}
+
+
+
+export const getOrderIdDetail = (id, jwt) => {
+    return axios.get(import.meta.env.VITE_BACKEND_HOST + "/orders/" + id, {
+        headers: {
+            'Authorization': 'Bearer ' + jwt,
+        },
+    })
+}

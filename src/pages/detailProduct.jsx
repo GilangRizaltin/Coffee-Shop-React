@@ -3,10 +3,12 @@ import { useState, useEffect } from 'react'
 import Header  from '../components/header';
 import Footer from "../components/footer";
 import { productWithRating } from "../components/productCard";
-import { useLocation } from 'react-router-dom';
+// import { useLocation } from 'react-router-dom';
 import { getDetailProduct } from '../https/product';
 import {useNavigate, useParams} from "react-router-dom"
 import { useProductContext } from '../context/productContext';
+
+import { useSelector, useDispatch } from 'react-redux';
 
 function detailProduct() {
   // const location = useLocation();
@@ -58,8 +60,23 @@ function detailProduct() {
     window.scrollTo(0, 0);
   }, []);
   const {addProduct} = useProductContext();
+
+  const dispatch = useDispatch();
+  // const yeyeye = {
+  //   image: "...",
+  //   product_id: 12,
+  //   product_name: "stringify",
+  //   hot_or_not: true,
+  //   size_id: 12,
+  //   quantity: 2,
+  //   price: 3000,
+  // }
   const navigate = useNavigate();
   const setOrder = () => {
+    dispatch({
+      type: "ADD_PRODUCT",
+      data: dataOrder
+    })
     addProduct(dataOrder);
     navigate("/checkout");
     // console.log(dataOrder)

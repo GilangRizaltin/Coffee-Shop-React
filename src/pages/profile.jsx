@@ -5,8 +5,9 @@ import { updateDataUser, getUser } from '../https/profile';
 import { useNavigate } from 'react-router-dom';
 
 function profile() {
-  const jwt = localStorage.getItem("token")
-  const [profileData, setProfileData] = useState({a: "a"})
+  const getUserData = JSON.parse(localStorage.getItem('dataUser'))
+  const jwt = getUserData.token
+  const [profileData, setProfileData] = useState({})
   const [valueData, setValueData] = useState({})
   const [image, setImage] = useState('')
   useEffect(() => {
