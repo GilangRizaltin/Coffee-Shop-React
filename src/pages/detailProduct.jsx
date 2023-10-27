@@ -8,12 +8,10 @@ import { getDetailProduct } from '../https/product';
 import {useNavigate, useParams} from "react-router-dom"
 import { useProductContext } from '../context/productContext';
 
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { addOrder  } from '../redux/slices/orderRedux';
 
 function detailProduct() {
-  // const location = useLocation();
-  // const searchParams = new URLSearchParams(location.search);
-  // const id = searchParams.get('id');
   let { id } = useParams();
   // console.log(id);
   const [data, setData] = useState('')
@@ -51,8 +49,8 @@ function detailProduct() {
     image: "...",
     product_id: (parseInt(id)),
     product_name: data.Product,
-    hot_or_not: hotOrNot,
-    size_id: size,
+    hot_or_not: hotOrNot || "Hot",
+    size_id: size || "Small",
     quantity: quantity,
     price: data.Price,
   }
@@ -62,24 +60,11 @@ function detailProduct() {
   const {addProduct} = useProductContext();
 
   const dispatch = useDispatch();
-  // const yeyeye = {
-  //   image: "...",
-  //   product_id: 12,
-  //   product_name: "stringify",
-  //   hot_or_not: true,
-  //   size_id: 12,
-  //   quantity: 2,
-  //   price: 3000,
-  // }
   const navigate = useNavigate();
   const setOrder = () => {
-    dispatch({
-      type: "ADD_PRODUCT",
-      data: dataOrder
-    })
+    dispatch(addOrder({ data: dataOrder }));
     addProduct(dataOrder);
     navigate("/checkout");
-    // console.log(dataOrder)
   }
   return (
     <>

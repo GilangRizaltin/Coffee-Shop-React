@@ -1,48 +1,48 @@
 import { useState } from 'react'
 import React from 'react'
 import {useNavigate} from "react-router-dom"
-import { useUserContext } from "../context/context";
-import { loginUser } from '../https/login';
+// import { useUserContext } from "../context/context";
+// import { loginUser } from '../https/login';
 import useLocalStorage from '../utils/hooks/useLocalStorage';
+import { useSelector, useDispatch } from 'react-redux';
+import { userAction } from '../redux/slices/userAuth';
 
 function login() {
   const navigate = useNavigate();
-  const [isPwdWrong, setIsPwdWrong] = useState(false);
-  const setShowPwdWrongModal = () => {
-    setIsPwdWrong((state) => !state);
-  }
+  const user = useSelector(state => state.user);
+  // console.log(user)
+  const dispatch = useDispatch();
   const [isPwdShown, setIsPwdShown] = useState(false);
   const showPwdHandler = () => {
     setIsPwdShown((state) => !state);
   }
-  //login axios
-  const [msg, setMsg] = useState('');
+  //state
   const [userData, setUserData] = useLocalStorage("dataUser", null, "json")
+  //submit button login axios
   const submitHandler = (e) => {
     e.preventDefault();
+    const {loginThunk} = userAction
     const body = {
       email: e.target.user_email.value,
       password: e.target.pwd.value,
     };
-    // console.log(loginInformation);
-    loginUser(body)
-    .then((res) => {
-      const newData = res.data.data;
-      if (userData) {
-        // If dataUser already exists, merge the new data with the existing data
-        setUserData({ ...userData, ...newData });
-      } else {
-        // If dataUser doesn't exist, set the new data
-        setUserData(newData);
-      }
-      console.log(res.data);
-      // localStorage.setItem("token", res.data.data.token)
-      navigate("/");
-    })
-      .catch((err) => {
-        console.log(err);
-        setMsg(err.response.data.msg)
-        setShowPwdWrongModal()});
+    // loginUser(body)
+    // .then((res) => {
+    //   const newData = res.data.data;
+    //   if (userData) {
+    //     setUserData({ ...userData, ...newData });
+    //   } else {
+    //     setUserData(newData);
+    //   }
+    //   console.log(res.data);
+    //   // navigate("/");
+    // })
+    //   .catch((err) => {
+    //     console.log(err);
+    //     setMsg(err.response.data.msg)
+    //     setShowPwdWrongModal()});
+    dispatch(loginThunk(body))
+    navigate("/");
   };
   return (
     <>
@@ -107,24 +107,25 @@ function login() {
         </div>
       </form>
     </div>
-    <div
-      className={`${isPwdWrong ? "block" : "hidden"} fixed inset-0 flex items-center justify-center z-50 outline-none modal w-full h-full bg-zinc-600/90`}
+    {user.err && user.err.login &&
+    (<div
+      className={`flex fixed inset-0 items-center justify-center z-50 outline-none modal w-full h-full bg-zinc-600/90`}
       id="myModals"
     >
       <div
         className="flex flex-col gap-7 modal-content bg-white p-8 rounded shadow-lg w-[300px] justify-center"
       >
-        <p className="text-red-700">{msg}</p>
+        <p className="text-red-700">{user.err.login.message}</p>
         <div className="flex justify-end items-center gap-4 text-black">
           <button
             className="flex-1 hover:border-primary text-base border-2 border-solid border-order rounded-xl"
-            id="closeModalBtn" onClick={setShowPwdWrongModal}
+            id="closeModalBtn" 
           >
             Ok
           </button>
         </div>
       </div>
-    </div>
+    </div>)}
     </>
   )
 }

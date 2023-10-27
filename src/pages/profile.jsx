@@ -11,7 +11,6 @@ function profile() {
   const [valueData, setValueData] = useState({})
   const [image, setImage] = useState('')
   useEffect(() => {
-    // Fetch data only once after the component is mounted
     getUser(jwt)
       .then((res) => {
         setProfileData(res.data.res[0]);

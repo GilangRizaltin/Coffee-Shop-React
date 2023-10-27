@@ -35,7 +35,7 @@ function register() {
   const [msg, setMsg] = useState('');
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    console.log(firstPassword, secondPassword)
+    // console.log(firstPassword, secondPassword)
     if (firstPassword !== secondPassword) 
     return setPwdCorrection(true);
     setPwdCorrection(false);

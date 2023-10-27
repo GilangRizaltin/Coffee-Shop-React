@@ -10,6 +10,10 @@ import ResetPwd from "./pages/resetpassword";
 import Profile from "./pages/profile";
 import DetailProduct from "./pages/DetailProduct";
 import DetailOrder from "./pages/detailOrder";
+import Dashboard from "./pages/Dashboard";
+import ProductAdmin from "./pages/ProductAdmin";
+import OrderAdmin from "./pages/OrderAdmin";
+import UserAdmin from "./pages/UserAdmin";
 
 // import Test from "./pages/login";
 import Sidebar from "./components/Sidebar";
@@ -71,7 +75,26 @@ const router = createBrowserRouter([
     element: <Sidebar />,
     // errorElement: "",
   },
-  
+  {
+    path: "/admin",
+    element: <Dashboard />,
+    // errorElement: "",
+  },
+  {
+    path: "/admin/product",
+    element: <ProductAdmin />,
+    // errorElement: "",
+  },
+  {
+    path: "/admin/order",
+    element: <OrderAdmin />,
+    // errorElement: "",
+  },
+  {
+    path: "/admin/user",
+    element: <UserAdmin />,
+    // errorElement: "",
+  },
 ]);
 
 export default router;

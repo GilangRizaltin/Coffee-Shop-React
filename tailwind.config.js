@@ -8,6 +8,7 @@ export default {
     extend: {
       padding: {
         def: "calc((100vw - 1180px) / 2)",
+        desk:"calc(((100vw - 1240px) / 2) + 40px)",
         title_top: "78px",
         title_bottom: "58px",
       },

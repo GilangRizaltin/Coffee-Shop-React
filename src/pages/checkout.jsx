@@ -12,9 +12,7 @@ import { useSelector, useDispatch } from 'react-redux';
 function checkout() {
   //redux
   const dispatch = useDispatch();
-  const reduxData = useSelector((state) => {
-    return state.productInfo;
-  })
+  const reduxData = useSelector(state => state.order.productInfo)
   //Toggle Modals
   const [showModalCheckout, setModalCheckout] = useState(false);
   const setShowModalCheckout = () => {
@@ -29,18 +27,15 @@ function checkout() {
   //Transaction process
   const [serve, setServe] = useState('')
   const [typeServe , setTypeServe] = useState('')
-  const totalPrice = reduxData.reduce((accumulator, order) => {
+  const totalPrice = reduxData ? reduxData.reduce((accumulator, order) => {
     const orderPrice = parseFloat(order.price);
     return accumulator + orderPrice;
-  }, 0);
+  }, 0) : 0;
   const totalTransactions = totalPrice + serve
   const chooseServing = (e) => {
     e.preventDefault();
-    // const newServe = e.target.value;
     const newTypeServe = e.target.name;
-    // setServe(newServe);
     setTypeServe(newTypeServe)
-    // console.log(newServe);
     console.log(newTypeServe);
   }
   const getUserData = JSON.parse(localStorage.getItem('dataUser'))
@@ -63,6 +58,9 @@ function checkout() {
       console.log(err)
     })
   }
+  // const consol = () => {
+  //   console.log(reduxData)
+  // }
   return (
 <>
     <Header />
