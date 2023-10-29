@@ -6,7 +6,8 @@ import Home from "./pages/home";
 import Product from "./pages/product";
 import Login from "./pages/login";
 import Register from "./pages/register";
-import ResetPwd from "./pages/resetpassword";
+import ForgetPwd from "./pages/ForgetPassword";
+import ResetPwd from "./pages/ResetPassword"
 import Profile from "./pages/profile";
 import DetailProduct from "./pages/DetailProduct";
 import DetailOrder from "./pages/detailOrder";
@@ -14,35 +15,17 @@ import Dashboard from "./pages/Dashboard";
 import ProductAdmin from "./pages/ProductAdmin";
 import OrderAdmin from "./pages/OrderAdmin";
 import UserAdmin from "./pages/UserAdmin";
+import Private  from "./components/Private";
+import AdminPage from "./components/AdminPageAuth";
 
 // import Test from "./pages/login";
-import Sidebar from "./components/Sidebar";
+// import Sidebar from "./components/Sidebar";
 
 
 const router = createBrowserRouter([
-    {
-        path: "/",
-        element: <Home />,
-        // errorElement: "",
-      },
-      {
-    path: "/checkout",
-    element: <Checkout />,
-    // errorElement: "",
-  },
   {
-    path: "/history",
-    element: <History />,
-    // errorElement: "",
-  },
-  {
-    path: "/product",
-    element: <Product /> ,
-    // errorElement: "",
-  },
-  {
-    path: "/profile",
-    element: <Profile />,
+    path: "/",
+    element: <Home />,
     // errorElement: "",
   },
   {
@@ -56,43 +39,101 @@ const router = createBrowserRouter([
     // errorElement: "",
   },
   {
+    path: "/forget-password",
+    element: <ForgetPwd />,
+    // errorElement: "",
+  },
+  {
     path: "/resetpassword",
     element: <ResetPwd />,
     // errorElement: "",
   },
   {
+    path: "/checkout",
+    element: (
+    <Private>
+      <Checkout />
+    </Private>),
+    // errorElement: "",
+  },
+  {
+    path: "/history",
+    element: (
+    <Private>
+      <History />
+    </Private>),
+    // errorElement: "",
+  },
+  {
+    path: "/product",
+    element: (
+    <Private>
+      <Product />
+    </Private>) ,
+    // errorElement: "",
+  },
+  {
+    path: "/profile",
+    element: (
+    <Private>
+      <Profile />
+    </Private>),
+    // errorElement: "",
+  },
+  {
     path: `/detailorder/:id`,
-    element: <DetailOrder />,
+    element: (
+    <Private>
+      <DetailOrder />
+    </Private>),
     // errorElement: "",
   },
   {
     path: "/detailproduct/:id",
-    element: <DetailProduct />,
-    // errorElement: "",
-  },
-  {
-    path: "/test",
-    element: <Sidebar />,
+    element: (
+    <Private>
+      <DetailProduct />
+    </Private>),
     // errorElement: "",
   },
   {
     path: "/admin",
-    element: <Dashboard />,
+    element: (
+      <Private>
+        <AdminPage>
+          <Dashboard />
+        </AdminPage>
+      </Private>),
     // errorElement: "",
   },
   {
     path: "/admin/product",
-    element: <ProductAdmin />,
+    element: (
+      <Private>
+        <AdminPage>
+          <ProductAdmin />,
+        </AdminPage>
+      </Private>),
     // errorElement: "",
   },
   {
     path: "/admin/order",
-    element: <OrderAdmin />,
+    element: (
+      <Private>
+        <AdminPage>
+          <OrderAdmin />,
+        </AdminPage>
+      </Private>),
     // errorElement: "",
   },
   {
     path: "/admin/user",
-    element: <UserAdmin />,
+    element: (
+      <Private>
+        <AdminPage>
+          <UserAdmin />,
+        </AdminPage>
+      </Private>),
     // errorElement: "",
   },
 ]);

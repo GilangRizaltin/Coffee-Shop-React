@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react'
 import Header from "../components/header";
 import Footer from "../components/footer";
 import { updateDataUser, getUser } from '../https/profile';
-import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 function profile() {
-  const getUserData = JSON.parse(localStorage.getItem('dataUser'))
-  const jwt = getUserData.token
+  const user = useSelector(state => state.user.userInfo);
+  const jwt = user.token
   const [profileData, setProfileData] = useState({})
   const [valueData, setValueData] = useState({})
   const [image, setImage] = useState('')
@@ -15,8 +15,6 @@ function profile() {
       .then((res) => {
         setProfileData(res.data.res[0]);
         setValueData(res.data.res[0]);
-        // console.log(profileData)
-        // console.log(res.data.res[0])
         setImage(import.meta.env.VITE_BACKEND_HOST + res.data.res[0].user_photo_profile)
       })
       .catch((err) => {

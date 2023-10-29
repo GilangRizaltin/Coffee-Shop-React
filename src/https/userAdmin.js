@@ -18,3 +18,11 @@ export const getAllUser = (url, jwt) => {
         },
     })
 }
+
+export const searchUser = (url, jwt) => {
+  return axios.get(url, {
+      headers: {
+        'Authorization': 'Bearer ' + jwt,
+      },
+  })
+}

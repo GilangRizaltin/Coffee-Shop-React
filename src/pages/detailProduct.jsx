@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
-import Header  from '../components/header';
-import Footer from "../components/footer";
+import Header  from '../components/Header';
+import Footer from "../components/Footer";
 import { productWithRating } from "../components/productCard";
 // import { useLocation } from 'react-router-dom';
 import { getDetailProduct } from '../https/product';
@@ -57,13 +57,11 @@ function detailProduct() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-  const {addProduct} = useProductContext();
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const setOrder = () => {
-    dispatch(addOrder({ data: dataOrder }));
-    addProduct(dataOrder);
+    dispatch(addOrder(dataOrder));
     navigate("/checkout");
   }
   return (

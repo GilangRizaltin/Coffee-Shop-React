@@ -1,12 +1,11 @@
 import React from 'react';
-import Header from "../components/header";
+import Header from "../components/Header";
 import { productOrder } from '../components/productCard';
 import { useState } from 'react';
-import Footer from "../components/footer";
-import { useProductContext } from '../context/productContext';
+import Footer from "../components/Footer";
 import { useNavigate } from 'react-router-dom';
 import { createOrder } from '../https/order';
-
+import Title from '../components/Title';
 import { useSelector, useDispatch } from 'react-redux';
 
 function checkout() {
@@ -38,8 +37,8 @@ function checkout() {
     setTypeServe(newTypeServe)
     console.log(newTypeServe);
   }
-  const getUserData = JSON.parse(localStorage.getItem('dataUser'))
-  const jwt = getUserData.token
+  const user = useSelector(state => state.user.userInfo);
+  const jwt = user.token
   const submitCheckout = () => {
     const body = {
       "subtotal": totalPrice,
@@ -62,7 +61,7 @@ function checkout() {
   //   console.log(reduxData)
   // }
   return (
-<>
+  <Title title="Checkout">
     <Header />
     <main className="relative pl-2 pr-2 md:pl-10 md:pr-10 desk:pl-def desk:pr-def">
       <p
@@ -513,7 +512,7 @@ function checkout() {
       </div>
     </main>
     <Footer />
-</>
+  </Title>
   )
 }
 

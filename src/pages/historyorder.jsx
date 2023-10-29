@@ -4,14 +4,11 @@ import Footer from "../components/footer";
 import { getOrderDetail } from '../https/order';
 // import { useSearchParams } from 'react-router-dom';
 import { historyProduct } from '../components/productCard';
+import { useSelector } from 'react-redux';
 
 function historyorder() {
-  // const jwt = localStorage.getItem("token");
-  // const [searchParams, setSearchParams] = useSearchParams({
-  //   page: 1
-  // })
-  const getUserData = JSON.parse(localStorage.getItem('dataUser'))
-  const jwt = getUserData.token
+  const user = useSelector(state => state.user.userInfo);
+  const jwt = user.token
   const url = import.meta.env.VITE_BACKEND_HOST + "/orders/order?page=1"
   const [dataOrder, setDataOrder] = useState(null)
   const [pages , setPage] = useState({
@@ -91,7 +88,8 @@ function historyorder() {
                       no: order.No,
                       date: order.Date,
                       total: order.Total_Transactions,
-                      status: order.Status,
+                      // status: order.Status,
+                      status: "Done",
                     })}
                   </div>
                   ))

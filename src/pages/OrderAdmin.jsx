@@ -23,6 +23,10 @@ function OrderAdmin() {
       setProductQty(productQty - 1)
     }
   };
+  const [filter, showFilter] = useState(false)
+  const setShowFilter = () => {
+  showFilter((state) => !state)
+}
   const data = [
     {
         no: 1,
@@ -269,10 +273,24 @@ function OrderAdmin() {
               </div>
             </div>
             <div className='flex items-end'>
-              <button className='flex items-center gap-2 p-2.5 h-[48px] bg-primary rounded-lg'>
+              <button onClick={setShowFilter}  className='flex items-center gap-2 p-2.5 h-[48px] bg-primary rounded-lg'>
                 <ion-icon name="funnel-outline"></ion-icon>
                 <p>Filter</p>
               </button>
+              {filter &&
+              <div className='relative '>
+                <div className='absolute top-2 z-10 right-0 bg-white border-2 border-solid border-order rounded-lg p-4 w-[300px] flex flex-col gap-4'>
+                  <p>Contaning Product</p>
+                  <div className='flex w-full items-center border-2 border-solid border-order rounded-lg p-2.5'>
+                    <input type="text" name="search_bar" id="productSearchBar" placeholder='Enter Product' className='flex-1 outline-none'/>
+                    <button>
+                      <ion-icon name="search-outline"></ion-icon>
+                    </button>
+                  </div>
+                  <button className='w-full p-2 flex justify-center items-center bg-primary rounded-lg'>Apply</button>
+                </div>
+              </div>
+              }
             </div>
           </div>
         </section>

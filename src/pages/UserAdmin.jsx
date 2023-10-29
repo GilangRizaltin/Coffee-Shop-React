@@ -2,26 +2,31 @@ import React from 'react'
 import Sidebar from '../components/Sidebar';
 import Header from '../components/header';
 import { useState, useEffect } from 'react';
-import { insertUser, getAllUser } from '../https/userAdmin';
+import { insertUser, getAllUser, searchUser } from '../https/userAdmin';
 import { useSearchParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import Title from '../components/Title';
 
 function UserAdmin() {
 const consol = () => {
-  console.log(userDetails)
+  console.log(type)
+  console.log(input)
 }
 //jwt
-const getUserData = JSON.parse(localStorage.getItem('dataUser'))
-const jwt = getUserData.token
+// const getUserData = JSON.parse(localStorage.getItem('dataUser'))
+const user = useSelector(state => state.user.userInfo)
+const jwt = user.token
 //Set Params
 const [searchParams, setSearchParams] = useSearchParams({
   full_name: "",
+  page: 1
 });
 //Generalze axios get user
 const url = import.meta.env.VITE_BACKEND_HOST + "/users?" + searchParams.toString()
 const userGet = (url, jwt) => {
   getAllUser(url, jwt)
     .then((res) => {
-      console.log(res)
+      // console.log(res)
       setUserData(res.data.result);
       setMetaData(res.data.meta)
     })
@@ -42,12 +47,19 @@ const [addModals, showAddModals] = useState(false)
 const setShowAddModals = () => {
   showAddModals((state) => !state)
 }
+//modal for filter
+const [filter, showFilter] = useState(false)
+const setShowFilter = () => {
+showFilter((state) => !state)
+}
 //state for edit details
 const [userDetails , setUserDetails] = useState({})
+const [valueUser, setValueUser] = useState({})
 //modal for edit user
 const [editModals, showEditModals] = useState(false)
 const setShowEditModals = (idx) => {
   setUserDetails(userData[idx]);
+  setValueUser(userData[idx]);
   showEditModals((state) => !state)
 }
 //toggle show password
@@ -76,7 +88,6 @@ const imageChange = (e) => {
   e.preventDefault()
   setSelectedImage(e.target.files[0])
 }
-
 const onSubmit = () => {
   setImage(URL.createObjectURL(selectedImage))
   setUpdatePhoto(false)
@@ -127,8 +138,37 @@ const search = (e) => {
   e.preventDefault();
   userGet(url, jwt)
 }
+//search by modal
+const [type, setType] = useState("user_name")
+const [input, setInput] = useState()
+const onSelect = (e) => {
+  e.preventDefault();
+  setType(e.target.value)
+  // console.log(data)
+}
+const onInput = (e) => {
+  e.preventDefault();
+  setInput(e.target.value)
+  setSearchParams({
+    [type]: input
+  })
+  // console.log(data)
+}
+const serchFilter = () => {
+  searchUser(url, jwt)
+  .then((res) => {
+    console.log(res)
+    setUserData(res.data.result);
+    setMetaData(res.data.meta)
+  })
+  .catch((err) => {
+    console.log(err)
+  })
+}
+//edit user
+
   return (
-    <>
+    <Title title="Admin User">
     <Header mode="light"/>
     <main className='sm:flex w-full'>
       <Sidebar />
@@ -139,8 +179,8 @@ const search = (e) => {
           <div className='flex-1 bg-black opacity-60' onClick={setShowAddModals}>
           </div>
           <div className='flex flex-col gap-y-[30px] h-full opacity right-0 w-[540px] bg-white p-8'>
-            <p className=' font-semibold text-2xl'>Add Product</p>
-            <p className='text-sm'>Photo Product</p>
+            <p className=' font-semibold text-2xl'>Add User</p>
+            <p className='text-sm'>Photo User</p>
             <div id='upload-bar' className='flex flex-col gap-y-[30px]'>
             {image ? (
               <div className="image lg:w-[50px] lg:h-[50px] my-4">
@@ -209,7 +249,7 @@ const search = (e) => {
         }
         {editModals  && 
         <div className='absolute w-full flex  z-40'>
-          <div className='flex-1 bg-black opacity-60'>
+          <div onClick={setShowEditModals} className='flex-1 bg-black opacity-60'>
           </div>
           <div className='flex flex-col gap-y-[30px] h-full opacity right-0 w-[540px] bg-white p-8'>
             <p className=' font-semibold text-2xl'  onClick={consol}>Edit User</p>
@@ -314,7 +354,7 @@ const search = (e) => {
             </button>
           </div>
           <div className='flex-1 flex sm:justify-end gap-4'>
-            <div className=' flex flex-col gap-4 justify-end text-sm'>
+            {/* <div className=' flex flex-col gap-4 justify-end text-sm'>
               <p>Search User</p>
               <form onSubmit={search} className='flex items-center border-2 border-solid border-order rounded-lg p-2.5'>
                 <input type="text" onChange={onChangeSearch} name="search_bar" id="productSearchBar" placeholder='Enter User Name' className='outline-none'/>
@@ -322,12 +362,32 @@ const search = (e) => {
                   <ion-icon name="search-outline"></ion-icon>
                 </button>
               </form>
-            </div>
+            </div> */}
             <div className='flex items-end'>
-              <button className='flex text-sm items-center gap-2 p-3  bg-primary rounded-lg'>
+              <button onClick={setShowFilter} className='flex text-sm items-center gap-2 p-3  bg-primary rounded-lg'>
                 <ion-icon name="funnel-outline"></ion-icon>
-                <p>Filter</p>
+                <p>Search</p>
               </button>
+              {filter &&
+              <div className='relative '>
+                <div className='absolute top-2 z-10 right-0 bg-white border-2 border-solid border-order rounded-lg p-4 w-[300px] flex flex-col gap-4'>
+                  <p>Search By</p>
+                  <select onChange={onSelect} className='w-full outline-none border-2 border-solid border-order rounded-lg p-2.5'>
+                    <option value="user_name">User Name</option>
+                    <option value="phone">Phone Number</option>
+                    <option value="email">Email</option>
+                    <option value="">Address</option>
+                  </select>
+                  <div className='flex w-full items-center border-2 border-solid border-order rounded-lg p-2.5'>
+                    <input onInput={onInput} type="text" name="search_bar" id="productSearchBar" placeholder='Enter Input' className='flex-1 outline-none'/>
+                    <button>
+                      <ion-icon name="search-outline"></ion-icon>
+                    </button>
+                  </div>
+                  <button onClick={serchFilter} className='w-full p-2 flex justify-center items-center bg-primary rounded-lg'>Apply</button>
+                </div>
+              </div>
+              }
             </div>
           </div>
         </section>
@@ -383,7 +443,7 @@ const search = (e) => {
         </div>
       </div>
     </main>
-    </>
+    </ Title>
   )
 }
 

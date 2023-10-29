@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import Header from '../components/header';
+import Header from '../components/Header';
 import Promo from '../components/promo';
-import Footer from '../components/footer';
+import Footer from '../components/Footer';
 import { useSearchParams } from "react-router-dom";
 import { productWithRating } from '../components/productCard';
 import { searchProduct } from '../https/product';
@@ -27,10 +27,11 @@ function product() {
       .then((res) => {
         setDataProduct(res.data.result);
         setPage(res.data.meta);
-        // console.log(res.data.meta)
+        console.log(res.data.result)
       })
       .catch((err) => {
         console.error(err);
+        setDataProduct(null)
       });
   }
   useEffect(() => {
@@ -47,7 +48,7 @@ function product() {
     //   page: pages.page + 1
     // })
     // const data = pages.next
-    console.log(dataProduct);
+    console.log(pages);
   }
 
 
@@ -63,6 +64,7 @@ function product() {
       return {
         ...prevSearchParams,
         search: e.target.value,
+        page: 1,
       };
     });
   };
@@ -76,6 +78,7 @@ function product() {
       return {
         ...prevSearchParams,
         category: e.target.value,
+        page: 1,
       };
     });
   };
@@ -89,9 +92,36 @@ function product() {
       return {
         ...prevSearchParams,
         sort: e.target.value,
+        page: 1,
       };
     });
   };
+  const [minValue, setMinValue] = useState("20000")
+  const [maxValue, setMaxValue] = useState("50500")
+  const min = (e) => {
+    e.preventDefault()
+    setMinValue(e.target.value);
+    setSearchParams((prev) => {
+      return {
+        ...prev,
+        minprice: parseInt(minValue),
+        maxprice: parseInt(maxValue),
+        
+      }
+    })
+    // setMaxValue(e.target.max_value.value)
+  }
+  const max = (e) => {
+    e.preventDefault()
+    setMaxValue(e.target.value);
+    setSearchParams((prev) => {
+      return {
+        ...prev,
+        minprice: parseInt(minValue),
+        maxprice: parseInt(maxValue)
+      }
+    })
+  }
   const isCategoryChecked = (value) => {
     const prevGenre = searchParams.get("category"); // Use the correct parameter name (category in this case)
     if (!prevGenre) return false;
@@ -114,6 +144,12 @@ function product() {
 
 
   const toNextPage = () => {
+    // setSearchParams((prev) => {
+    //   return {
+    //     ...prev,
+    //     page: pages.page + 1,
+    //   }
+    // })
     const nextUrl = pages.next
     product(nextUrl)
   }
@@ -127,15 +163,18 @@ function product() {
   return (
     <>
       <Header />
-      <main className="px-2 md:pl-10 desk:pl-def md:pr-10 desk:pr-def">
-      <div className='hidden lg:block w-full' >
+      <main className="">
+      <div className='hidden lg:block relative w-full' >
         <img src="./webp/Rectangle 299.webp" alt="product" className='w-full' />
-        {/* <p className='text-2xl desk:text-5xl absolute text-white top-0 left-2'>We Provide Good Coffee and Healthy Meals</p> */}
+        <p className='text-2xl lg:text-5xl absolute text-white top-20 desk:top-40 left-10'>We Provide Good Coffee and Healthy Meals</p>
       </div>
-        <section className="flex flex-col gap-y-5 mb-10 mt-10">
+        <section className="px-2 md:px-10 flex flex-col gap-y-5 mb-10 mt-10">
           <p className="text-2xl lg:text-5xl">Today Promo</p>
           <div className="w-full overflow-scroll">
-            <div className="flex w-[1600px] gap-x-5">
+            <div className="flex w-[2600px] gap-x-5">
+              <Promo />
+              <Promo />
+              <Promo />
               <Promo />
               <Promo />
               <Promo />
@@ -143,7 +182,7 @@ function product() {
             </div>
           </div>
         </section>
-        <section>
+        <section className='px-2 md:px-10'>
           <div className="flex flex-col gap-y-5 mb-8">
             <p className="text-2xl lg:text-5xl" onClick={consol}>Our Product</p>
             <div className="flex gap-5 w-full">
@@ -239,22 +278,31 @@ function product() {
                 <p>New Product</p>
               </div>
               </form>
-              <form action="">
+              <form>
               <p className="text-xl h-[45px]">Range Price</p>
+              <div className='flex'>
+                <p className='flex-1'>{minValue}</p>
+                <p>To</p>
+                <p className='flex-1 flex justify-end'>{maxValue}</p>
+              </div>
               <div className="flex items-center h-[45px]">
                 <input
                   type="range"
-                  className="custom-range w-[50%]"
-                  min="0"
-                  max="100"
-                  step="1"
+                  name='min_value'
+                  onChange={min}
+                  className="w-[50%] cursor-pointer appearance-none bg-orange-500 h-1 rounded-full outline-none"
+                  min="20000"
+                  max="50000"
+                  step="500"
                 />
                 <input
                   type="range"
-                  className="custom-range w-[50%]"
-                  min="0"
-                  max="100"
-                  step="1"
+                  name='max_value'
+                  onChange={max}
+                  className="w-[50%] cursor-pointer appearance-none bg-orange-500 h-1 rounded-full outline-none"
+                  min="50500"
+                  max="100000"
+                  step="500"
                 />
               </div>
               </form>
@@ -266,7 +314,7 @@ function product() {
               </button >
             </div>
               <div className="w-full relative">
-                <div className={`w-full grid mobile_m:grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 justify-items-center mb-8`}>
+                <div className={`w-full grid mobile_m:grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 desk:grid-cols-3 justify-items-center mb-8`}>
                   {dataProduct ? (
                     dataProduct.map((product, index) => (
                     <div key={index}>
@@ -285,11 +333,11 @@ function product() {
                    )}
                 </div>
                 <div className="w-full flex justify-center gap-4">
-                  {pages.prev !== null && <button className='h-12 w-12 bg-order text-black rounded-full flex justify-center items-center'
+                  {dataProduct !== null && pages.prev !== null && <button className='h-12 w-12 bg-order text-black rounded-full flex justify-center items-center'
                   onClick={toPrevPage}>
                   <ion-icon name="chevron-back-outline"></ion-icon></button>}
-                  <button className='h-12 w-12 bg-order text-black rounded-full flex justify-center items-center'>{pages.page}</button>
-                  {pages.next !== null && <button className='h-12 w-12 bg-order text-black rounded-full flex justify-center items-center' 
+                  {dataProduct !== null && <button className='h-12 w-12 bg-order text-black rounded-full flex justify-center items-center'>{pages.page}</button>}
+                  {dataProduct !== null && pages.next !== null && <button className='h-12 w-12 bg-order text-black rounded-full flex justify-center items-center' 
                   onClick={toNextPage}
                   ><ion-icon name="chevron-forward-outline"></ion-icon></button>}
                 </div>

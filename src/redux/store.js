@@ -1,10 +1,17 @@
-import { configureStore } from "@reduxjs/toolkit";
-import thunk from "redux-thunk";
+import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import orderReducer from "../redux/slices/orderRedux";
-import userReducer from "../redux/slices/userAuth";
-import {persistReducer , persistStore} from "redux-persist";
+import userReducer from "./slices/user";
 import storage from "redux-persist/lib/storage"
-
+import {
+    persistStore,
+    persistReducer,
+    PERSIST,
+    FLUSH,
+    REHYDRATE,
+    PAUSE,
+    REGISTER,
+    PURGE,
+  } from "redux-persist";
 // const initialState = {
 //     productInfo: []
 // };
@@ -33,14 +40,25 @@ import storage from "redux-persist/lib/storage"
 const persistConfig = {
     key: "lib",
     storage,
+
 };
 
-const store = configureStore({
-    reducer: {
-        order: orderReducer,
-        user: userReducer,
-    },
-    middleware: [thunk]
+const combinedReducers = combineReducers({
+    order: orderReducer,
+    user: userReducer,
+})
+
+const persistedReducer = persistReducer(persistConfig, combinedReducers)
+
+export const store = configureStore({
+    reducer: persistedReducer,
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware({
+            serializableCheck: {
+                ignoredActions: [PERSIST, FLUSH, REHYDRATE, PAUSE, REGISTER, PURGE],
+            },
+        }),
 });
 
-export default store;
+// export default store;
+export const persistedStore = persistStore(store)

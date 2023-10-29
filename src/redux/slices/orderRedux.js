@@ -9,19 +9,15 @@ const orderSlice = createSlice({
     name: "order",
     initialState,
     reducers: {
-        addOrder(state, action) {
-            // Destructure payload directly from the action parameter
-            const { data } = action.payload;
+        addOrder(state, {payload}) {
             return {
                 ...state,
-                productInfo: [...state.productInfo, data],
+                productInfo: [...state.productInfo, payload],
             };
         },
-        delOrder(state, action) {
-            // Destructure id directly from the payload
-            const { id } = action.payload;
+        delOrder(state, {payload}) {
             const updatedProductInfo = state.productInfo.filter(
-                (product, index) => index !== id
+                (product, index) => index !== payload
             );
             return {
                 ...state,

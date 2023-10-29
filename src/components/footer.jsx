@@ -1,7 +1,7 @@
 function footer() {
   return (
     <footer
-      className="relative bg-order pt-[67px] pb-8 flex flex-col gap-8  px-2 sm:px-10 desk:px-def md:flex-row text-footer font-primary"
+      className="relative bg-order pt-[67px] pb-8 flex flex-col gap-8  px-2 sm:px-10 md:flex-row text-footer font-primary"
     >
       <section className="flex-1">
         <div className="flex gap-2">

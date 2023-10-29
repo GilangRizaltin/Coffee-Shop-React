@@ -2,11 +2,11 @@ import React from 'react'
 import { useState } from 'react'
 import { Link } from "react-router-dom";
 import { useProductContext } from '../context/productContext';
+import { useDispatch } from 'react-redux';
+import { delOrder  } from '../redux/slices/orderRedux';
+import { addOrder  } from '../redux/slices/orderRedux';
 
-import { useSelector, useDispatch } from 'react-redux';
-
-
-export function productCard() {
+export function productCard(props) {
   const [cancelProduct, setCancel] = useState(false)
   const setCancelOrderPorduct = () => {
     setCancel((state) => !state)
@@ -29,14 +29,13 @@ export function productCard() {
                 <div
                   className="flex flex-col bg-white desk:w-[90%] desk:absolute desk:left-[14px] desk:top-60 desk:p-2.5 desk:gap-y-3 desk:shadow-md"
                 >
-                  <p className="text-base font-bold lg:text-xl">Hazelnut Latte</p>
+                  <p className="text-base font-bold lg:text-xl">{props.title}</p>
                   <p className="text-sm lg:text-base">
-                    You can explore the menu that we provide with fun and have
-                    their own taste and make your day better.
+                  {props.desc}
                   </p>
                   <div className="desk:flex items-center gap-2">
                     <p className="text-sm text-red-800 lg:text-base"><del>IDR 10.000</del></p>
-                    <p className="text-base text-primary lg:text-xl">IDR 20.000</p>
+                    <p className="text-base text-primary lg:text-xl">IDR {props.price}</p>
                   </div>
                   <div className="flex flex-col gap-y-1 desk:flex-row gap-x-2">
                     <button
@@ -59,10 +58,7 @@ export function productCard() {
 export function productOrder(props) {
   const dispatch = useDispatch();
   const deleted = () => {
-    dispatch({
-      type: "DELETE_PRODUCT",
-      id: props.idx
-    })
+    dispatch(delOrder(props.idx))
   }
   return (
     <div className="mb-4">
@@ -85,7 +81,7 @@ export function productOrder(props) {
                   </p>
                   <p className="text-lg font-bold">{props.title}</p>
                   <div
-                    className="grid grid-cols-[auto_auto] sm:grid-cols-[auto_2px_auto_2px_auto_2px_auto] text-sm text-center text-detail desk:text-xl"
+                    className="grid grid-cols-[auto_auto] sm:grid-cols-[auto_2px_auto_2px_auto_2px_auto] text-sm text-center text-detail desk:text-base"
                   >
                     <p>{props.quantity} pcs</p>
                     <hr className="hidden sm:block h-5 desk:h-8 w-0.5 bg-detail" />
@@ -246,11 +242,29 @@ export function historyProduct (props) {
                       </svg>
                       <p>Status</p>
                     </div>
+                    {props.status === "On progress" && 
                     <div
+                      className="flex items-center justify-center bg-orange-300 w-fit py-1 px-2 rounded-xl"
+                    >
+                      <p className="text-black font-semibold">On Progress</p>
+                    </div>}
+                    {props.status === "Shipping" && 
+                    <div
+                      className="flex items-center justify-center bg-gray-300 w-fit py-1 px-2 rounded-xl"
+                    >
+                      <p className="text-black font-semibold">Shipping</p>
+                    </div>}
+                    {props.status === "Done" && 
+                    <div
+                      className="flex items-center justify-center bg-green-300 w-fit py-1 px-2 rounded-xl"
+                    >
+                      <p className="text-black font-semibold">Done</p>
+                    </div>}
+                    {/* <div
                       className="flex items-center justify-center bg-orange-300 w-fit p-1 rounded-xl"
                     >
                       <p className="text-black">{props.status}</p>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
                 <Link to={`/detailorder/${props.no}`} className="text-orange-800 cursor-pointer">View Order</Link>
@@ -261,6 +275,20 @@ export function historyProduct (props) {
 }
 
 export function productWithRating(props) {
+  const id = props.id
+  const dataOrder = {
+    image: "...",
+    product_id: (parseInt(id)),
+    product_name: props.title,
+    hot_or_not: "Hot",
+    size_id: "Small",
+    quantity: 1,
+    price: props.price,
+  }
+  const dispatch = useDispatch();
+  const setOrder = () => {
+    dispatch(addOrder(dataOrder));
+  }
   return (
     <div className="w-fit">
                 <div
@@ -274,7 +302,7 @@ export function productWithRating(props) {
                   <div
                     className="bg-white p-2.5 flex flex-col gap-y-1 lg:w-[90%] lg:absolute lg:left-[15.5px] lg:top-[240px] lg:shadow-md"
                   >
-                    <p className="text-base font-bold lg:text-xl desk:text-2xl mobile_m:h-[48px]  overflow-hidden text-ellipsis">
+                    <p className="text-base font-bold lg:text-xl desk:text-2xl mobile_m:h-[60px]  overflow-hidden text-ellipsis">
                       {props.title}
                     </p>
                     <p className="text-sm mobile_m:h-[120px] lg:h-[60px] overflow-hidden text-ellipsis">
@@ -319,7 +347,7 @@ export function productWithRating(props) {
                       >
                         Buy
                       </Link>
-                      <button
+                      <button onClick={setOrder}
                         className="flex justify-center text-primary text-xl p-1 w-full border-2 border-solid border-primary rounded-xl lg:w-[20%]"
                       >
                         <ion-icon name="cart-outline"></ion-icon>

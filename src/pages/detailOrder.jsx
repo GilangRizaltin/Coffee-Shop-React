@@ -5,11 +5,13 @@ import { detailProductOrder } from '../components/productCard';
 import { useEffect, useState } from 'react';
 import { getOrderIdDetail } from '../https/order';
 import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 function detailOrder() {
   let { id } = useParams();
-  const getUserData = JSON.parse(localStorage.getItem('dataUser'))
-  const jwt = getUserData.token
+  // const getUserData = JSON.parse(localStorage.getItem('dataUser'))
+  const user = useSelector(state => state.user)
+  const jwt = user.token
   const [userData, setUserData] = useState({})
   const [orderData, setOrderData] = useState(null)
   useEffect(() => {

@@ -2,13 +2,24 @@ import React from 'react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { registerUser, verifyUser } from '../https/register';
+import { useDispatch, useSelector } from 'react-redux';
 
 function register() {
+  //set up
   const navigate = useNavigate();
+  const user = useSelector(state => state.user);
+  const dispatch = useDispatch();
+  //handler for show password
   const [isPwdShown, setIsPwdShown] = useState(false);
   const showPwdHandler = () => {
     setIsPwdShown((state) => !state);
   }
+  //modals
+  const [modal, setModal] = useState(false)
+  const setShowModal = () => {
+    setModal((state) => !state)
+  }
+  //handle incorrection input password
   const [pwdCorrect, setPwdCorrection] = useState(false)
   const [firstPassword, setFirstPassword] = useState('');
   const [secondPassword, setSecondPassword] = useState('');
@@ -18,6 +29,24 @@ function register() {
   const handleSecondPwdChange = (e) => {
     setSecondPassword(e.target.value);
   };
+  
+  //submit register
+  const registerFormSubmit = (e) => {
+    e.preventDefault();
+    if (firstPassword !== secondPassword) 
+    return setPwdCorrection(true);
+    setPwdCorrection(false);
+    const body = {
+      full_name: e.target.user_name.value,
+      email: e.target.user_email.value,
+      password: firstPassword,
+    };
+    dispatch(registerThunk(body))
+    setShowModal()
+  }
+
+
+
   const [isSuccessRegister, setRegisterSuccess] = useState(false);
   const setShowSuccessModal = () => {
     setRegisterSuccess((state) => !state);
@@ -140,13 +169,14 @@ function register() {
           </div>
           <div className="cursor-pointer flex-1 h-10 w-10 border-2 border-solid border-order rounded-lg flex justify-center items-center gap-2">
             <img src="/webp/flat-color-icons_google.webp" alt="google" />
-            <p className='hidden mobile:block' onClick={setShowSuccessModal}>Google</p>
+            <p className='hidden mobile:block'>Google</p>
           </div>
         </div>
       </form>
     </div>
-    <div
-      className={`${isFailedRegister ? "block" : "hidden"} fixed inset-0 flex items-center justify-center z-50 outline-none modal w-full h-full bg-zinc-600/90`}
+
+    {isFailedRegister && <div
+      className='fixed inset-0 flex items-center justify-center z-50 outline-none modal w-full h-full bg-zinc-600/90'
       id="modalsError"
     >
       <div
@@ -162,9 +192,11 @@ function register() {
           </button>
         </div>
       </div>
-    </div>
+    </div>}
+    
+    {isSuccessRegister && 
     <div
-      className={`${isSuccessRegister ? "block" : "hidden"} fixed inset-0 flex items-center justify-center z-50 outline-none modal w-full h-full bg-zinc-600/90`}
+      className='fixed inset-0 flex items-center justify-center z-50 outline-none modal w-full h-full bg-zinc-600/90'
       id="otpModal"
     >
       <div
@@ -185,9 +217,11 @@ function register() {
         </div>
         </form>
       </div>
-    </div>
+    </div>}
+
+    {isSuccessVerify &&  
     <div
-      className={`${isSuccessVerify ? "block" : "hidden"} fixed inset-0 flex items-center justify-center z-50 outline-none modal w-full h-full bg-zinc-600/90`}
+      className='fixed inset-0 flex items-center justify-center z-50 outline-none modal w-full h-full bg-zinc-600/90'F
       id="successRegister"
     >
       <div
@@ -204,6 +238,7 @@ function register() {
         </div>
       </div>
     </div>
+    }
     </>
   )
 }

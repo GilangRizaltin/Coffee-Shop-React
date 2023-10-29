@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { addProduct, updateProduct } from '../https/productAdmin';
 import { searchProduct } from '../https/product';
+import { useSelector } from 'react-redux';
 
 function ProductAdmin() {
   const data = [
@@ -45,8 +46,9 @@ function ProductAdmin() {
 const [searchParams, setSearchParams] = useSearchParams({
 });
 //jwt
-const getUserData = JSON.parse(localStorage.getItem('dataUser'))
-const jwt = getUserData.token
+// const getUserData = JSON.parse(localStorage.getItem('dataUser'))
+const user = useSelector(state => state.user.userInfo)
+const jwt = user.token
 //state
 const [productData, setProductData] = useState(null)
 const [metaData, setMetaData] = useState(0)
@@ -56,6 +58,7 @@ const getProducts = (url) => {
   searchProduct(url)
   .then((res) => {
     setProductData(res.data.result)
+    setValueData(res.data.result)
     setMetaData(res.data.meta)
     console.log(res)
   })
@@ -69,9 +72,14 @@ useEffect(() => {
 //set toggle modals
 const [editModals, showEditModals] = useState(false)
 const [productDetails , setProductrDetails] = useState({})
-const setShowEditModals = (idx) => {
+const [valueData, setValueData] = useState({})
+const [productIdx, setProductIdx] = useState()
+const setShowEditModals = (idx, no) => {
   setProductrDetails(productData[idx]);
+  setValueData(productData[idx]);
+  setProductIdx(no)
   showEditModals((state) => !state)
+  console.log(no)
 }
 const [addModals, showAddModals] = useState(false)
 const setShowAddModals = () => {
@@ -82,9 +90,53 @@ const setShowFilter = () => {
   showFilter((state) => !state)
 }
 //modals for res msg
+const [message, setMessage] = useState('')
 const [modals, setModals] = useState(false)
 const setShowModals = () => {
   setModals((state) => !state)
+}
+//change handler
+const handleChange = (event) => {
+  event.preventDefault();
+  const { name, value } = event.target;
+  setProductrDetails((prevData) => ({
+    ...prevData,
+    [name]: value,
+  }));
+};
+//submit update
+const body = {};
+const [bodyUpdate, setBodyUpdate] = useState({})
+const [clearanceModalSubmit, setClearanceModalSubmit] = useState(false)
+const setShowClearanceModalSubmit = () => {
+  setClearanceModalSubmit((state) => !state)
+}
+const clearanceBeforeSubmit = () => {
+  setShowClearanceModalSubmit();
+  for (const key in productDetails) {
+    if (productDetails[key] !== valueData[key]) {
+      body[key] = valueData[key];
+    }
+  }
+  // console.log(body)
+  setBodyUpdate(body)
+}
+const confirmUpdates = () => {
+  setShowClearanceModalSubmit();
+  const urlUpdate = import.meta.env.VITE_BACKEND_HOST + "/products/" + productIdx
+  updateProduct(urlUpdate, bodyUpdate, jwt)
+  .then((res) => {
+    setMessage(res.data.msg)
+    console.log(res)
+  })
+  .catch((err) => {
+    console.log(err)
+    setMessage(err.response.data.msg)
+  });
+  setShowModals();
+  // console.log(bodyUpdate)
+  // console.log(urlUpdate)
+  // console.log(jwt)
 }
 // handler
 const [category, setCategory] = useState()
@@ -92,7 +144,6 @@ const categoryHandler = (e) => {
   e.preventDefault();
   setCategory(e.target.value)
 }
-const [message, setMessage] = useState('')
 //submit handler
 const postUrl = import.meta.env.VITE_BACKEND_HOST + "/products"
 const addSubmit = (e) => {
@@ -168,9 +219,9 @@ const selected = (e) => {
               </div>
               <p className='text-sm font-semibold'>Category</p>
               <div className='flex gap-2 text-sm'>
-                <button className='flex-1 flex items-center justify-center p-2 border-2 border-solid border-order rounded-lg focus:border-primary' value='1' onClick={categoryHandler}>Coffee</button>
-                <button className='flex-1 flex items-center justify-center p-2 border-2 border-solid border-order rounded-lg focus:border-primary' value='2' onClick={categoryHandler}>Non Coffee</button>
-                <button className='flex-1 flex items-center justify-center p-2 border-2 border-solid border-order rounded-lg focus:border-primary' value='3' onClick={categoryHandler}>Foods</button>
+                <button className='flex-1 flex items-center justify-center p-2 border-2 border-solid border-order rounded-lg focus:border-primary focus:outline-none' value='1' onClick={categoryHandler}>Coffee</button>
+                <button className='flex-1 flex items-center justify-center p-2 border-2 border-solid border-order rounded-lg focus:border-primary focus:outline-none' value='2' onClick={categoryHandler}>Non Coffee</button>
+                <button className='flex-1 flex items-center justify-center p-2 border-2 border-solid border-order rounded-lg focus:border-primary focus:outline-none' value='3' onClick={categoryHandler}>Foods</button>
               </div>
               <p className='text-sm font-semibold'>Description</p>
               <div className='w-full h-[142px] p-3 border-2 border-solid border-order bg-input_bg rounded-lg'>
@@ -204,14 +255,14 @@ const selected = (e) => {
                 Upload
               </button>
             </div>
-            <form className='flex flex-col gap-y-[30px]'>
+            <div className='flex flex-col gap-y-[30px]'>
               <p className='text-sm font-semibold'>Product Name</p>
               <div className='w-full p-3 border-2 border-solid border-order bg-input_bg rounded-lg'>
-                <input type="text" value={productDetails.Product} name="productName" id="name" placeholder='Enter Product Name' className='text-sm outline-none w-full bg-input_bg'/>
+                <input type="text" value={productDetails.Product} onChange={handleChange} name="Product" placeholder='Enter Product Name' className='text-sm outline-none w-full bg-input_bg'/>
               </div>
               <p className='text-sm font-semibold'>Price</p>
               <div className='w-full p-3 border-2 border-solid border-order bg-input_bg rounded-lg'>
-                <input type="number" value={productDetails.Price} name="productPrice" id="price" placeholder='Enter Product Price' className='text-sm outline-none w-full bg-input_bg'/>
+                <input type="number" value={productDetails.Price} onChange={handleChange}  name="Price" placeholder='Enter Product Price' className='text-sm outline-none w-full bg-input_bg'/>
               </div>
               <p className='text-sm font-semibold'>Category</p>
               <div className='flex gap-2 text-sm'>
@@ -223,17 +274,37 @@ const selected = (e) => {
               <div className='w-full h-[142px] p-3 border-2 border-solid border-order bg-input_bg rounded-lg'>
                 <input 
                   type="text" 
-                  name="productDesc" 
-                  id="description" 
+                  name="Description" 
                   value={productDetails.Description}
+                  onChange={handleChange} 
                   placeholder='Enter Product Description' 
                   className='text-sm outline-none w-full bg-input_bg mt-2 ' 
                 />
               </div>
-              <button className='text-sm font-semibold w-full p-2.5 flex items-center justify-center bg-primary rounded-lg'>
+              <button onClick={clearanceBeforeSubmit} className='text-sm font-semibold w-full p-2.5 flex items-center justify-center bg-primary rounded-lg'>
                 Edit Save
               </button>
-            </form>
+            </div>
+          </div>
+        </div>
+        }
+        {clearanceModalSubmit && 
+        <div
+        className='flex fixed inset-0  items-center justify-center z-50 outline-none modal w-full h-full bg-zinc-600/90'
+        id="updatePhotoModals"
+        >
+        <div className="flex flex-col gap-7 modal-content bg-white p-8 rounded shadow-lg w-[300px] justify-center">
+          <p className='text-red-800'>Are you sure for updating product?</p>
+          <div className='flex flex-col gap-8'>
+              <div className="flex justify-end items-center gap-4 text-black">
+                <button
+                  className="flex-1 hover:border-primary text-base border-2 border-solid border-order rounded-xl"
+                  id="setUpdatePhoto" onClick={confirmUpdates}
+                >
+                  Ok
+                </button>
+              </div>
+            </div>
           </div>
         </div>
         }
@@ -307,6 +378,7 @@ const selected = (e) => {
                       <input type="range" name="" id="" className=''/>
                     </div>
                   </div>
+                  <button className='w-full p-2 flex justify-center items-center bg-primary rounded-lg'>Apply</button>
                 </div>
               </div>
               }
@@ -336,7 +408,7 @@ const selected = (e) => {
                   <p className='col-span-1 flex justify-center items-center'>IDR {data.Price}</p>
                   <p className='col-span-1 flex justify-center items-center'>{data.Description}</p>
                   <div className='col-span-1 flex gap-2 justify-center items-center'>
-                    <button onClick={() => {setShowEditModals(idx)}} className='w-8 h-8 bg-orange-200 text-orange-800 rounded-full flex items-center justify-center'>
+                    <button onClick={() => {setShowEditModals(idx, data.No)}} className='w-8 h-8 bg-orange-200 text-orange-800 rounded-full flex items-center justify-center'>
                       <ion-icon name="pencil-outline"></ion-icon>
                     </button>
                     <button className='w-8 h-8 bg-red-300 text-red-800 rounded-full flex items-center justify-center'>

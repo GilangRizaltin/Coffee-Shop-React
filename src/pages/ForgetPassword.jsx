@@ -3,7 +3,7 @@ import {useNavigate} from "react-router-dom";
 import { forgetPassword } from '../https/resetpwd';
 import { useState } from 'react';
 
-function resetpassword() {
+function forgetPasswordPage() {
   const submitReset = (e) => {
     e.preventDefault();
     const email = e.target.user_email.value
@@ -35,21 +35,11 @@ function resetpassword() {
           </p>
         </div>
         <p className='text-xl text-brown'>Fill out the form correctly</p>
-        <p className='text-sm lg:text-base text-brown'>Insert Your New Password</p>
+        <p className='text-sm lg:text-base text-brown'>We will send new password to your email</p>
+        <p className='text-sm lg:text-base'>Email</p>
         <div className="w-full border-2 border-solid border-order p-3 flex items-center gap-2 rounded-lg">
-          <ion-icon name="bag-outline"></ion-icon>
-          <input type="password" placeholder="Enter your password" name="pwdTwo"  className='flex-1 outline-none  text-sm lg:text-base'/>          
-          <div>
-            <ion-icon name="eye-off-outline"></ion-icon>
-          </div>
-        </div>
-        <p className='text-sm lg:text-base text-brown'>Confirm Password</p>
-        <div className="w-full border-2 border-solid border-order p-3 flex items-center gap-2 rounded-lg">
-          <ion-icon name="bag-outline"></ion-icon>
-          <input type="password" placeholder="Enter your password" name="pwdTwo"  className='flex-1 outline-none  text-sm lg:text-base'/>          
-          <div>
-            <ion-icon name="eye-off-outline"></ion-icon>
-          </div>
+          <ion-icon name="mail-outline"></ion-icon>
+          <input type="text" placeholder="Enter your Email" name='user_email' className='flex-1 outline-none text-sm lg:text-base'/>
         </div>
         <div className="">
           <button type='submit' className='w-full bg-primary p-3 flex items-center justify-center rounded-lg'>Submit</button>
@@ -59,4 +49,4 @@ function resetpassword() {
   )
 }
 
-export default resetpassword
+export default forgetPasswordPage
