@@ -1,11 +1,12 @@
 import React from 'react'
 import Sidebar from '../components/Sidebar';
-import Header from '../components/header';
+import Header from '../components/Header';
 import { useState, useEffect } from 'react';
-import { insertUser, getAllUser, searchUser } from '../https/userAdmin';
+import { insertUser, getAllUser, searchUser, updateUserByAdmin } from '../https/userAdmin';
 import { useSearchParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import Title from '../components/Title';
+import AccessEnded from '../components/AccessEnded';
 
 function UserAdmin() {
 const consol = () => {
@@ -16,6 +17,7 @@ const consol = () => {
 // const getUserData = JSON.parse(localStorage.getItem('dataUser'))
 const user = useSelector(state => state.user.userInfo)
 const jwt = user.token
+const [showAccessEnded, setShowAccessEnded] = useState(false);
 //Set Params
 const [searchParams, setSearchParams] = useSearchParams({
   full_name: "",
@@ -26,12 +28,14 @@ const url = import.meta.env.VITE_BACKEND_HOST + "/users?" + searchParams.toStrin
 const userGet = (url, jwt) => {
   getAllUser(url, jwt)
     .then((res) => {
-      // console.log(res)
+      console.log(res.data.result)
       setUserData(res.data.result);
       setMetaData(res.data.meta)
     })
     .catch((err) => {
       console.error(err);
+      if (err.response.status === 401)
+      setShowAccessEnded(true)
     });
 }
 //state for getUser
@@ -62,6 +66,14 @@ const setShowEditModals = (idx) => {
   setValueUser(userData[idx]);
   showEditModals((state) => !state)
 }
+//handler edit
+const handleChange = (event) => {
+  const { name, value } = event.target;
+  setUserDetails((prevData) => ({
+    ...prevData,
+    [name]: value,
+  }));
+};
 //toggle show password
 const [isPwdShown, setIsPwdShown] = useState(false);
 const showPwdHandler = () => {
@@ -166,7 +178,30 @@ const serchFilter = () => {
   })
 }
 //edit user
-
+const body = {};
+const [bodyUpdate, seBodyUpdate] = useState({})
+const clearanceBeforeSubmit = () => {
+  for (const key in userDetails) {
+    if (userDetails[key] !== valueUser[key]) {
+      body[key] = userDetails[key];
+    }
+  }
+  console.log(body)
+  // setShowModalSubmit();
+  seBodyUpdate(body)
+}
+const confirmUpdates = () => {
+  updateUserByAdmin(bodyUpdate, jwt)
+  .then((res) => {
+    // setShowModalSubmit();
+    // setUpdateMsg(res.data.msg)
+    console.log(res)
+    // setSuccessUpdateModal(true);
+  })
+  .catch((err) => {
+    console.log(err)
+  });
+}
   return (
     <Title title="Admin User">
     <Header mode="light"/>
@@ -265,27 +300,28 @@ const serchFilter = () => {
             <form className='flex flex-col gap-y-[30px]'>
               <p className='text-sm font-semibold'>User Name</p>
               <div className='w-full p-3 border-2 border-solid border-order bg-input_bg rounded-lg'>
-                <input type="text" value={userDetails.Username} name="userName" placeholder='Enter User Name' className='text-sm outline-none w-full bg-input_bg'/>
+                <input type="text" value={userDetails.Username} onChange={handleChange} name="Username" placeholder='Enter User Name' className='text-sm outline-none w-full bg-input_bg'/>
               </div>
               <p className='text-sm font-semibold'>Full Name</p>
               <div className='w-full p-3 border-2 border-solid border-order bg-input_bg rounded-lg'>
-                <input type="text" value={userDetails.Name} name="fullName" placeholder='Enter Full Name' className='text-sm outline-none w-full bg-input_bg'/>
+                <input type="text" value={userDetails.Name} onChange={handleChange} name="Name" placeholder='Enter Full Name' className='text-sm outline-none w-full bg-input_bg'/>
               </div>
               <p className='text-sm font-semibold'>Email</p>
               <div className='w-full p-3 border-2 border-solid border-order bg-input_bg rounded-lg'>
-                <input type="text" value={userDetails.E_Mail} name="userEmail" placeholder='Enter User E-Mail' className='text-sm outline-none w-full bg-input_bg'/>
+                <input type="text" value={userDetails.E_Mail} onChange={handleChange} name="E_Mail" placeholder='Enter User E-Mail' className='text-sm outline-none w-full bg-input_bg'/>
               </div>
               <p className='text-sm font-semibold'>Phone</p>
               <div className='w-full p-3 border-2 border-solid border-order bg-input_bg rounded-lg'>
-                <input type="text" value={userDetails.Phone_Number} name="userPhone" placeholder='Enter User Phone Number' className='text-sm outline-none w-full bg-input_bg'/>
+                <input type="text" value={userDetails.Phone_Number} onChange={handleChange} name="Phone_Number" placeholder='Enter User Phone Number' className='text-sm outline-none w-full bg-input_bg'/>
               </div>
               <p className='text-sm font-semibold'>Address</p>
               <div className='w-full p-3 border-2 border-solid border-order bg-input_bg rounded-lg'>
                 <input 
                   type="text" 
-                  name="userAddress" 
+                  name="Address" 
                   value={userDetails.Address}
                   id="description" 
+                  onChange={handleChange} 
                   placeholder='Enter User Address' 
                   className='text-sm outline-none w-full bg-input_bg mt-2 ' 
                 />
@@ -443,6 +479,7 @@ const serchFilter = () => {
         </div>
       </div>
     </main>
+    {showAccessEnded && <AccessEnded /> }
     </ Title>
   )
 }

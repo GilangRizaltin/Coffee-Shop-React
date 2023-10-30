@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import React from 'react'
-import {useNavigate} from "react-router-dom"
+import {useNavigate , useLocation} from "react-router-dom"
 // import { useUserContext } from '../context/context';
 // import { searchProduct } from '../https/product';
 // import { getUser } from '../https/profile';
@@ -30,7 +30,6 @@ function header(props) {
   useEffect(() => {
     if (user) return setUrlImage(user.photo);
   }, []);
-
   const onLogOutHandler = () => {
     logOutUser(user.token)
     setShowModalLogout();
@@ -38,7 +37,11 @@ function header(props) {
     window.location.reload();
     navigate("/")
   }
-  const [clicked, setClicked] = useState("Home")
+  const [clicked, setClicked] = useState("/")
+  const location = useLocation()
+  useEffect(() => {
+    setClicked(location.pathname)
+  },[])
    return (
     <>
     <header
@@ -67,10 +70,10 @@ function header(props) {
           <p className={`font-logo text-xl ${props.mode === "light" && "text-brown"}`}>Coffee Shop</p>
         </div>
         <div className="hidden md:flex items-center gap-8">
-          <button className={`focus:border-b-2 focus:border-b-solid focus:border-b-primary nav-item cursor-pointer`}>
+          <button className={`${clicked === "/" && "border-b-2 border-b-solid border-b-primary "} nav-item cursor-pointer`}>
             <p onClick={() => navigate("/")}>Home</p>
           </button>
-          <button className={`focus:border-b-2 focus:border-b-solid focus:border-b-primary nav-item cursor-pointer`}>
+          <button className={`${clicked === "/product" && "border-b-2 border-b-solid border-b-primary "} nav-item cursor-pointer`}>
           <p onClick={() => navigate("/product")}>Product</p>
           </button>
         </div>

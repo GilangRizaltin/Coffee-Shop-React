@@ -2,17 +2,29 @@ import React from 'react'
 import { useState } from 'react'
 import { Link } from "react-router-dom";
 import { useProductContext } from '../context/productContext';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { delOrder  } from '../redux/slices/orderRedux';
 import { addOrder  } from '../redux/slices/orderRedux';
 
 export function productCard(props) {
-  const [cancelProduct, setCancel] = useState(false)
-  const setCancelOrderPorduct = () => {
-    setCancel((state) => !state)
-  };
+  const id = props.id
+  const dataOrder = {
+    image: "...",
+    product_id: (parseInt(id)),
+    product_name: props.title,
+    hot_or_not: "Hot",
+    size_id: "Small",
+    quantity: 1,
+    price: props.price,
+  }
+  const dispatch = useDispatch();
+  // const user = useSelector(state => state.user);
+  const setOrder = () => {
+    // if (user.isUserAvailable === true)
+     dispatch(addOrder(dataOrder));
+  }
   return (
-    <div className='min-w-[25%] md:min-w-fit'>
+    <div className='min-w-[25%] md:min-w-fit h-[500px]'>
               <div className="relative w-[158px] lg:w-[210px] desk:w-[280px]">
                 <div className="relative">
                   <img
@@ -30,7 +42,7 @@ export function productCard(props) {
                   className="flex flex-col bg-white desk:w-[90%] desk:absolute desk:left-[14px] desk:top-60 desk:p-2.5 desk:gap-y-3 desk:shadow-md"
                 >
                   <p className="text-base font-bold lg:text-xl">{props.title}</p>
-                  <p className="text-sm lg:text-base">
+                  <p className="text-sm  mobile_m:h-[120px] lg:h-[60px] overflow-hidden text-ellipsis">
                   {props.desc}
                   </p>
                   <div className="desk:flex items-center gap-2">
@@ -38,12 +50,12 @@ export function productCard(props) {
                     <p className="text-base text-primary lg:text-xl">IDR {props.price}</p>
                   </div>
                   <div className="flex flex-col gap-y-1 desk:flex-row gap-x-2">
-                    <button
+                    <Link to={`/detailproduct/${props.id}`}
                       className="flex justify-center text-base p-1 w-full bg-primary rounded-xl"
                     >
                       Buy
-                    </button>
-                    <button
+                    </Link>
+                    <button onClick={setOrder}
                       className="flex justify-center text-primary text-xl p-1 w-full border-2 border-solid border-primary rounded-xl desk:w-[30%]"
                     >
                       <ion-icon name="cart-outline"></ion-icon>

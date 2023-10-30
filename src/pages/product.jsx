@@ -5,29 +5,35 @@ import Footer from '../components/Footer';
 import { useSearchParams } from "react-router-dom";
 import { productWithRating } from '../components/productCard';
 import { searchProduct } from '../https/product';
+import Title from '../components/Title';
 
 function product() {
+  //state
+  const [dataProduct, setDataProduct] = useState(null)
+  const [pages , setPage] = useState({
+    next: "",
+    prev: "",
+  })
+  const [minValue, setMinValue] = useState("20000")
+  const [maxValue, setMaxValue] = useState("50500")
+  //search params
   const [searchParams, setSearchParams] = useSearchParams({
     search: "",
     category: "",
     sort: "",
     page: 1
   });
-  const [dataProduct, setDataProduct] = useState(null)
-  const [pages , setPage] = useState({
-    next: "",
-    prev: "",
-  })
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+  //get products
   const url = import.meta.env.VITE_BACKEND_HOST + "/products?" + searchParams.toString()
   const product = (url) => {
     searchProduct(url)
       .then((res) => {
         setDataProduct(res.data.result);
         setPage(res.data.meta);
-        console.log(res.data.result)
+        // console.log(res.data.result)
       })
       .catch((err) => {
         console.error(err);
@@ -37,22 +43,6 @@ function product() {
   useEffect(() => {
     product(url)
   }, []);
-
-  const consol = () => {
-    // const page = pages.next.split('?')[1]
-    // if (page)
-    // return setSearchParams(page)
-    // const data = setSearchParams(page.toString)
-    // setSearchParams({
-    //   ...searchParams,
-    //   page: pages.page + 1
-    // })
-    // const data = pages.next
-    console.log(pages);
-  }
-
-
-
   //filter
   const handleInputChange = (e) => {
     e.preventDefault();
@@ -64,7 +54,6 @@ function product() {
       return {
         ...prevSearchParams,
         search: e.target.value,
-        page: 1,
       };
     });
   };
@@ -96,8 +85,6 @@ function product() {
       };
     });
   };
-  const [minValue, setMinValue] = useState("20000")
-  const [maxValue, setMaxValue] = useState("50500")
   const min = (e) => {
     e.preventDefault()
     setMinValue(e.target.value);
@@ -123,12 +110,12 @@ function product() {
     })
   }
   const isCategoryChecked = (value) => {
-    const prevGenre = searchParams.get("category"); // Use the correct parameter name (category in this case)
+    const prevGenre = searchParams.get("category");
     if (!prevGenre) return false;
     return prevGenre.split(",").includes(value.toString());
   };
   const isSortChecked = (value) => {
-    const prevGenre = searchParams.get("sort"); // Use the correct parameter name (category in this case)
+    const prevGenre = searchParams.get("sort");
     if (!prevGenre) return false;
     return prevGenre.split(",").includes(value.toString());
   };
@@ -137,12 +124,10 @@ function product() {
       page: 1,
     });
   };
+  //submit handler
   const submit = () => {
     product(url)}
-
-
-
-
+  //pagination
   const toNextPage = () => {
     // setSearchParams((prev) => {
     //   return {
@@ -157,11 +142,24 @@ function product() {
     const prevUrl = pages.prev
     product(prevUrl)
   }
+  
+  const consol = () => {
+    // const page = pages.next.split('?')[1]
+    // if (page)
+    // return setSearchParams(page)
+    // const data = setSearchParams(page.toString)
+    // setSearchParams({
+    //   ...searchParams,
+    //   page: pages.page + 1
+    // })
+    // const data = pages.next
+    console.log(pages);
+  }
 
 
 
   return (
-    <>
+    <Title title="Product">
       <Header />
       <main className="">
       <div className='hidden lg:block relative w-full' >
@@ -347,7 +345,7 @@ function product() {
         </section>
       </main>
       <Footer />
-    </>
+    </Title>
   );
 }
 

@@ -1,16 +1,16 @@
 import React from 'react'
-import Header  from '../components/header';
-import Footer from "../components/footer";
+import Header  from '../components/Header';
+import Footer from "../components/Footer";
 import { detailProductOrder } from '../components/productCard';
 import { useEffect, useState } from 'react';
 import { getOrderIdDetail } from '../https/order';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 function detailOrder() {
   let { id } = useParams();
   // const getUserData = JSON.parse(localStorage.getItem('dataUser'))
-  const user = useSelector(state => state.user)
+  const user = useSelector(state => state.user.userInfo)
   const jwt = user.token
   const [userData, setUserData] = useState({})
   const [orderData, setOrderData] = useState(null)

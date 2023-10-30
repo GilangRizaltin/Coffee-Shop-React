@@ -24,8 +24,14 @@ const orderSlice = createSlice({
                 productInfo: updatedProductInfo,
             };
         },
+        cleanOrder(state) {
+            return {
+                ...state,
+                productInfo: []
+            }
+        }
     },
 });
 
-export const { addOrder, delOrder } = orderSlice.actions;
+export const { addOrder, delOrder, cleanOrder } = orderSlice.actions;
 export default orderSlice.reducer;

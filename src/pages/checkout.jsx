@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Header from "../components/Header";
 import { productOrder } from '../components/productCard';
 import { useState } from 'react';
@@ -7,11 +7,28 @@ import { useNavigate } from 'react-router-dom';
 import { createOrder } from '../https/order';
 import Title from '../components/Title';
 import { useSelector, useDispatch } from 'react-redux';
+import { getUserProfile } from '../https/profile';
+import { cleanOrder } from '../redux/slices/orderRedux';
 
 function checkout() {
   //redux
   const dispatch = useDispatch();
   const reduxData = useSelector(state => state.order.productInfo)
+  //redux user
+  const [dataUser, setDataUser] = useState(null)
+  const user = useSelector(state => state.user.userInfo);
+  const jwt = user.token
+  //Get user
+  useEffect(() => {
+    getUserProfile(jwt)
+    .then((res) => {
+      setDataUser(res.data.res[0])
+      // console.log(res.data.res[0])
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+  }, [])
   //Toggle Modals
   const [showModalCheckout, setModalCheckout] = useState(false);
   const setShowModalCheckout = () => {
@@ -24,22 +41,24 @@ function checkout() {
     navigate("/product")
   }
   //Transaction process
-  const [serve, setServe] = useState('')
+  const [serve, setServe] = useState('0')
   const [typeServe , setTypeServe] = useState('')
   const totalPrice = reduxData ? reduxData.reduce((accumulator, order) => {
     const orderPrice = parseFloat(order.price);
     return accumulator + orderPrice;
   }, 0) : 0;
-  const totalTransactions = totalPrice + serve
+  const totalTransactions = totalPrice + parseInt(serve) + 4000
   const chooseServing = (e) => {
     e.preventDefault();
     const newTypeServe = e.target.name;
-    setTypeServe(newTypeServe)
-    console.log(newTypeServe);
+    const newServe = e.target.value;
+    setTypeServe(newTypeServe);
+    setServe(newServe)
+    // console.log(newTypeServe);
   }
-  const user = useSelector(state => state.user.userInfo);
-  const jwt = user.token
   const submitCheckout = () => {
+    if (typeServe === '')
+    return setShowModalCheckout()
     const body = {
       "subtotal": totalPrice,
       "promo_id": 1,
@@ -56,6 +75,7 @@ function checkout() {
     .catch((err) => {
       console.log(err)
     })
+    dispatch(cleanOrder())
   }
   // const consol = () => {
   //   console.log(reduxData)
@@ -123,6 +143,7 @@ function checkout() {
                   className="bg-inherit pl-2.5 w-full outline-none"
                   type="text"
                   placeholder="Enter your E-Mail"
+                  value={dataUser && dataUser.email}
                 />
               </div>
               <p>FullName</p>
@@ -134,6 +155,7 @@ function checkout() {
                   className="bg-inherit pl-2.5 w-full outline-none"
                   type="text"
                   placeholder="Enter your Full name"
+                  value={dataUser && dataUser.full_name}
                 />
               </div>
               <p>Address</p>
@@ -145,24 +167,25 @@ function checkout() {
                   className="bg-inherit pl-2.5 w-full outline-none"
                   type="text"
                   placeholder="Enter your Address"
+                  value={dataUser && dataUser.address}
                 />
               </div>
               <p>Delivery</p>
               <form className="flex gap-2">
                 <button
-                  className="flex-1 p-2.5 border-solid border-2 border-border rounded-xl focus:border-primary"
+                  className={`${typeServe === "Dine In" ? "border-primary" : "border-border" } flex-1 p-2.5 border-solid border-2 rounded-xl`}
                   aria-label="dine in" value='5000' name='Dine In' onClick={chooseServing}
                 >
                   Dine In
                 </button>
                 <button
-                  className="flex-1 p-2.5 border-solid border-2 border-border rounded-xl focus:border-primary"
+                  className={`${typeServe === "Delivery" ? "border-primary" : "border-border" } flex-1 p-2.5 border-solid border-2 rounded-xl`}
                   aria-label="delivery" value='20000' name='Delivery' onClick={chooseServing}
                 >
                   Delivery
                 </button>
                 <button
-                  className="flex-1 p-2.5 border-solid border-2 border-border rounded-xl focus:border-primary"
+                  className={`${typeServe === "Pick Up" ? "border-primary" : "border-border" } flex-1 p-2.5 border-solid border-2 rounded-xl`}
                   aria-label="pick up" value='0' name='Pick Up' onClick={chooseServing}
                 >
                   Pick Up
@@ -196,7 +219,7 @@ function checkout() {
               </div>
               <div className="flex">
                 <p className="flex-1">Subtotal</p>
-                <p className="flex-1 flex justify-end">IDR 44.000</p>
+                <p className="flex-1 flex justify-end">IDR {totalPrice + parseInt(serve) + 4000}</p>
               </div>
               <button
                 className="w-full p-2.5 flex justify-center bg-primary rounded-xl font-semibold"
@@ -245,7 +268,7 @@ function checkout() {
                     <button
                       id="confirm"
                       className="border-2 border-solid border-order py-1 px-2.5 rounded-xl hover:border-primary"
-                      aria-label="confirm checkout" onClick={() => navigate("/product")}
+                      aria-label="confirm checkout" onClick={() => navigate("/history")}
                     >
                       Ok
                     </button>

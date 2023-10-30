@@ -1,19 +1,91 @@
-import React from 'react'
-import Header from '../components/header'
+import React, { useEffect } from 'react'
+import Header from '../components/Header'
 import Sidebar from '../components/Sidebar'
 import { useState } from 'react';
 import { detailProductOrder } from '../components/productCard';
 import { getAllOrder, updateStatusOrder } from '../https/orderAdmin';
+import { getAllUser } from '../https/userAdmin';
+import { useSearchParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { format } from 'date-fns';
+import AccessEnded from '../components/AccessEnded';
+import Title from '../components/Title';
+
 
 function OrderAdmin() {
+  //JWT
+  const user = useSelector(state => state.user.userInfo);
+  const jwt = user.token
+  const [showAccessEnded, setShowAccessEnded] = useState(false);
+  //get order
+  const [dataOrder, setDataOrder] = useState(null)
+  const [searchParams, setSearchParams] = useSearchParams({});
+  const url = import.meta.env.VITE_BACKEND_HOST + "/orders?" + searchParams.toString()
+  const getOrder = (url, jwt) => {
+    getAllOrder(url, jwt)
+    .then((res) => {
+      console.log(res.data.result)
+      setDataOrder(res.data.result)
+    })
+    .catch((err) => {
+      console.log(err)
+      setDataOrder(null)
+      if (err.response.status === 401)
+      setShowAccessEnded(true)
+    })
+  }
+  useEffect(() => {
+    getOrder(url, jwt)
+  },[])
+  //edit order
   const [editModals, showEditModals] = useState(false)
-  const setShowEditModals = () => {
+  const [orderDetails , setOrderDetails] = useState({})
+  const [orderIdx, setOrderIdx] = useState()
+  const setShowEditModals = (idx, no) => {
+    setOrderDetails(dataOrder[idx])
+    setOrderIdx(no)
     showEditModals((state) => !state)
   }
+  //update order
+  const [status, setStatus] = useState()
+  const changeStatus = (e) => {
+    e.preventDefault()
+    setStatus({
+      statuses: e.target.value
+    })
+  }
+  const submitUpdate = () => {
+    updateStatusOrder(orderIdx, status, jwt)
+    .then((res) => {
+      console.log(res)
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+  }
+  //modals
   const [addModals, showAddModals] = useState(false)
   const setShowAddModals = () => {
     showAddModals((state) => !state)
   }
+  //get User for add order
+  const [dataUser, setDataUser] = useState([])
+  const [idUser, setIdUser] = useState('') //for id user in add order by admin
+  const inputUser = (e) => {
+    e.preventDefault();
+    const urlUser = import.meta.env.VITE_BACKEND_HOST + "/users?full_name=" + e.target.productName.value
+    getAllUser(urlUser, jwt)
+    .then((res) => {
+      // console.log(res.data.result)
+      setDataUser(res.data.result)
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+    // console.log(idUser)
+  }
+  
+  //form
   const [productQty, setProductQty] = useState(1)
   const increaseQty = () =>{
     setProductQty(productQty + 1)
@@ -26,53 +98,32 @@ function OrderAdmin() {
   const [filter, showFilter] = useState(false)
   const setShowFilter = () => {
   showFilter((state) => !state)
-}
-  const data = [
-    {
-        no: 1,
-        date: "12 Juni 2000",
-        order: "ayam, gulai",
-        status: "On Progress",
-        total: 40000,
-    },
-    {
-      no: 2,
-      date: "12 sEPTEMBER 2000",
-      order: "ayam, gulai",
-      status: "On Progress",
-      total: 40000,
-  },
-  {
-    no: 3,
-    date: "21 Juni 2000",
-    order: "ayam, gulai",
-    status: "On Progress",
-    total: 40000,
-},
-{
-  no: 4,
-  date: "12 Juni 2000",
-  order: "ayam, gulai",
-  status: "On Progress",
-  total: 45000,
-},
-{
-  no: 5,
-  date: "12 Juni 2000",
-  order: "ayam, gulai",
-  status: "On Progress",
-  total: 42000,
-},
-{
-  no: 6,
-  date: "12 Juni 2000",
-  order: "ayam, gulai",
-  status: "On Progress",
-  total: 47000,
-},
-];
+  }
+  //search by id
+  const onSearchHandler = (e) => {
+    e.preventDefault()
+    setSearchParams(() => {
+      return {
+        order_id: e.target.value
+      }
+    });
+  }
+  const submit = () => {
+    getOrder(url, jwt)
+  }
+  //sort
+  const selectSort = (e) => {
+    e.preventDefault()
+    // setSort(e.target.value)
+    setSearchParams(() => {
+      return {
+        status: e.target.value
+      }
+    });
+    getOrder(import.meta.env.VITE_BACKEND_HOST + "/orders?status=" + e.target.value, jwt)
+  }
   return (
-    <>
+    <Title title="Admin Order">
     <Header mode="light"/>
     <main className='sm:flex'>
       <Sidebar />
@@ -137,10 +188,11 @@ function OrderAdmin() {
                   <p>Status</p>
                 </div>
                 <div className='flex-1 flex justify-end font-semibold'>
-                  <select name="" id="" className='bg-gray-300 p-2 rounded-lg outline-none'>
-                    <option value="">On Progress</option>
-                    <option value="">On Shipping</option>
-                    <option value="">Canceled</option>
+                  <select name="statuses" onChange={changeStatus} id="" className='bg-gray-300 p-2 rounded-lg outline-none'>
+                    <option value="On progress'">On Progress</option>
+                    <option value="Pending">On Shipping</option>
+                    <option value="Done'">On Shipping</option>
+                    <option value="Cancelled">Canceled</option>
                   </select>
                 </div>
               </div>
@@ -184,8 +236,21 @@ function OrderAdmin() {
             {/* for several reason, i change form below into div */}
             <div className='flex flex-col gap-y-[30px]'>
               <p className='text-sm font-semibold'>User Name</p>
-              <div className='w-full p-3 border-2 border-solid border-order bg-input_bg rounded-lg'>
+              <form onSubmit={inputUser} className='w-full flex p-3 border-2 border-solid border-order bg-input_bg rounded-lg'>
                 <input type="text" name="productName" id="name" placeholder='Enter User Name' className='text-sm outline-none w-full bg-input_bg'/>
+                <button type='submit'>
+                  <ion-icon name="search-outline"></ion-icon>
+                </button>
+              </form>
+              <div className='flex gap-5 flex-wrap'>
+                {dataUser && dataUser.map((data, idx) => (
+                  <p key={idx} onClick={() => {setIdUser(data.No)}} className={`${idUser === data.No ? "bg-primary" : "bg-order"} p-2 rounded-lg w-fit text-sm cursor-pointer`}>{data.Name}</p>
+                ))}
+                {/* <p className='p-2 bg-order rounded-lg w-fit text-sm cursor-pointer'>Asian Dolce Latte</p>
+                <p className='p-2 bg-order rounded-lg w-fit text-sm cursor-pointer'>Asian Dolce Latte</p>
+                <p className='p-2 bg-order rounded-lg w-fit text-sm cursor-pointer'>Asian Dolce Latte</p>
+                <p className='p-2 bg-order rounded-lg w-fit text-sm cursor-pointer'>Asian Dolce Latte</p>
+                <p className='p-2 bg-order rounded-lg w-fit text-sm cursor-pointer'>Asian Dolce Latte</p> */}
               </div>
               <p className='text-sm font-semibold'>Search Product</p>
               <div className='w-full p-3 border-2 border-solid border-order bg-input_bg rounded-lg'>
@@ -258,18 +323,21 @@ function OrderAdmin() {
           <div className='flex-1 flex flex-col sm:flex-row md:justify-end gap-4'>
             <div className=' flex flex-col gap-4 justify-end'>
               <p>Status</p>
-              <select className='w-fit outline-none border-2 border-solid border-order rounded-lg p-2.5'>
+              <select onChange={selectSort} className='w-fit outline-none border-2 border-solid border-order rounded-lg p-2.5'>
               <option value="">All</option>
-                <option value="">On Progress</option>
-                <option value="">On Shipping</option>
-                <option value="">Canceled</option>
+                <option value="On progress">On Progress</option>
+                <option value="Pending">On Shipping</option>
+                <option value="Done">Done</option>
+                <option value="Cancelled">Canceled</option>
               </select>
             </div>
             <div className=' flex flex-col gap-4 justify-end'>
               <p>Search Order</p>
               <div className='flex w-fit items-center border-2 border-solid border-order rounded-lg p-2.5'>
-                <input type="text" name="search_bar" id="productSearchBar" placeholder='Enter Order ID' className='outline-none'/>
-                <ion-icon name="search-outline"></ion-icon>
+                <input type="text" onChange={onSearchHandler} name="search_bar" id="productSearchBar" placeholder='Enter Order ID' className='outline-none'/>
+                <button onClick={submit}>
+                  <ion-icon name="search-outline"></ion-icon>
+                </button>
               </div>
             </div>
             <div className='flex items-end'>
@@ -306,18 +374,18 @@ function OrderAdmin() {
             <div className='col-span-1 flex justify-center items-center font-bold py-8'>Status</div>
             <div className='col-span-1 flex justify-center items-center font-bold py-8'>Total</div>
             <div className='col-span-1 flex justify-center items-center font-bold py-8'>Action</div> {/* Empty column for Action */}
-            {data && data.map((data) => (
-              <React.Fragment key={data.no}>
+            {dataOrder  && dataOrder.map((data, idx) => (
+              <React.Fragment key={idx}>
                 <div className={`flex justify-center items-center`}>
                   <ion-icon name="create-outline"></ion-icon>
                 </div>
-                <p className='col-span-1 flex justify-center items-center'>{data.no}</p>
-                <p className='col-span-1 flex justify-center items-center'>{data.date}</p>
-                <p className='col-span-1 flex justify-center items-center'>{data.order}</p>
-                <p className='col-span-1 flex justify-center items-center'>{data.status}</p>
-                <p className='col-span-1 flex justify-center items-center'>IDR {data.total}</p>
+                <p className='col-span-1 flex justify-center items-center'># {data.No}</p>
+                <p className='col-span-1 flex justify-center items-center'>{format(new Date(data.Date), 'yyyy-MMM-dd')}</p>
+                <p className='col-span-1 flex justify-center items-center'>A</p>
+                <p className='col-span-1 flex justify-center items-center'>{data.Status}</p>
+                <p className='col-span-1 flex justify-center items-center font-semibold'>IDR {data.Total_Transactions}</p>
                 <div className='col-span-1 flex gap-2 justify-center'>
-                  <button onClick={setShowEditModals} className='w-8 h-8 bg-orange-200 text-orange-800 rounded-full flex items-center justify-center'>
+                  <button onClick={() => {setShowEditModals(idx, data.No)}} className='w-8 h-8 bg-orange-200 text-orange-800 rounded-full flex items-center justify-center'>
                     <ion-icon name="pencil-outline"></ion-icon>
                   </button>
                   <button className='w-8 h-8 bg-red-300 text-red-800 rounded-full flex items-center justify-center'>
@@ -344,7 +412,8 @@ function OrderAdmin() {
         </div>
       </div>
     </main>
-    </>
+    {showAccessEnded && <AccessEnded /> }
+    </ Title>
   )
 }
 

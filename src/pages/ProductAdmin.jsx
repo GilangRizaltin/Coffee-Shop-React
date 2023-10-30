@@ -1,50 +1,19 @@
 import React from 'react'
 import Sidebar from '../components/Sidebar';
-import Header from '../components/header';
+import Header from '../components/Header';
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { addProduct, updateProduct } from '../https/productAdmin';
 import { searchProduct } from '../https/product';
 import { useSelector } from 'react-redux';
+import Title from '../components/Title';
+import AccessEnded from '../components/AccessEnded';
 
 function ProductAdmin() {
-  const data = [
-    {
-        no: 1,
-        img: "dsjgfjfd",
-        name: "ayam",
-        price: 200,
-        desc: "dssjfndsjnidsjf",
-        action: "dsidjifjidsjf"
-    },
-    {
-      no: 2,
-      img: "dsjfbfdsgfjfd",
-      name: "kopi",
-      price: 200,
-      desc: "dssjfndsjsdnidsjf",
-      action: "dsidjifjidsjf"
-  },
-  {
-    no: 3,
-    img: "dsdsf",
-    name: "dadar",
-    price: 200,
-    desc: "dssjfndsjnidsjf",
-    action: "dsidjifjdsidsjf"
-},
-{
-  no: 4,
-  img: "dsjgfjfd",
-  name: "regginang",
-  price: 200,
-  desc: "dssjfndsjndsidsjf",
-  action: "dsidjifjdsidsjf"
-},
-];
 //Set searchParams
 const [searchParams, setSearchParams] = useSearchParams({
 });
+const [showAccessEnded, setShowAccessEnded] = useState(false);
 //jwt
 // const getUserData = JSON.parse(localStorage.getItem('dataUser'))
 const user = useSelector(state => state.user.userInfo)
@@ -64,6 +33,8 @@ const getProducts = (url) => {
   })
   .catch((err) => {
     console.log(err)
+    if (err.response.status === 401)
+      setShowAccessEnded(true)
   })
 }
 useEffect(() => {
@@ -139,11 +110,8 @@ const confirmUpdates = () => {
   // console.log(jwt)
 }
 // handler
-const [category, setCategory] = useState()
-const categoryHandler = (e) => {
-  e.preventDefault();
-  setCategory(e.target.value)
-}
+const [category, setCategory] = useState('')
+const [sort, setSortBy] = useState('')
 //submit handler
 const postUrl = import.meta.env.VITE_BACKEND_HOST + "/products"
 const addSubmit = (e) => {
@@ -167,26 +135,81 @@ const addSubmit = (e) => {
   })
 }
 //search bar
+const [minValue, setMinValue] = useState("20000")
+const [maxValue, setMaxValue] = useState("50500")
 const onChangeSearch = (e) => {
-  e.preventDefault()
-  setSearchParams((prevState) => {
-    return {
-      ...prevState,
-      search: e.target.value
-    }
+  e.preventDefault();
+    setSearchParams((prev) => {
+      const prevSearchParams = {};
+      prev.forEach((value, key) => {
+        Object.assign(prevSearchParams, { [key]: value });
+      });
+      return {
+        ...prevSearchParams,
+        search: e.target.value,
+      };
   });
 }
-const search = (e) => {
-  e.preventDefault();
+const search = () => {
   getProducts(url)
 }
-const selected = (e) => {
+//filter
+const min = (e) => {
   e.preventDefault()
-  if (productDetails.Categories === e.target.value)
-  return "border-primary"
+  setMinValue(e.target.value);
+  setSearchParams((prev) => {
+    return {
+      ...prev,
+      minprice: parseInt(minValue),
+      maxprice: parseInt(maxValue),
+      
+    }
+  })
+}
+const max = (e) => {
+  e.preventDefault()
+  setMaxValue(e.target.value);
+  setSearchParams((prev) => {
+    return {
+      ...prev,
+      minprice: parseInt(minValue),
+      maxprice: parseInt(maxValue)
+    }
+  })
+}
+const setNewCategory = (e) => {
+  e.preventDefault()
+  setSearchParams((prev) => {
+    const prevSearchParams = {};
+    prev.forEach((value, key) => {
+      Object.assign(prevSearchParams, { [key]: value });
+    });
+    return {
+      ...prevSearchParams,
+      category: e.target.value,
+    };
+  });
+  setCategory(e.target.value)
+};
+const setSort = (e) => {
+  e.preventDefault()
+  setSearchParams((prev) => {
+    const prevSearchParams = {};
+    prev.forEach((value, key) => {
+      Object.assign(prevSearchParams, { [key]: value });
+    });
+    return {
+      ...prevSearchParams,
+      sort: e.target.value,
+    };
+  });
+  setSortBy(e.target.value)
+};
+const submitFilter = () => {
+  getProducts(url)
 }
   return (
-    <>
+    <Title title="Product Admin">
     <Header mode="light"/>
     <main className='sm:flex w-full'>
       <Sidebar />
@@ -219,9 +242,9 @@ const selected = (e) => {
               </div>
               <p className='text-sm font-semibold'>Category</p>
               <div className='flex gap-2 text-sm'>
-                <button className='flex-1 flex items-center justify-center p-2 border-2 border-solid border-order rounded-lg focus:border-primary focus:outline-none' value='1' onClick={categoryHandler}>Coffee</button>
-                <button className='flex-1 flex items-center justify-center p-2 border-2 border-solid border-order rounded-lg focus:border-primary focus:outline-none' value='2' onClick={categoryHandler}>Non Coffee</button>
-                <button className='flex-1 flex items-center justify-center p-2 border-2 border-solid border-order rounded-lg focus:border-primary focus:outline-none' value='3' onClick={categoryHandler}>Foods</button>
+                <button className='flex-1 flex items-center justify-center p-2 border-2 border-solid border-order rounded-lg focus:border-primary focus:outline-none' value='1'>Coffee</button>
+                <button className='flex-1 flex items-center justify-center p-2 border-2 border-solid border-order rounded-lg focus:border-primary focus:outline-none' value='2'>Non Coffee</button>
+                <button className='flex-1 flex items-center justify-center p-2 border-2 border-solid border-order rounded-lg focus:border-primary focus:outline-none' value='3'>Foods</button>
               </div>
               <p className='text-sm font-semibold'>Description</p>
               <div className='w-full h-[142px] p-3 border-2 border-solid border-order bg-input_bg rounded-lg'>
@@ -357,28 +380,38 @@ const selected = (e) => {
                 <div className='absolute top-2 z-10 right-0 bg-white border-2 border-solid border-order rounded-lg p-4 w-[300px] flex flex-col gap-4'>
                   <p>Category</p>
                   <div className='flex gap-2'>
-                    <button className='p-2 border-2 border-solid border-order rounded-lg'>Coffee</button>
-                    <button className='flex-1 p-2 border-2 border-solid border-order rounded-lg'>Non-Coffee</button>
-                    <button className='p-2 border-2 border-solid border-order rounded-lg'>Foods</button>
+                    <button onClick={setNewCategory} value="1" name="category" className={`${category === '1' ? "border-primary" : "border-order"} p-2 border-2 border-solid rounded-lg`}>Coffee</button>
+                    <button onClick={setNewCategory} value="2" name="category" className={`${category === '2' ? "border-primary" : "border-order"} flex-1 p-2 border-2 border-solid rounded-lg`}>Non-Coffee</button>
+                    <button onClick={setNewCategory} value="3" name="category" className={`${category === '3' ? "border-primary" : "border-order"} p-2 border-2 border-solid rounded-lg`}>Foods</button>
                   </div>
                   <p>Sort</p>
                   <div className='flex gap-2'>
-                    <button className='flex-1 p-2 border-2 border-solid border-order rounded-lg'>Cheapest</button>
-                    <button className='flex-1 p-2 border-2 border-solid border-order rounded-lg'>Most Expensive</button>
-                    <button className='flex-1 p-2 border-2 border-solid border-order rounded-lg'>New Product</button>
+                    <button name="sort" onClick={setSort} value='Cheapest' className={`${sort === 'Cheapest' ? "border-primary" : "border-order"} flex-1 p-2 border-2 border-solid border-order rounded-lg`}>Cheapest</button>
+                    <button name="sort" onClick={setSort} value='Most Expensive' className={`${sort === 'Most Expensive' ? "border-primary" : "border-order"} flex-1 p-2 border-2 border-solid border-order rounded-lg`}>Most Expensive</button>
+                    <button name="sort" onClick={setSort} value='New Product' className={`${sort === 'New Product' ? "border-primary" : "border-order"} flex-1 p-2 border-2 border-solid border-order rounded-lg`}>New Product</button>
                   </div>
                   <p>Range</p>
-                  <div className='flex'>
-                    <div className='flex-1'>
-                      <p>Min Price</p>
-                      <input type="range" name="" id="" className='' />
-                    </div>
-                    <div className='flex-1'>
-                      <p className='flex justify-end'>Max Price</p>
-                      <input type="range" name="" id="" className=''/>
-                    </div>
+                  <div className="flex items-center h-[45px]">
+                    <input
+                      type="range"
+                      name='min_value'
+                      onChange={min}
+                      className="w-[50%] cursor-pointer appearance-none bg-orange-500 h-1 rounded-full outline-none"
+                      min="20000"
+                      max="50000"
+                      step="500"
+                    />
+                    <input
+                      type="range"
+                      name='max_value'
+                      onChange={max}
+                      className="w-[50%] cursor-pointer appearance-none bg-orange-500 h-1 rounded-full outline-none"
+                      min="50500"
+                      max="100000"
+                      step="500"
+                    />
                   </div>
-                  <button className='w-full p-2 flex justify-center items-center bg-primary rounded-lg'>Apply</button>
+                  <button onClick={submitFilter} className='w-full p-2 flex justify-center items-center bg-primary rounded-lg'>Apply</button>
                 </div>
               </div>
               }
@@ -435,7 +468,8 @@ const selected = (e) => {
         </div>
       </div>
     </main>
-    </>
+    {showAccessEnded && <AccessEnded /> }
+    </ Title>
   )
 }
 

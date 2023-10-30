@@ -1,15 +1,20 @@
 import React, { useEffect, useState } from 'react'
-import Header from "../components/header";
-import Footer from "../components/footer";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 import { getOrderDetail } from '../https/order';
-// import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { historyProduct } from '../components/productCard';
 import { useSelector } from 'react-redux';
 
 function historyorder() {
+  //jwt
   const user = useSelector(state => state.user.userInfo);
   const jwt = user.token
-  const url = import.meta.env.VITE_BACKEND_HOST + "/orders/order?page=1"
+  //params
+  const [searchParams, setSearchParams] = useSearchParams({
+    page: 1
+  })
+  const url = import.meta.env.VITE_BACKEND_HOST + "/orders/order?" + searchParams.toString()
   const [dataOrder, setDataOrder] = useState(null)
   const [pages , setPage] = useState({
     next: "",
@@ -32,53 +37,65 @@ function historyorder() {
     const month = date.toLocaleString('en-US', { month: 'long' });
     const year = date.getFullYear();
   }
+  const [status, setStatus] = useState('')
+  const setOrderStatus = (e) => {
+    e.preventDefault();
+    const set = e.target.value;
+    setStatus(set);
+    setSearchParams((prev) => {
+      return {
+        ...prev,
+        status: e.target.value
+      }
+    })
+  }
   return (
     <>
     <Header />
-    <main class="pl-2 pr-2 md:pl-10 md:pr-10 desk:pl-def desk:pr-def">
+    <main className="pl-2 pr-2 md:pl-10 md:pr-10 desk:pl-def desk:pr-def">
       <div
-        class="flex pt-[38px] pb-[31px] md:pt-[58px] md:pb-[40px] desk:pt-[78px] desk:pb-[58px] items-center"
+        className="flex pt-[38px] pb-[31px] md:pt-[58px] md:pb-[40px] desk:pt-[78px] desk:pb-[58px] items-center"
       >
-        <p class="flex-1 font-semibold text-2xl lg:text-3xl desk:text-5xl">
+        <p className="flex-1 font-semibold text-2xl lg:text-3xl desk:text-5xl">
           History Order
         </p>
-        <div class="flex flex-0.5 justify-end">
+        <div className="flex flex-0.5 justify-end">
           <p
-            class="bg-order h-7 w-7 flex justify-center items-center lg:text-xl"
+            className="bg-order h-7 w-7 flex justify-center items-center lg:text-xl"
           >
             2
           </p>
         </div>
       </div>
-      <section class="md:flex md:gap-x-4 text-sm md:text-base">
-        <div class="w-full md:w-[70%] lg:flex-1">
+      <section className="md:flex md:gap-x-4 text-sm md:text-base">
+        <div className="w-full md:w-[70%] lg:flex-1">
           <div
-            class="flex flex-col gap-y-5 mb-4 lg:flex-row-reverse lg:gap-x-10"
+            className="flex flex-col gap-y-5 mb-4 lg:flex-row-reverse lg:gap-x-10"
           >
             <input
               type="month"
               name=""
               id="month-input"
-              class="bg-order w-fit text-sm p-2.5 outline-none"
+              className="bg-order w-fit text-sm p-2.5 outline-none"
             />
             <div
-              class="flex bg-order w-full items-center p-2.5 gap-x-2 text-xs md:text-base"
+              className="flex bg-order w-full items-center p-2.5 gap-x-2 text-xs md:text-base"
             >
-              <p
-                class="flex-1 flex justify-center items-center h-7 hover:bg-white"
+              <button onClick={setOrderStatus} value="On Progress"
+                className={`${status === "On Progress" && "bg-white"} flex-1 flex justify-center items-center h-7`}
               >
                 On Progress
-              </p>
-              <p
-                class="flex-1 flex justify-center items-center h-7 hover:bg-white"
+              </button>
+              <button onClick={setOrderStatus} value="Pending"
+                className={`${status === "Pending" && "bg-white"} flex-1 flex justify-center items-center h-7`}
               >
                 Sending Goods
-              </p>
-              <p
-                class="flex-1 flex justify-center items-center h-7 hover:bg-white"
+              </button>
+              <button onClick={setOrderStatus} value="Done"
+                className={`${status === "Done" && "bg-white"} flex-1 flex justify-center items-center h-7`}
               >
                 Finish Order
-              </p>
+              </button>
             </div>
           </div>
           {dataOrder ? (
@@ -98,46 +115,46 @@ function historyorder() {
                       No Orders information available.
                   </div>
                    )}
-          <div class="w-full flex justify-center gap-2 mb-10">
+          <div className="w-full flex justify-center gap-2 mb-10">
             <button
-              class="text-md bg-primary p-2 h-9 w-9 rounded-full flex items-center justify-center"
+              className="text-md bg-primary p-2 h-9 w-9 rounded-full flex items-center justify-center"
               aria-label="page 1"
             >
               1
             </button>
             <button
-              class="text-md bg-order text-gray-600 p-2 h-9 w-9 rounded-full flex items-center justify-center"
+              className="text-md bg-order text-gray-600 p-2 h-9 w-9 rounded-full flex items-center justify-center"
               aria-label="page 2"
             >
               2
             </button>
             <button
-              class="text-md bg-order text-gray-600 p-2 h-9 w-9 rounded-full flex items-center justify-center"
+              className="text-md bg-order text-gray-600 p-2 h-9 w-9 rounded-full flex items-center justify-center"
               aria-label="page 3"
             >
               3
             </button>
             <button
-              class="text-md bg-order text-gray-600 p-2 h-9 w-9 rounded-full flex items-center justify-center"
+              className="text-md bg-order text-gray-600 p-2 h-9 w-9 rounded-full flex items-center justify-center"
               aria-label="page 4"
             >
               4
             </button>
             <button
-              class="text-md bg-primary p-2 h-9 w-9 rounded-full text-white flex items-center justify-center"
+              className="text-md bg-primary p-2 h-9 w-9 rounded-full text-white flex items-center justify-center"
               aria-label="next page"
             >
               <ion-icon
                 name="arrow-forward-outline"
-                class="text-white"
+                className="text-white"
               ></ion-icon>
             </button>
           </div>
         </div>
         <div
-          class="p-2 w-full bg-order mb-12 flex-1 h-fit lg:p-2.5 lg:bg-white lg:border-2 lg:border-solid lg:border-order lg:max-w-[480px]"
+          className="p-2 w-full bg-order mb-12 flex-1 h-fit lg:p-2.5 lg:bg-white lg:border-2 lg:border-solid lg:border-order lg:max-w-[480px]"
         >
-          <div class="flex flex-col gap-[9px]">
+          <div className="flex flex-col gap-[9px]">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="48"
@@ -181,13 +198,13 @@ function historyorder() {
                 </clipPath>
               </defs>
             </svg>
-            <p class="text-lg font-bold text-gray-600">Send Us Message</p>
-            <p class="text-base">
+            <p className="text-lg font-bold text-gray-600">Send Us Message</p>
+            <p className="text-base">
               if your unable to find answer or find your product quickly, please
               describe your problem and tell us. we will give you solution.
             </p>
             <button
-              class="text-sm flex justify-center items-center h-9 w-full bg-primary rounded-xl font-bold"
+              className="text-sm flex justify-center items-center h-9 w-full bg-primary rounded-xl font-bold"
               aria-label="send message"
             >
               Send Message

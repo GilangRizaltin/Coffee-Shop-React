@@ -26,3 +26,13 @@ export const searchUser = (url, jwt) => {
       },
   })
 }
+
+
+const updateUrl = import.meta.env.VITE_BACKEND_HOST + "/users/update"
+export const updateUserByAdmin = (body, jwt) => {
+  return axios.patch(updateUrl, body, {
+      headers: {
+        'Authorization': 'Bearer ' + jwt,
+      },
+  })
+}

@@ -3,10 +3,13 @@ import Sidebar from '../components/Sidebar'
 import { useState, useEffect } from 'react';
 import ChartComponent from '../components/Chart';
 import { statistic, getOrdersAllStatus } from '../https/dashboard';
-import Header from '../components/header';
+import Header from '../components/Header';
 import Title from '../components/Title';
+import AccessEnded from '../components/AccessEnded';
+import { format } from 'date-fns';
 
 function Dashboard() {
+    const [showAccessEnded, setShowAccessEnded] = useState(false);
     const [dateStart, setDateStart] = useState()
     const [dateEnd, setDateEnd] = useState()
     const dateStartValue = (e) => {
@@ -26,6 +29,8 @@ function Dashboard() {
             setDataStatistic(res.data.result)
         }) .catch((err) => {
             console.log(err)
+            if (err.response.status === 401)
+                setShowAccessEnded(true)
         });
         getOrdersAllStatus()
         .then((res) => {
@@ -33,6 +38,8 @@ function Dashboard() {
             setDataStatus(res.data.result);
         }) .catch((err) => {
             console.log(err)
+            if (err.response.status === 401)
+                setShowAccessEnded(true)
         });
       }, []);    
     const currentDate = new Date();
@@ -179,6 +186,7 @@ function Dashboard() {
         </section>
         </div>
     </main>
+    {showAccessEnded && <AccessEnded /> }
     </ Title>
   )
 }

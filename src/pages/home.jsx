@@ -1,35 +1,36 @@
 import React from 'react'
+import { useState, useEffect } from 'react';
 import Header  from '../components/Header';
 import Footer from "../components/Footer";
-import { productCard } from "../components/productCard";
+import { productCard, productWithRating } from "../components/productCard";
 import Title from '../components/Title';
-import { useState, useEffect } from 'react';
 import { searchProduct } from '../https/product';
 
 function home() {
-  const [product, setProduct] = useState([])
-  // useEffect(() => {
-  //   searchProduct(import.meta.env.VITE_BACKEND_HOST + "/products")
-  //   .then((res) => {
-  //     setProduct(res.data.result)
-  //   })
-  //   .catch((err) => {
-  //     console.log(err)
-  //   })
-  // })
-  const url = import.meta.env.VITE_BACKEND_HOST + "/products"
-  const productData = (url) => {
-    searchProduct(url)
-      .then((res) => {
-        setProduct(res.data.result);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }
+  const [product, setProduct] = useState(null)
   useEffect(() => {
-    productData(url)
-  }, [])
+    searchProduct(import.meta.env.VITE_BACKEND_HOST + "/products")
+    .then((res) => {
+      setProduct(res.data.result)
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+  },)
+  // const url = import.meta.env.VITE_BACKEND_HOST + "/products"
+  // const productData = (url) => {
+  //   searchProduct(url)
+  //     .then((res) => {
+  //       setProduct(res.data.result);
+  //       console.log(res.data.result)
+  //     })
+  //     .catch((err) => {
+  //       console.error(err);
+  //     });
+  // }
+  // useEffect(() => {
+  //   productData(url)
+  // }, [])
   return (
     <Title title= "Home">
       <Header />
@@ -175,7 +176,7 @@ function home() {
               taste and make your day better
             </p>
             <div className="flex gap-6 justify-center flex-wrap">
-            {/* {product.length > 0 ? (
+            {product !== null && product.length > 0 ? (
               product.map((product, index) => (
                 <div key={index}>
                   {productCard({
@@ -188,7 +189,7 @@ function home() {
                 ))
               ) : (
                 <p>No Product Available</p>
-              )} */}
+              )}
             </div>
           </div>
         </section>

@@ -3,11 +3,8 @@ import { useState, useEffect } from 'react'
 import Header  from '../components/Header';
 import Footer from "../components/Footer";
 import { productWithRating } from "../components/productCard";
-// import { useLocation } from 'react-router-dom';
 import { getDetailProduct } from '../https/product';
 import {useNavigate, useParams} from "react-router-dom"
-import { useProductContext } from '../context/productContext';
-
 import { useDispatch } from 'react-redux';
 import { addOrder  } from '../redux/slices/orderRedux';
 
@@ -133,14 +130,14 @@ function detailProduct() {
                 </div>
                 <p className='text-sm font-bold'>Choose Size</p>
                 <form className='flex gap-6 text-xs '>
-                    <button className='flex-1 p-2.5 md: px-1 border-2 border-solid border-order focus:border-primary' value='Regular' onClick={chooseSize}>Regular</button>
-                    <button className='flex-1 p-2.5 md: px-1 border-2 border-solid border-order focus:border-primary' value='Grande'onClick={chooseSize}>Grande</button>
-                    <button className='flex-1 p-2.5 md: px-1 border-2 border-solid border-order focus:border-primary' value='Venti'onClick={chooseSize}>Venti</button>
+                    <button className={`${size === "Regular" ? "border-primary" : "border-order"} flex-1 p-2.5 md: px-1 border-2 border-solid`} value='Regular' onClick={chooseSize}>Regular</button>
+                    <button className={`${size === "Grande" ? "border-primary" : "border-order"} flex-1 p-2.5 md: px-1 border-2 border-solid`} value='Grande'onClick={chooseSize}>Grande</button>
+                    <button className={`${size === "Venti" ? "border-primary" : "border-order"} flex-1 p-2.5 md: px-1 border-2 border-solid`} value='Venti'onClick={chooseSize}>Venti</button>
                 </form>
                 <p className='text-sm font-bold'>Hot/Ice?</p>
                 <div  className='flex gap-6 text-xs'>
-                <button className='flex-1 p-2.5 md: px-1 border-2 border-solid border-order focus:border-primary' value='Hot' onClick={setToIceHandler}>Hot</button>
-                  <button className='flex-1 p-2.5 md: px-1 border-2 border-solid border-order focus:border-primary' value='Ice' onClick={setToIceHandler}>Ice</button>
+                <button className={`${hotOrNot === "Hot" ? "border-primary" : "border-order"} flex-1 p-2.5 md: px-1 border-2 border-solid`} value='Hot' onClick={setToIceHandler}>Hot</button>
+                  <button className={`${hotOrNot === "Ice" ? "border-primary" : "border-order"} flex-1 p-2.5 md: px-1 border-2 border-solid `} value='Ice' onClick={setToIceHandler}>Ice</button>
                 </div>
                 <div className='flex flex-col w-full text-sm gap-2 detailProduct:flex-row'>
                     <button className='flex-1 w-full p-2.5 rounded-lg bg-primary font-bold' onClick={setOrder}>Buy</button>
@@ -173,13 +170,13 @@ function detailProduct() {
                 })}
               </div>
             </div>
-            <div className='flex '>
+            {/* <div className='flex '>
                 <button>1</button>
                 <button>2</button>
                 <button>3</button>
                 <button>4</button>
                 <button>dsf</button>
-            </div>
+            </div> */}
         </section>
     </main>
     <Footer />
