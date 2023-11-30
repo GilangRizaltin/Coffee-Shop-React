@@ -3,12 +3,14 @@ import { useState } from 'react'
 import {useNavigate} from "react-router-dom"
 import { useSelector, useDispatch } from 'react-redux';
 import { userAction } from '../redux/slices/user';
+import { ModalsTwoButton } from '../components/Modals';
 
 function login() {
+  //inisialization
   const navigate = useNavigate();
   const user = useSelector(state => state.user);
-  // console.log(user)
   const dispatch = useDispatch();
+  //setTogglePasswordType
   const [isPwdShown, setIsPwdShown] = useState(false);
   const showPwdHandler = () => {
     setIsPwdShown((state) => !state);
@@ -25,11 +27,6 @@ function login() {
       setShowWrongModal();
     }
   }
-  const successLogin = () => {
-    if (user.isFulfilled)
-      navigate("/");
-
-  }
   //submit button login axios
   const submitHandler = (e) => {
     e.preventDefault();
@@ -38,21 +35,6 @@ function login() {
       email: e.target.user_email.value,
       password: e.target.pwd.value,
     };
-    // loginUser(body)
-    // .then((res) => {
-    //   const newData = res.data.data;
-    //   if (userData) {
-    //     setUserData({ ...userData, ...newData });
-    //   } else {
-    //     setUserData(newData);
-    //   }
-    //   console.log(res.data);
-    //   // navigate("/");
-    // })
-    //   .catch((err) => {
-    //     console.log(err);
-    //     setMsg(err.response.data.msg)
-    //     setShowPwdWrongModal()});
     dispatch(loginThunk(body))
   }
   useEffect(() => {
@@ -91,13 +73,13 @@ function login() {
         <div className="w-full border-2 border-solid border-order p-3 flex items-center gap-2 rounded-lg">
           <ion-icon name="bag-outline"></ion-icon>
           <input type={isPwdShown ? "text" : "password"} placeholder="Enter your password" name='pwd'  className='flex-1 outline-none text-sm lg:text-base'/>          
-          <div onClick={showPwdHandler}>
+          <div className='cursor-pointer' onClick={showPwdHandler}>
             <ion-icon name="eye-off-outline"></ion-icon>
           </div>
         </div>
         <div className="flex">
           <p className='flex-1 hidden text-red-600'>Incorrect Password</p>
-          <p onClick={() => navigate("/resetpassword")} className='flex-1 flex justify-end text-primary text-sm'>Lupa password?</p>
+          <p onClick={() => navigate("/forget-password")} className='flex-1 flex justify-end text-primary text-sm cursor-pointer'>Lupa password?</p>
         </div>
         <div className="">
           <button type='submit' className='w-full bg-primary p-3 flex items-center justify-center rounded-lg'>Log In</button>

@@ -23,6 +23,7 @@ function header(props) {
   };
 
   const user = useSelector(state => state.user.userInfo);
+  const jwt = user ? user.token : null
   const product = useSelector(state => state.order);
   // const getUserData = JSON.parse(localStorage.getItem('dataUser'))
   const [urlImage, setUrlImage] = useState("/img/user_image-1695737375917-95805558.jpeg")
@@ -31,10 +32,16 @@ function header(props) {
     if (user) return setUrlImage(user.photo);
   }, []);
   const onLogOutHandler = () => {
-    logOutUser(user.token)
+    logOutUser(jwt)
+    .then((res) => {
+      console.log(res)
+    })
+    .catch((err) => {
+      console.log(err)
+    })
     setShowModalLogout();
     localStorage.removeItem("persist:lib")
-    window.location.reload();
+    // window.location.reload();
     navigate("/")
   }
   const [clicked, setClicked] = useState("/")

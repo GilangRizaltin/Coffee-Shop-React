@@ -4,6 +4,10 @@ import { forgetPassword } from '../https/resetpwd';
 import { useState } from 'react';
 
 function forgetPasswordPage() {
+  const [modal, setModal] = useState(false)
+  const setShowModal = () => {
+    setModal((state) => ! state)
+  }
   const submitReset = (e) => {
     e.preventDefault();
     const email = e.target.user_email.value
@@ -14,9 +18,11 @@ function forgetPasswordPage() {
     .catch((err) => {
       console.log(err)
     })
+    setShowModal()
     // console.log("email=" + email)
   }
   return (
+    <>
     <div className="flex h-screen">
       <div className="hidden md:block">
         <img
@@ -46,6 +52,26 @@ function forgetPasswordPage() {
         </div>
       </form>
     </div>
+    {modal &&
+    (<div
+      className={`flex fixed inset-0 items-center justify-center z-50 outline-none modal w-full h-full bg-zinc-600/90`}
+      id="myModals"
+    >
+      <div
+        className="flex flex-col gap-7 modal-content bg-white p-8 rounded shadow-lg w-[300px] justify-center"
+      >
+        <p className="text-red-700">Check your Email</p>
+        <div className="flex justify-end items-center gap-4 text-black">
+          <button
+            className="flex-1 hover:border-primary text-base border-2 border-solid border-order rounded-xl"
+            id="closeModalBtn" onClick={setShowModal}
+          >
+            Ok
+          </button>
+        </div>
+      </div>
+    </div>)}
+    </>
   )
 }
 

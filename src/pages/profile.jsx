@@ -5,9 +5,16 @@ import { updateDataUser, getUser } from '../https/profile';
 import { useSelector } from 'react-redux';
 
 function profile() {
+  //Authorization
   const user = useSelector(state => state.user.userInfo);
   const jwt = user.token
+  //State
   const [profileData, setProfileData] = useState({})
+  
+
+
+
+
   const [valueData, setValueData] = useState({})
   const [image, setImage] = useState('')
   useEffect(() => {

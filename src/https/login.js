@@ -10,7 +10,7 @@ export const loginUser = (body) => {
 const logOutUrl = import.meta.env.VITE_BACKEND_HOST + "/users/logout"
 
 export const logOutUser = (jwt) => {
-    return axios.post(logOutUrl, {
+    return axios.delete(logOutUrl, {
         headers: {
             'Authorization': 'Bearer ' + jwt,
         },

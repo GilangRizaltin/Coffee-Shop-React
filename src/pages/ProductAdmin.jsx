@@ -150,7 +150,8 @@ const onChangeSearch = (e) => {
       };
   });
 }
-const search = () => {
+const search = (e) => {
+  e.preventDefault();
   getProducts(url)
 }
 //filter

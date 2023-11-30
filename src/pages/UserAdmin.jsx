@@ -9,10 +9,6 @@ import Title from '../components/Title';
 import AccessEnded from '../components/AccessEnded';
 
 function UserAdmin() {
-const consol = () => {
-  console.log(type)
-  console.log(input)
-}
 //jwt
 // const getUserData = JSON.parse(localStorage.getItem('dataUser'))
 const user = useSelector(state => state.user.userInfo)
@@ -59,11 +55,14 @@ showFilter((state) => !state)
 //state for edit details
 const [userDetails , setUserDetails] = useState({})
 const [valueUser, setValueUser] = useState({})
+const [bodyUpdate, seBodyUpdate] = useState({})
+const [id, setId] = useState()
 //modal for edit user
 const [editModals, showEditModals] = useState(false)
-const setShowEditModals = (idx) => {
+const setShowEditModals = (idx, no) => {
   setUserDetails(userData[idx]);
   setValueUser(userData[idx]);
+  setId(no)
   showEditModals((state) => !state)
 }
 //handler edit
@@ -179,17 +178,28 @@ const serchFilter = () => {
 }
 //edit user
 const body = {};
-const [bodyUpdate, seBodyUpdate] = useState({})
+const [modalsConfirm, setModalsConfirm] = useState(false);
+const setShowModalsConfirm = () => {
+  setModalsConfirm((state) => !state)
+}
 const clearanceBeforeSubmit = () => {
   for (const key in userDetails) {
     if (userDetails[key] !== valueUser[key]) {
       body[key] = userDetails[key];
     }
   }
-  console.log(body)
-  // setShowModalSubmit();
   seBodyUpdate(body)
+  console.log(bodyUpdate)
+  setModalsConfirm(true)
 }
+// useEffect(() => {
+//   for (const key in userDetails) {
+//     if (userDetails[key] !== valueUser[key]) {
+//       body[key] = userDetails[key];
+//     }
+//   }
+//   seBodyUpdate(body)
+// },[])
 const confirmUpdates = () => {
   updateUserByAdmin(bodyUpdate, jwt)
   .then((res) => {
@@ -201,6 +211,16 @@ const confirmUpdates = () => {
   .catch((err) => {
     console.log(err)
   });
+}
+const consol = () => {
+  for (const key in userDetails) {
+        if (userDetails[key] !== valueUser[key]) {
+          body[key] = userDetails[key];
+        }
+      }
+      seBodyUpdate(body)
+  console.log(type)
+  console.log(bodyUpdate)
 }
   return (
     <Title title="Admin User">
@@ -297,7 +317,7 @@ const confirmUpdates = () => {
                 Upload
               </button>
             </div>
-            <form className='flex flex-col gap-y-[30px]'>
+            <div className='flex flex-col gap-y-[30px]'>
               <p className='text-sm font-semibold'>User Name</p>
               <div className='w-full p-3 border-2 border-solid border-order bg-input_bg rounded-lg'>
                 <input type="text" value={userDetails.Username} onChange={handleChange} name="Username" placeholder='Enter User Name' className='text-sm outline-none w-full bg-input_bg'/>
@@ -326,10 +346,10 @@ const confirmUpdates = () => {
                   className='text-sm outline-none w-full bg-input_bg mt-2 ' 
                 />
               </div>
-              <button className='text-sm font-semibold w-full p-2.5 flex items-center justify-center bg-primary rounded-lg'>
+              <button onClick={clearanceBeforeSubmit} className='text-sm font-semibold w-full p-2.5 flex items-center justify-center bg-primary rounded-lg'>
                 Edit Save
               </button>
-            </form>
+            </div>
           </div>
         </div>
         }
@@ -452,7 +472,7 @@ const confirmUpdates = () => {
                   <p className='col-span-1 h-autoflex justify-center items-center'>{data.Address}</p>
                   <p className='col-span-1 flex justify-center items-center'>{data.E_Mail}</p>
                   <div className='col-span-1 flex gap-2 justify-center'>
-                    <button onClick={() => {setShowEditModals(idx)}} className='w-8 h-8 bg-orange-200 text-orange-800 rounded-full flex items-center justify-center'>
+                    <button onClick={() => {setShowEditModals(idx, data.No)}} className='w-8 h-8 bg-orange-200 text-orange-800 rounded-full flex items-center justify-center'>
                       <ion-icon name="pencil-outline"></ion-icon>
                     </button>
                     <button className='w-8 h-8 bg-red-300 text-red-800 rounded-full flex items-center justify-center'>
@@ -479,6 +499,30 @@ const confirmUpdates = () => {
         </div>
       </div>
     </main>
+    {modalsConfirm &&
+      (<div
+        className={`flex fixed inset-0 items-center justify-center z-50 outline-none modal w-full h-full bg-zinc-600/90`}
+      >
+        <div
+          className="flex flex-col gap-7 modal-content bg-white p-8 rounded shadow-lg w-[300px] justify-center"
+        >
+          <p className="">Are you sure to updating data user?</p>
+          <div className="flex justify-end items-center gap-4 text-black">
+          <button
+              className="flex-1 hover:border-primary text-base border-2 border-solid border-order rounded-xl"
+              id="closeModalBtn" onClick={setShowModalsConfirm}
+            >
+              Cancel
+            </button>
+            <button
+              className="flex-1 hover:border-primary text-base border-2 border-solid border-order rounded-xl"
+              id="confirmSubmit" onClick={confirmUpdates}
+            >
+              Ok
+            </button>
+          </div>
+        </div>
+      </div>)}
     {showAccessEnded && <AccessEnded /> }
     </ Title>
   )

@@ -143,7 +143,7 @@ function OrderAdmin() {
                   <p>Fullname</p>
                 </div>
                 <div className='flex-1 flex justify-end font-semibold'>
-                  <p>gantenk</p>
+                  <p>{orderDetails.User}</p>
                 </div>
               </div>
               <div className='flex px-2.5 py-4 border-b-2 border-solid border-order'>
@@ -152,7 +152,7 @@ function OrderAdmin() {
                   <p>Address</p>
                 </div>
                 <div className='flex-1 flex justify-end font-semibold'>
-                  <p>st ville aville</p>
+                  <p>{orderDetails.Addrress}</p>
                 </div>
               </div>
               <div className='flex px-2.5 py-4 border-b-2 border-solid border-order'>
@@ -161,7 +161,7 @@ function OrderAdmin() {
                   <p>Phone</p>
                 </div>
                 <div className='flex-1 flex justify-end font-semibold'>
-                  <p>weqeq2143</p>
+                  <p>+44-2123-2313</p>
                 </div>
               </div>
               <div className='flex px-2.5 py-4 border-b-2 border-solid border-order'>
@@ -170,7 +170,7 @@ function OrderAdmin() {
                   <p>Payment Method</p>
                 </div>
                 <div className='flex-1 flex justify-end font-semibold'>
-                  <p>credit</p>
+                  <p>{orderDetails.Payment_Type}</p>
                 </div>
               </div>
               <div className='flex px-2.5 py-4 border-b-2 border-solid border-order'>
@@ -179,7 +179,7 @@ function OrderAdmin() {
                   <p>Shipping</p>
                 </div>
                 <div className='flex-1 flex justify-end font-semibold'>
-                  <p>Dine in</p>
+                  <p>{orderDetails.Serving_Type}</p>
                 </div>
               </div>
               <div className='flex px-2.5 py-4 border-b-2 border-solid border-order'>
@@ -205,7 +205,7 @@ function OrderAdmin() {
                 </div>
               </div>
               {detailProductOrder({
-                      title: "ara ara",
+                      title: "Hazelnut Latte",
                       hot: "Hot",
                       size: "Venti",
                       quantity: 2,
@@ -213,14 +213,14 @@ function OrderAdmin() {
                       price: 20000,
               })}
               {detailProductOrder({
-                      title: "asu kui",
+                      title: "Hazlenut Latte",
                       hot: "Hot",
                       size: "Large",
                       quantity: 2,
                       serve_id: "Pick Up",
                       price: 24000,
               })}
-            <button className='text-sm font-semibold w-full p-2.5 flex items-center justify-center bg-primary rounded-lg'>
+            <button onClick={submitUpdate} className='text-sm font-semibold w-full p-2.5 flex items-center justify-center bg-primary rounded-lg'>
                 Edit Save
               </button>
             </section>
