@@ -8,5 +8,5 @@ export const searchProduct = (URL) => {
 }
 
 export const getDetailProduct = (id) => {
-    return axios.get(import.meta.env.VITE_BACKEND_HOST + "/products/" + id)
+    return axios.get(import.meta.env.VITE_BACKEND_HOST + "/product/" + id)
 }

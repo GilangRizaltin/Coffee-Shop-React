@@ -10,87 +10,100 @@ function profile() {
   const jwt = user.token
   //State
   const [profileData, setProfileData] = useState({})
-  
-
-
-
-
-  const [valueData, setValueData] = useState({})
+  const [fullName, setFullName] = useState("")
   const [image, setImage] = useState('')
+  const [imageUpdate, setImageUpdate] = useState(false)
+
   useEffect(() => {
     getUser(jwt)
       .then((res) => {
-        setProfileData(res.data.res[0]);
-        setValueData(res.data.res[0]);
-        setImage(import.meta.env.VITE_BACKEND_HOST + res.data.res[0].user_photo_profile)
+        setProfileData(res.data.data[0]);
+        setFullName(res.data.data[0].Full_name)
+        // setValueData(res.data.data[0]);
+        // console.log(res.data)
       })
       .catch((err) => {
         console.error(err);
       });
   }, []);
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setValueData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-  const timestamp = profileData.since;
+
+  const timestamp = profileData.created_at;
   const date = new Date(timestamp);
   const month = date.toLocaleString('en-US', { month: 'long' });
   const year = date.getFullYear();
-  const body = {};
-  const [bodyUpdate, seBodyUpdate] = useState({})
+
+  // const formDataa = new FormData();
+
+  const handleChange = (event) => {
+    event.preventDefault()
+    const { name, value } = event.target;
+    setProfileData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+    // formDataa.append("Full_name", value);
+  };
+
+  const changeImageHandler = (e) => {
+    setImage(e.target.files[0]);
+    setImageUpdate(true)
+  };
+
+  const consol = () => {
+    if (formDataa.has("Full_name")) {
+      console.log(`The value for ${"Full_name"} is present in the FormData.`);
+    } else {
+      console.log(`The value for ${"Full_name"} is not present in the FormData.`);
+    }
+    // console.log(valueData)
+  }
   const [modalSubmit, setModalSubmit] = useState(false)
   const setShowModalSubmit = () => {
     setModalSubmit((state) => !state)
   }
   const clearanceBeforeSubmit = () => {
-    for (const key in profileData) {
-      if (profileData[key] !== valueData[key]) {
-        body[key] = valueData[key];
-      }
-    }
-    console.log(body)
+    // for (const key in profileData) {
+    //   if (profileData[key] !== valueData[key]) {
+    //     body[key] = valueData[key];
+    //   }
+    // }
+    // console.log(body)
     setShowModalSubmit();
-    seBodyUpdate(body)
+    // console.log("a")
+    // for (const value of formDataa.values()) {
+    //   console.log(value);
+    // }
+    // seBodyUpdate(body)
   }
+
   const [showSuccessUpdateModal, setSuccessUpdateModal] = useState(false)
   const [updateMsg, setUpdateMsg] = useState('')
+
   const confirmUpdates = () => {
-    updateDataUser(bodyUpdate, jwt)
+    const formData = new FormData();
+    formData.append("Full_name", profileData.Full_name);
+    formData.append("Phone", profileData.Phone);
+    formData.append("Address", profileData.Address);
+    if (imageUpdate === true) {
+      formData.append("Photo_profile", image);
+    }
+    updateDataUser(formData, jwt)
     .then((res) => {
       setShowModalSubmit();
-      setUpdateMsg(res.data.msg)
+      setUpdateMsg(res.data.message)
       console.log(res)
       setSuccessUpdateModal(true);
     })
     .catch((err) => {
+      setUpdateMsg("Data failed to update")
       console.log(err)
+      setSuccessUpdateModal(true);
     });
   }
-  const okButtonClick = () => {
-    window.location.reload();
-  };
-  const [updatePhoto, setUpdatePhoto] = useState(false)
-  const setShowUpdatePhoto = () => {
-    setUpdatePhoto((state) => !state)
-  }
-  const [selectedImage, setSelectedImage] = useState()
-  const imageChange = (e) => {
-    if (e.target.files && e.target.files.length > 0) {
-      setSelectedImage(e.target.files[0])
-      const { name } = e.target;
-      setValueData((prevData) => ({
-      ...prevData,
-      [name]: e.target.files[0],
-    }));
-    }
-  }
-  const onSubmit = (e) => {
-    e.preventDefault();
-    setImage(URL.createObjectURL(selectedImage))
-  }
+
+  // const okButtonClick = () => {
+  //   window.location.reload();
+  // };
   return (
     <>
     <Header/>
@@ -98,31 +111,42 @@ function profile() {
     <p className='pt-[38px] pb-[31px] md:pt-[58px] md:pb-[40px] desk:pt-[78px] desk:pb-[58px] font-semibold text-2xl lg:text-3xl desk:text-5xl'>Profile</p>
       <div className='flex flex-col gap-[19px] md:flex-row'>
       <div className="w-full md:w-[428px] h-fit border-2 border-solid border-order py-3 flex flex-col items-center gap-y-4 rounded-lg">
-        {/* <div class="name-photo"> */}
-        <p className='text-lg font-bold lg:text-2xl'>{profileData.full_name}</p>          
-          <p className='text-sm text-footer'>{profileData.email}</p>
+        {/* LEFT SIDE INFORMAION */}
+        <p className='text-lg font-bold lg:text-2xl'>{fullName}</p>          
+          <p className='text-sm text-footer'>{profileData.Email}</p>
           <div className="image lg:w-[80px] lg:h-[80px] my-4">
-            <img height={"80px"} width={"80px"} src={image} className='rounded-full h-[80px] w-[80px]' alt="photo-profile" />
+            <img height={"80px"} width={"80px"} src={image ? URL.createObjectURL(image) : profileData.Photo_profile} className='rounded-full h-[80px] w-[80px]' alt="photo-profile" />
           </div>
-          <button onClick={setShowUpdatePhoto} className='w-[226px] px-[18px] py-3 bg-primary font-semibold flex justify-center items-center rounded-lg' >Upload New Photo</button>
-          <p className='text-base text-footer'>Since <strong>{month} {year}</strong></p>
-        {/* </div> */}
+          {/* <button onClick={setShowUpdatePhoto} className='w-[226px] px-[18px] py-3 bg-primary font-semibold flex justify-center items-center rounded-lg' >Upload New Photo</button> */}
+          <input
+              type="file"
+              id="image"
+              name="users_image"
+              className="hidden"
+              onChange={changeImageHandler}
+            />
+            <label
+              htmlFor="image"
+              className="text-sm font-medium text-dark py-3 px-6 bg-primary hover:bg-amber-600 rounded-md w-fit lg:text-xs xl:text-sm active:ring active:ring-orange-300 outline-none flex justify-center items-center text-center cursor-pointer"
+            >Upload New Image</label>
+          <p className='text-base text-footer' onClick={consol}>Since <strong>{month} {year}</strong></p>
       </div>
+      {/* FORM */}
       <div className="w-full h-fit border-2 border-solid border-order py-3 px-3 flex flex-col gap-y-4 rounded-lg">
         <p>Full Name</p>
         <div className="w-full border-2 border-solid border-order p-3 flex items-center gap-2 rounded-lg">
           <ion-icon name="person-outline"></ion-icon>
-          <input type="text" value={valueData.full_name} name='full_name' onChange={handleChange} className='flex-1 outline-none text-sm lg:text-base'/>
+          <input type="text" value={profileData.Full_name} name='Full_name' onChange={handleChange} className='flex-1 outline-none text-sm lg:text-base'/>
         </div>
         <p>Email</p>
         <div className="w-full border-2 border-solid border-order p-3 flex items-center gap-2 rounded-lg">
           <ion-icon name="mail-outline"></ion-icon>
-          <input type="text" value={valueData.email} name='email' onChange={handleChange} placeholder="Enter your E-Mail"  className='flex-1 outline-none text-sm lg:text-base'/>
+          <input type="text" value={profileData.Email} name='Email' placeholder="Enter your E-Mail"  className='flex-1 outline-none text-sm lg:text-base text-gray-400'/>
         </div>
         <p>Phone</p>
         <div className="w-full border-2 border-solid border-order p-3 flex items-center gap-2 rounded-lg">
           <ion-icon name="call-outline"></ion-icon>
-          <input type="text" value={valueData.phone} name='phone' onChange={handleChange} placeholder="Enter your phone number" className='flex-1 outline-none text-sm lg:text-base' />
+          <input type="text" value={profileData.Phone} name='Phone' onChange={handleChange} placeholder="Enter your phone number" className='flex-1 outline-none text-sm lg:text-base' />
         </div>
         <div className='flex'>
           <p className=''>Password</p>
@@ -135,7 +159,7 @@ function profile() {
         <p>Address</p>
         <div className="w-full border-2 border-solid border-order p-3 flex items-center gap-2 rounded-lg">
           <ion-icon name="location-outline"></ion-icon>
-          <input type="text" value={valueData.address} name='address' onChange={handleChange} placeholder="Enter your address"  className='flex-1 outline-none text-sm lg:text-base'/>
+          <input type="text" value={profileData.Address} name='Address' onChange={handleChange} placeholder="Enter your address"  className='flex-1 outline-none text-sm lg:text-base'/>
         </div>
         <div className='w-full bg-primary p-3 flex items-center justify-center rounded-lg'  onClick={clearanceBeforeSubmit}>
           <p>Submit</p>
@@ -175,36 +199,11 @@ function profile() {
         <div className="flex justify-end items-center gap-4 text-black">
           <button
             className="flex-1 hover:border-primary text-base border-2 border-solid border-order rounded-xl"
-            id="successUpdate" onClick={okButtonClick}
+            id="successUpdate" onClick={() => {setSuccessUpdateModal(false)}} 
           >
             Ok
           </button>
         </div>
-      </div>
-    </div>
-    <div
-      className={`${updatePhoto ? "flex" : "hidden" } fixed inset-0  items-center justify-center z-50 outline-none modal w-full h-full bg-zinc-600/90`}
-      id="updatePhotoModals"
-    >
-      <div className="flex flex-col gap-7 modal-content bg-white p-8 rounded shadow-lg w-[300px] justify-center">
-        <p>Select Photo</p>
-        <form onSubmit={onSubmit} className='flex flex-col gap-8'>
-        <input type="file" name="user_photo_profile" id="photoFile" className='w-full' onChange={imageChange}/>
-        <div className="flex justify-end items-center gap-4 text-black">
-          <button
-            className="flex-1 hover:border-primary text-base border-2 border-solid border-order rounded-xl"
-            id="cancelUpdatePhoto" onClick={setShowUpdatePhoto}
-          >
-            Cancel
-          </button>
-          <button
-            className="flex-1 hover:border-primary text-base border-2 border-solid border-order rounded-xl"
-            id="setUpdatePhoto" type='submit' onClick={setShowUpdatePhoto}
-          >
-            Ok
-          </button>
-        </div>
-        </form>
       </div>
     </div>
     <Footer/>

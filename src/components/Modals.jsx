@@ -1,9 +1,6 @@
 import React from 'react'
 
 export function ModalsTwoButton(props) {
-    const submit = () => {
-
-    }
   return (
     <div
       className={`flex fixed inset-0 items-center justify-center z-50 outline-none modal w-full h-full bg-zinc-600/90`}

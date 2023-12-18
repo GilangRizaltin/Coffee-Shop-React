@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { loginUser } from "../../https/login";
+import { logOutUser, loginUser } from "../../https/login";
 import { registerUser } from "../../https/register";
 // import { useNavigate } from "react-router-dom";
 
@@ -9,26 +9,44 @@ const initialState = {
     err: {
         login: null,
         register: null,
+        logout:null,
     },
     isPending: false, //membuat animasi loading
     isRejected: false, //memunculkan modal error
     isFulfilled: false, //melakukan aksi berhasil
 }
 
-const loginThunk = createAsyncThunk("users/login", async(body, { rejectWithValue }) => {
-  // const navigate = useNavigate()  
+const loginThunk = createAsyncThunk("auth/login", async({body, cb, errorCb}, { rejectWithValue }) => {
   try {
         const {data} = await loginUser(body);
-        // navigate("/")
+        if (cb) cb()
         return data.data
     } catch (err) {
         const errObj = {
             status: err.response.status,
-            message: err.response.data.msg,
+            message: err.response.data.message,
         }
+        console.log(err)
+        errorCb(err);
         return rejectWithValue(errObj)
     }
 });
+
+const logoutThunk = createAsyncThunk("auth/logout", async({token, cb}, { rejectWithValue }) => {
+  try {
+        const {data} = await logOutUser(token);
+        if (cb) cb()
+        return data.data
+    } catch (err) {
+        const errObj = {
+            status: err.response.status,
+            message: err.response.data.message,
+        }
+        console.log(err)
+        return rejectWithValue(errObj)
+    }
+});
+
 
 const registerThunk = createAsyncThunk("users/register", async (body, { rejectWithValue }) => {
     try {
@@ -81,6 +99,36 @@ const userSlice = createSlice({
                 userInfo: payload,
             }
         })
+        .addCase(logoutThunk.pending, (prevState) => {
+          return {
+              ...prevState,
+              isPending: true,
+              isRejected: false,
+              isFulfilled: false,
+              err: null,
+          }
+      })
+      .addCase(logoutThunk.rejected, (prevState, {payload}) => {
+          return {
+              ...prevState,
+              isPending: false,
+              isRejected: true,
+              err: {
+                  ...prevState.err,
+                  logout: payload,
+              }
+          }
+      })
+      .addCase(logoutThunk.fulfilled, (prevState, {payload}) => {
+          return {
+              ...prevState,
+              isUserAvailable: false,
+              isPending: false,
+              isFulfilled: true,
+              token:null,
+              userInfo: null,
+          }
+      })
         .addCase(registerThunk.pending, (prevState) => {
             return {
               ...prevState,
@@ -118,6 +166,7 @@ const userSlice = createSlice({
 export const userAction = {
     ...userSlice.actions,
     loginThunk,
+    logoutThunk,
     registerThunk,
 }
 

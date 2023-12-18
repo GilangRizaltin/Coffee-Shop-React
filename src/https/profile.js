@@ -1,7 +1,7 @@
 import axios from "axios";
 
 
- const url = import.meta.env.VITE_BACKEND_HOST + "/users/profile"
+ const url = import.meta.env.VITE_BACKEND_HOST + "/user/profile"
 
 export const getUser = (jwt) => {
     return axios.get(url, {
@@ -11,7 +11,7 @@ export const getUser = (jwt) => {
     })
 }
 
-const urlUpdateProfile = import.meta.env.VITE_BACKEND_HOST + "/users"
+const urlUpdateProfile = import.meta.env.VITE_BACKEND_HOST + "/user"
 // const config = {
 //     headers: {
 //       'Content-Type': 'multipart/form-data',

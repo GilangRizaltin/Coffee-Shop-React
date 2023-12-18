@@ -6,10 +6,10 @@ const ChartComponent = (props) => {
   const [dataStatistic, setDataStatistic] = useState(null);
   const chartRef = useRef(null);
   const chartInstanceRef = useRef(null);
-  const body = {
-    dateStart: props.dateStart,
-    dateEnd: props.dateEnd,
-  }
+  // const body = {
+  //   dateStart: props.dateStart,
+  //   dateEnd: props.dateEnd,
+  // }
 
   const formattedDate = (inputDate) => {
     const date = new Date(inputDate);
@@ -19,21 +19,21 @@ const ChartComponent = (props) => {
     return `${year}-${month}-${day}`;
   };
 
-  useEffect(() => {
-    statisticProduct()
-      .then((res) => {
-        // console.log(res);
-        setDataStatistic(res.data.result);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+  // useEffect(() => {
+  //   statisticProduct()
+  //     .then((res) => {
+  //       // console.log(res);
+  //       setDataStatistic(res.data.result);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }, []);
 
   useEffect(() => {
-    if (dataStatistic) {
-      const productDate = dataStatistic.map((item) => formattedDate(item.orderdate));
-      const productSold = dataStatistic.map((item) => item.totalquantity);
+    if (props.dataStatistic) {
+      const productDate = props.dataStatistic.map((item) => formattedDate(item.OrderDate));
+      const productSold = props.dataStatistic.map((item) => item.TotalQuantity);
 
       if (chartInstanceRef.current) {
         chartInstanceRef.current.destroy();
@@ -72,7 +72,7 @@ const ChartComponent = (props) => {
         }
       };
     }
-  }, [dataStatistic]);
+  }, [props.dataStatistic]);
 
   return <canvas ref={chartRef} />;
 };

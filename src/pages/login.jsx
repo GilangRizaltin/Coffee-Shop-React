@@ -8,7 +8,7 @@ import { ModalsTwoButton } from '../components/Modals';
 function login() {
   //inisialization
   const navigate = useNavigate();
-  const user = useSelector(state => state.user);
+  const statement = useSelector(state => state.user);
   const dispatch = useDispatch();
   //setTogglePasswordType
   const [isPwdShown, setIsPwdShown] = useState(false);
@@ -21,28 +21,36 @@ function login() {
   const setShowWrongModal = () => {
     setWrongModals((state) => !state)
   }
-  const errorModals = () => {
-    if (user.err.login && user.err.login.message) {
-      setMsg(user.err.login.message)
-      setShowWrongModal();
-    }
-  }
   //submit button login axios
   const submitHandler = (e) => {
     e.preventDefault();
     const {loginThunk} = userAction
     const body = {
-      email: e.target.user_email.value,
-      password: e.target.pwd.value,
+      Email: e.target.user_email.value,
+      Password: e.target.pwd.value,
     };
-    dispatch(loginThunk(body))
+    dispatch(loginThunk({
+      body,
+      cb: () => {
+        navigate("/")
+      }, errorCb: (error) => {
+        console.log(error.response.data.message)
+        if (error.response.data.message === "Wrong input after validation") {
+          setMsg("Please input data")
+          setShowWrongModal()
+          return
+        }
+        if (error.response.data.message === "Email or password is wrong") {
+          setMsg("E-mail or Password is wrong")
+          setShowWrongModal()
+          return
+        }
+        setMsg("Internal Server Error")
+        setShowWrongModal()
+      }
+    })
+    )
   }
-  useEffect(() => {
-    user.isFulfilled === true && navigate("/")
-  }, [user.isFulfilled])
-  useEffect(() => {
-    user.isRejected === true && errorModals()
-  }, [user.isRejected])
   return (
     <>
     <div className="flex h-screen">
@@ -82,7 +90,7 @@ function login() {
           <p onClick={() => navigate("/forget-password")} className='flex-1 flex justify-end text-primary text-sm cursor-pointer'>Lupa password?</p>
         </div>
         <div className="">
-          <button type='submit' className='w-full bg-primary p-3 flex items-center justify-center rounded-lg'>Log In</button>
+          <button type='submit' className='w-full bg-primary p-3 flex items-center justify-center rounded-lg'>{statement.isPending === true ? <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span> : "Log In"}</button>
         </div>
         <div className='flex gap-2 justify-center'>
           <p  className='text-sm lg:text-base flex justify-center gap-2'>

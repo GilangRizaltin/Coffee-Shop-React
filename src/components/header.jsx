@@ -4,11 +4,13 @@ import {useNavigate , useLocation} from "react-router-dom"
 // import { useUserContext } from '../context/context';
 // import { searchProduct } from '../https/product';
 // import { getUser } from '../https/profile';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { logOutUser } from '../https/login';
+import { userAction } from '../redux/slices/user';
 
 function header(props) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [toggle, changeToggle] = useState(false);
   const setToggle = () => {
     changeToggle((state) => !state);
@@ -25,24 +27,13 @@ function header(props) {
   const user = useSelector(state => state.user.userInfo);
   const jwt = user ? user.token : null
   const product = useSelector(state => state.order);
-  // const getUserData = JSON.parse(localStorage.getItem('dataUser'))
   const [urlImage, setUrlImage] = useState("/img/user_image-1695737375917-95805558.jpeg")
-  const imageAccess = import.meta.env.VITE_BACKEND_HOST + urlImage
   useEffect(() => {
-    if (user) return setUrlImage(user.photo);
+    if (user) return setUrlImage(user.photo_profile);
   }, []);
   const onLogOutHandler = () => {
-    logOutUser(jwt)
-    .then((res) => {
-      console.log(res)
-    })
-    .catch((err) => {
-      console.log(err)
-    })
-    setShowModalLogout();
-    localStorage.removeItem("persist:lib")
-    // window.location.reload();
-    navigate("/")
+    const {logoutThunk} = userAction
+    dispatch(logoutThunk({jwt, cb: () => {navigate("/"), setShowModalLogout()}}))
   }
   const [clicked, setClicked] = useState("/")
   const location = useLocation()
@@ -52,7 +43,7 @@ function header(props) {
    return (
     <>
     <header
-      className={`flex ${props.mode === "light" ? "bg-white text-black border-b-2 border-solid border-order" : "bg-black text-white" } font-primary h-header items-center sticky top-0 z-50 gap-8 px-2 sm:px-10`}
+      className={`flex ${props.mode === "light" ? "bg-white text-black border-b-2 border-solid border-order" : "bg-black text-white" } font-primary h-header items-center sticky top-0 z-50 gap-8 px-2 sm:px-10 desk:px-def`}
     >
       <section className="flex items-center gap-8">
         <div className="flex items-center gap-2.5 cursor-pointer">
@@ -99,7 +90,7 @@ function header(props) {
         {user !== null ? (
       <div className='flex items-center' id='navbarIfLogin'>
         <div className="hidden md:block cursor-pointer  pl-8">
-          <img src={imageAccess}  className='h-[48px] w-[48px] rounded-full' alt="profile-photo"/>
+          <img src={urlImage}  className='h-[48px] w-[48px] rounded-full' alt="profile-photo"/>
         </div>
         <div className="hidden md:block cursor-pointer relative pl-8">
           <button
@@ -148,9 +139,9 @@ function header(props) {
     className={`${toggle ? "block" : "hidden"} fixed z-50 top-[76px] bg-black w-full flex flex-col items-center overflow-auto h-screen md:hidden transition-all duration-300 ease-in`}
   >
     <div className="flex items-center px-2 py-4 gap-4">
-      <img src={imageAccess} alt="profile-photo" className='h-[48px] w-[48px]  rounded-full' onClick={() => navigate("/profile")}/>
+      <img src={urlImage} alt="profile-photo" className='h-[48px] w-[48px]  rounded-full' onClick={() => navigate("/profile")}/>
       <div className="text-sm text-white font-semibold">
-      <p className='text-lg'>{user ? user.userName : ""}</p>
+      <p className='text-lg'>{user ? user.fullname : ""}</p>
         {/* {user.isUserAvailable && (<p className='text-lg'>{user.userInfo.userName}</p>)}
         {!user.isUserAvailable && (<p className='text-lg'>Guest</p>)} */}
       </div>

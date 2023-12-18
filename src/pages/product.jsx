@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import Promo from '../components/promo';
+import Page from '../components/page';
 import Footer from '../components/Footer';
 import { useSearchParams } from "react-router-dom";
 import { productWithRating } from '../components/productCard';
@@ -8,45 +9,47 @@ import { searchProduct } from '../https/product';
 import Title from '../components/Title';
 
 function product() {
-  //state
-  const [dataProduct, setDataProduct] = useState(null)
-  const [pages , setPage] = useState({
-    next: "",
-    prev: "",
-  })
+  const [dataProduct, setDataProduct] = useState([])
+  const [pages , setPage] = useState(null)
   const [minValue, setMinValue] = useState("20000")
   const [maxValue, setMaxValue] = useState("50500")
-  //search params
   const [searchParams, setSearchParams] = useSearchParams({
     search: "",
     category: "",
     sort: "",
     page: 1
   });
+  // const [query, setQueryString] = useState({
+  //   search: "",
+  //   category: "",
+  //   sort: "",
+  //   page: 1
+  // })
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-  //get products
-  const url = import.meta.env.VITE_BACKEND_HOST + "/products?" + searchParams.toString()
+  const url = import.meta.env.VITE_BACKEND_HOST + "/product?" + searchParams.toString()
   const product = (url) => {
     searchProduct(url)
       .then((res) => {
-        setDataProduct(res.data.result);
+        setDataProduct(res.data.data);
         setPage(res.data.meta);
-        // console.log(res.data.result)
+        console.log(res.data.meta)
       })
       .catch((err) => {
         console.error(err);
-        setDataProduct(null)
+        setDataProduct([])
       });
   }
   useEffect(() => {
     product(url)
   }, []);
+
   //filter
   const handleInputChange = (e) => {
     e.preventDefault();
     setSearchParams((prev) => {
+      // setQueryString((prev) => {
       const prevSearchParams = {};
       prev.forEach((value, key) => {
         Object.assign(prevSearchParams, { [key]: value });
@@ -60,6 +63,7 @@ function product() {
   // const [category, setCategory] = useState('');
   const setNewCategory = (e) => {
     setSearchParams((prev) => {
+      // setQueryString((prev) => {
       const prevSearchParams = {};
       prev.forEach((value, key) => {
         Object.assign(prevSearchParams, { [key]: value });
@@ -74,6 +78,7 @@ function product() {
   // const [sortBy, setSortBy] = useState('');
   const setSort = (e) => {
     setSearchParams((prev) => {
+      // setQueryString((prev) => {
       const prevSearchParams = {};
       prev.forEach((value, key) => {
         Object.assign(prevSearchParams, { [key]: value });
@@ -89,6 +94,7 @@ function product() {
     e.preventDefault()
     setMinValue(e.target.value);
     setSearchParams((prev) => {
+      // setQueryString((prev) => {
       return {
         ...prev,
         minprice: parseInt(minValue),
@@ -96,12 +102,12 @@ function product() {
         
       }
     })
-    // setMaxValue(e.target.max_value.value)
   }
   const max = (e) => {
     e.preventDefault()
     setMaxValue(e.target.value);
     setSearchParams((prev) => {
+      // setQueryString((prev) => {
       return {
         ...prev,
         minprice: parseInt(minValue),
@@ -109,6 +115,7 @@ function product() {
       }
     })
   }
+
   const isCategoryChecked = (value) => {
     const prevGenre = searchParams.get("category");
     if (!prevGenre) return false;
@@ -124,40 +131,34 @@ function product() {
       page: 1,
     });
   };
+  //pagination
+  const renderButtons = () => {
+    return Array.from({ length: pages.total_page }, (_, index) => (
+      <button
+        key={index}
+        className={`h-12 w-12 ${index + 1 === pages.page ? "bg-primary" : "bg-order"} text-black rounded-full flex justify-center items-center`}
+      >{index + 1}</button>
+    ));
+  };
+  const nextPage = () => {
+    if (pages.next === "null") {
+      return
+    }
+    product(pages.next)}
+  const prevPage = () => {
+    if (pages.prev === "null") {
+      return
+    }
+    product(pages.prev)}
   //submit handler
   const submit = () => {
     product(url)}
-  //pagination
-  const toNextPage = () => {
-    // setSearchParams((prev) => {
-    //   return {
-    //     ...prev,
-    //     page: pages.page + 1,
-    //   }
-    // })
-    const nextUrl = pages.next
-    product(nextUrl)
+  const pageSubmit = (urls) => {
+    product(urls)
   }
-  const toPrevPage = () => {
-    const prevUrl = pages.prev
-    product(prevUrl)
-  }
-  
   const consol = () => {
-    // const page = pages.next.split('?')[1]
-    // if (page)
-    // return setSearchParams(page)
-    // const data = setSearchParams(page.toString)
-    // setSearchParams({
-    //   ...searchParams,
-    //   page: pages.page + 1
-    // })
-    // const data = pages.next
     console.log(pages);
   }
-
-
-
   return (
     <Title title="Product">
       <Header />
@@ -166,7 +167,7 @@ function product() {
         <img src="./webp/Rectangle 299.webp" alt="product" className='w-full' />
         <p className='text-2xl lg:text-5xl absolute text-white top-20 desk:top-40 left-10'>We Provide Good Coffee and Healthy Meals</p>
       </div>
-        <section className="px-2 md:px-10 flex flex-col gap-y-5 mb-10 mt-10">
+        <section className="px-2 md:px-10 desk:px-def flex flex-col gap-y-5 mb-10 mt-10">
           <p className="text-2xl lg:text-5xl">Today Promo</p>
           <div className="w-full overflow-scroll">
             <div className="flex w-[2600px] gap-x-5">
@@ -180,7 +181,7 @@ function product() {
             </div>
           </div>
         </section>
-        <section className='px-2 md:px-10'>
+        <section className='px-2 md:px-10 desk:px-def'>
           <div className="flex flex-col gap-y-5 mb-8">
             <p className="text-2xl lg:text-5xl" onClick={consol}>Our Product</p>
             <div className="flex gap-5 w-full">
@@ -211,8 +212,8 @@ function product() {
                   type="radio"
                   name="category" 
                   onChange={setNewCategory}
-                  value="1"
-                  checked={isCategoryChecked(1)}
+                  value="Coffee"
+                  checked={isCategoryChecked("Coffee")}
                   className="cursor-pointer h-5 w-5 border rounded-LG focus:ring-0 appearance-none checked:bg-orange-500 checked:border-none rounded-md checked:text-black"
                 />
                 <p>Coffee</p>
@@ -222,8 +223,8 @@ function product() {
                   type="radio"
                   name="category" 
                   onChange={setNewCategory}
-                  value="2"
-                  checked={isCategoryChecked(2)}
+                  value="Non - Coffee"
+                  checked={isCategoryChecked("Non - Coffee")}
                   className="cursor-pointer h-5 w-5 border rounded-LG focus:ring-0 appearance-none checked:bg-orange-500 checked:border-none rounded-md checked:text-black"
                 />
                 <p>Non Coffee</p>
@@ -233,8 +234,8 @@ function product() {
                   type="radio"
                   name="category"
                   onChange={setNewCategory}
-                  value="3"
-                  checked={isCategoryChecked(3)}
+                  value="Food"
+                  checked={isCategoryChecked("Food")}
                   className="cursor-pointer h-5 w-5 border rounded-LG focus:ring-0 appearance-none checked:bg-orange-500 checked:border-none rounded-md checked:text-black"
                 />
                 <p>Foods</p>
@@ -275,6 +276,17 @@ function product() {
                 />
                 <p>New Product</p>
               </div>
+              <div className="flex items-center gap-4 h-[45px]">
+                <input
+                  type="radio"
+                  name="sort"
+                  onChange={setSort}
+                  value="Oldest"
+                  checked={isSortChecked("Oldest")}
+                  className="cursor-pointer h-5 w-5 border rounded-LG focus:ring-0 appearance-none checked:bg-orange-500 checked:border-none rounded-md checked:text-black"
+                />
+                <p>Oldest</p>
+              </div>
               </form>
               <form>
               <p className="text-xl h-[45px]">Range Price</p>
@@ -312,7 +324,7 @@ function product() {
               </button >
             </div>
               <div className="w-full relative">
-                <div className={`w-full grid mobile_m:grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 desk:grid-cols-3 justify-items-center mb-8`}>
+                <div className={`w-full grid mobile_m:grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 justify-items-center mb-8`}>
                   {dataProduct ? (
                     dataProduct.map((product, index) => (
                     <div key={index}>
@@ -320,7 +332,7 @@ function product() {
                       title: product.Product,
                       desc: product.Description,
                       price: product.Price,
-                      id: product.No,
+                      id: product.Id,
                     })}
                   </div>
                   ))
@@ -330,15 +342,19 @@ function product() {
                   </div>
                    )}
                 </div>
-                <div className="w-full flex justify-center gap-4">
-                  {dataProduct !== null && pages.prev !== null && <button className='h-12 w-12 bg-order text-black rounded-full flex justify-center items-center'
-                  onClick={toPrevPage}>
-                  <ion-icon name="chevron-back-outline"></ion-icon></button>}
-                  {dataProduct !== null && <button className='h-12 w-12 bg-order text-black rounded-full flex justify-center items-center'>{pages.page}</button>}
-                  {dataProduct !== null && pages.next !== null && <button className='h-12 w-12 bg-order text-black rounded-full flex justify-center items-center' 
-                  onClick={toNextPage}
-                  ><ion-icon name="chevron-forward-outline"></ion-icon></button>}
-                </div>
+                   <div className='flex flex-1 justify-center'>
+                    {pages !== null && 
+                      <div className='flex gap-x-2 text-lg text-white justify center items-center'>
+                        <button className={`h-12 w-12 bg-order ${pages.prev !== "null" ? "text-black" : "text-red-700"} rounded-full flex justify-center items-center`}
+                        onClick={prevPage}>
+                        <ion-icon name="chevron-back-outline"></ion-icon></button>
+                        {renderButtons()}
+                        <button className={`h-12 w-12 bg-order ${pages.next !== null ? "text-black" : "text-gray-700"} rounded-full flex justify-center items-center`}
+                        onClick={nextPage}>
+                        <ion-icon name="chevron-forward-outline"></ion-icon></button>
+                      </div>
+                    }
+                   </div>
               </div>
             </div>
           </div>

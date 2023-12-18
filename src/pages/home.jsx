@@ -7,44 +7,33 @@ import Title from '../components/Title';
 import { searchProduct } from '../https/product';
 
 function home() {
-  const [product, setProduct] = useState(null)
+  const [product, setProduct] = useState([])
   useEffect(() => {
-    searchProduct(import.meta.env.VITE_BACKEND_HOST + "/products")
+    searchProduct("http://localhost:6121/product/popular")
     .then((res) => {
-      setProduct(res.data.result)
+      console.log(res)
+      setProduct(res.data.data)
     })
     .catch((err) => {
       console.log(err)
     })
-  },)
-  // const url = import.meta.env.VITE_BACKEND_HOST + "/products"
-  // const productData = (url) => {
-  //   searchProduct(url)
-  //     .then((res) => {
-  //       setProduct(res.data.result);
-  //       console.log(res.data.result)
-  //     })
-  //     .catch((err) => {
-  //       console.error(err);
-  //     });
-  // }
-  // useEffect(() => {
-  //   productData(url)
-  // }, [])
+  },[])
   return (
     <Title title= "Home">
       <Header />
       <main>
-        <section className="relative md:flex flex-row-reverse lg:h-screen">
-          <div className="hidden lg:block h-[500px] w-full lg:flex-1 lg:h-screen">
+        <section className="relative md:flex flex-row-reverse">
+          <div className="hidden lg:block lg:w-1/2 desk:w-fit">
             <img
               src="/webp/Rectangle 287.webp"
               alt=""
-              className="h-[500px] w-full lg:h-screen"
+              width="712px"
+              height="1024px"
+              className=""
             />
           </div>
           <div
-            className="w-full bottom-0 border-none bg-gradient-to-t from-black to-zinc-700 text-white px-2 pb-5 pt-[38px] md:py-[58px] flex flex-col gap-[25px] sm:relative sm:opacity-100 sm:px-10 lg:flex-1 lg:justify-center"
+            className="w-full bottom-0 border-none bg-gradient-to-t from-black to-zinc-700 text-white px-2 pb-5 pt-[38px] md:py-[58px] flex flex-col gap-[25px] sm:relative sm:opacity-100 sm:px-10 desk:pl-def lg:flex-1 lg:justify-center"
           >
             <p className="text-2xl lg:text-3xl desk:text-5xl">
               Start Your Day with Coffee and Good Meals
@@ -58,34 +47,36 @@ function home() {
                 Get Started
               </button>
             </div>
-            <div className="text-2xl lg:text-3xl flex gap-x-5 sm:gap-x-10">
+            <div className="text-2xl lg:text-5xl flex gap-x-5 sm:gap-x-10">
               <div>
-                <p className="text-primary">90+</p>
+                <p className="text-primary lg:mb-4">90+</p>
                 <p className='text-sm lg:text-base'>Staff</p>
               </div>
               <hr className="h-14 w-0.5 bg-white lg:h-16" />
               <div>
-                <p className="text-primary">30+</p>
+                <p className="text-primary lg:mb-4">30+</p>
                 <p className='text-sm lg:text-base'>Stores</p>
               </div>
               <hr className="h-14 w-0.5 bg-white lg:h-16" />
               <div>
-                <p className="text-primary">800+</p>
+                <p className="text-primary lg:mb-4">800+</p>
                 <p className='text-sm lg:text-base'>Customer</p>
               </div>
             </div>
           </div>
         </section>
-        <section className="relative lg:flex flex-row-reverse lg:h-2/4">
-          <div className="hidden lg:block h-1/4 w-[full] lg:flex-1 lg:h-2/4">
+        <section className="relative lg:flex flex-row-reverse">
+          <div className="hidden lg:block lg:w-1/2 desk:w-fit">
             <img
               src="/webp/Rectangle 291.webp"
               alt=""
-              className="h-1/4 w-full lg:h-2/4"
+              width="712px"
+              height="574px"
+              className=""
             />
           </div>
           <div
-            className="bg-white text-black px-2 flex flex-col gap-[25px] pb-5 pt-[38px] md:py-[58px] sm:relative sm:px-10 lg:flex-1 lg:justify-center"
+            className="bg-white text-black px-2 flex flex-col gap-[25px] pb-5 pt-[38px] md:py-[58px] sm:relative sm:px-10 desk:pl-def lg:flex-1 lg:justify-center"
           >
             <div className="flex gap-5 items-center">
               <hr className="w-1 h-10 desk:h-20 bg-primary" />
@@ -161,7 +152,7 @@ function home() {
             </div>
           </div>
         </section>
-        <section className="mb-10 mt-10 desk:mb-20 desk:mt-20 desk:h-[650px]">
+        <section className="mb-10 mt-10 desk:mb-20 desk:mt-20 h-fit">
           <div
             className="px-2 sm:px-10 flex flex-col gap-y-[9px] desk:gap-y-[25px]"
           >
@@ -183,7 +174,7 @@ function home() {
                       title: product.Product,
                       desc: product.Description,
                       price: product.Price,
-                      id: product.No,
+                      id: product.Id,
                     })}
                   </div>
                 ))

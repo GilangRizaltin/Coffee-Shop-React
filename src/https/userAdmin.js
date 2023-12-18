@@ -1,12 +1,13 @@
 import axios from "axios";
 
 
-const baseUrl = import.meta.env.VITE_BACKEND_HOST + "/users"
+const baseUrl = import.meta.env.VITE_BACKEND_HOST + "/user"
 
-export const insertUser = (body) => {
+export const insertUser = (body, jwt) => {
     return axios.post(baseUrl, body, {
         headers: {
           'Content-Type': 'multipart/form-data',
+          'Authorization': 'Bearer ' + jwt,
         },
     })
 }
@@ -28,7 +29,7 @@ export const searchUser = (url, jwt) => {
 }
 
 
-const updateUrl = import.meta.env.VITE_BACKEND_HOST + "/users/update"
+const updateUrl = import.meta.env.VITE_BACKEND_HOST + "/user"
 export const updateUserByAdmin = (body, jwt) => {
   return axios.patch(updateUrl, body, {
       headers: {

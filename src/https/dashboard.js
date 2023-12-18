@@ -1,20 +1,28 @@
 import axios from "axios";
 
-
-const baseUrl = import.meta.env.VITE_BACKEND_HOST + "/statistic"
-
-export const statistic = () => {
-    return axios.get(baseUrl)
+export const statistic = (baseUrl, jwt) => {
+    return axios.get(baseUrl, {
+      headers: {
+          'Authorization': 'Bearer ' + jwt,
+      }
+    })
 }
 
 
-const statUrl = import.meta.env.VITE_BACKEND_HOST + "/products/state"
-export const statisticProduct = () => {
-  return axios.get(statUrl)
+export const statisticProduct = (statUrl, jwt) => {
+  return axios.get(statUrl, {
+    headers: {
+        'Authorization': 'Bearer ' + jwt,
+    }
+  })
 }
 
 
-const orderStatusUrl = import.meta.env.VITE_BACKEND_HOST + "/orders/status"
-export const getOrdersAllStatus = () => {
-  return axios.get(orderStatusUrl)
+const orderStatusUrl = import.meta.env.VITE_BACKEND_HOST + "/order/statistic"
+export const getOrdersAllStatus = (jwt) => {
+  return axios.get(orderStatusUrl, {
+    headers: {
+        'Authorization': 'Bearer ' + jwt,
+    }
+  })
 }

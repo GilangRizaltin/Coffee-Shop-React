@@ -12,12 +12,14 @@ function detailProduct() {
   let { id } = useParams();
   // console.log(id);
   const [data, setData] = useState('')
-  getDetailProduct(id)
+  useEffect(() => {
+    getDetailProduct(id)
   .then((res) => {
-    setData(res.data.result[0])
+    setData(res.data.data[0])
   }).catch((err) => {
     console.log(err)
   })
+  },[])
   const [productQty, setProductQty] = useState(1)
   const increaseQty = () =>{
     setProductQty(productQty + 1)

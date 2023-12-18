@@ -10,24 +10,22 @@ import Title from '../components/Title';
 import AccessEnded from '../components/AccessEnded';
 
 function ProductAdmin() {
-//Set searchParams
-const [searchParams, setSearchParams] = useSearchParams({
-});
+
+const [searchParams, setSearchParams] = useSearchParams({});
 const [showAccessEnded, setShowAccessEnded] = useState(false);
-//jwt
-// const getUserData = JSON.parse(localStorage.getItem('dataUser'))
+
 const user = useSelector(state => state.user.userInfo)
 const jwt = user.token
-//state
+
 const [productData, setProductData] = useState(null)
 const [metaData, setMetaData] = useState(0)
-//generalize url and axios for search and get
-const url = import.meta.env.VITE_BACKEND_HOST + "/products?" + searchParams.toString()
+
+const url = import.meta.env.VITE_BACKEND_HOST + "/product?" + searchParams.toString()
 const getProducts = (url) => {
   searchProduct(url)
   .then((res) => {
-    setProductData(res.data.result)
-    setValueData(res.data.result)
+    setProductData(res.data.data)
+    setValueData(res.data.data)
     setMetaData(res.data.meta)
     console.log(res)
   })
@@ -40,10 +38,30 @@ const getProducts = (url) => {
 useEffect(() => {
   getProducts(url)
 }, [])
-//set toggle modals
+
+const renderButtons = () => {
+  return Array.from({ length: metaData.total_page }, (_, index) => (
+    <p
+      key={index}
+      className={`${index + 1 === metaData.page ? "font-semibold text-black" : "text-gray-700"} text-base`}
+    >{index + 1}</p>
+  ));
+};
+
 const [editModals, showEditModals] = useState(false)
 const [productDetails , setProductrDetails] = useState({})
 const [valueData, setValueData] = useState({})
+
+const [uploadedImage, setUpdloadeImage] = useState([])
+const changeImageHandler = (event) => {
+  const files = event.target.files;
+  const selectedFiles = [];
+  for (let i = 0; i < files.length; i++) {
+    selectedFiles.push(files[i]);
+  }
+  setUpdloadeImage(selectedFiles);
+};
+
 const [productIdx, setProductIdx] = useState()
 const setShowEditModals = (idx, no) => {
   setProductrDetails(productData[idx]);
@@ -209,6 +227,7 @@ const setSort = (e) => {
 const submitFilter = () => {
   getProducts(url)
 }
+
   return (
     <Title title="Product Admin">
     <Header mode="light"/>
@@ -224,12 +243,28 @@ const submitFilter = () => {
             <p className=' font-semibold text-2xl'>Add Product</p>
             <p className='text-sm'>Photo Product</p>
             <div id='upload-bar' className='flex flex-col gap-y-[30px]'>
-              <div className='w-[50px] h-[50px] flex items-center justify-center bg-gray-400 rounded-lg'>
-                <ion-icon name="image-outline"></ion-icon>
+              <div className='flex gap-x-2'>
+                {uploadedImage.length < 1 ? 
+                (<div className='w-[50px] h-[50px] flex items-center justify-center bg-gray-400 rounded-lg'>
+                  <ion-icon name="image-outline"></ion-icon>
+                </div>) : (
+                uploadedImage.map((file, index) => (
+                    <img key={index} height={"50px"} width={"50px"} src={URL.createObjectURL(file)} className='rounded-lg h-[50px] w-[50px]' alt="photo-profile" />
+                ))
+                )}
               </div>
-              <button className='w-fit text-xs px-2.5 py-2 rounded-lg bg-primary flex items-center justify-center font-semibold'>
-                Upload
-              </button>
+            <input
+              type="file"
+              id="image"
+              name="users_image"
+              className="hidden"
+              onChange={changeImageHandler}
+              multiple
+            />
+            <label
+              htmlFor="image"
+              className="text-sm font-medium text-dark py-3 px-6 bg-primary hover:bg-amber-600 rounded-md w-fit lg:text-xs xl:text-sm active:ring active:ring-orange-300 outline-none flex justify-center items-center text-center cursor-pointer"
+            >Upload</label>
             </div>
             {/* dibawah diganti sementara jadi div dari form */}
             <form onSubmit={addSubmit} className='flex flex-col gap-y-[30px]'>
@@ -436,7 +471,7 @@ const submitFilter = () => {
                     <ion-icon name="create-outline"></ion-icon>
                   </div>
                   <div className='col-span-1 flex justify-center items-center'>
-                    <img src="../webp/image 31.webp" className='rounded-lg' alt="" height={48} width={48} />
+                    <img src={data.Product_photo_1 !== null ? data.Product_photo_1 : "../webp/image 31.webp"} className='rounded-lg' alt="" height={48} width={48} />
                   </div>
                   <p className='col-span-1 flex justify-center items-center'>{data.Product}</p>
                   <p className='col-span-1 flex justify-center items-center'>IDR {data.Price}</p>
@@ -454,8 +489,8 @@ const submitFilter = () => {
             </div>
           </div>
           <div className='md:flex p-4 text-footer'>
-            <p className='flex-1'>Show {productData ? productData.length : 0} of {metaData.totalProduct} Products</p>
-            <div className='flex-1 flex md:justify-end gap-4'>
+            <p className='flex-1'>Show {productData ? productData.length : 0} of {metaData.total_data} Products</p>
+            {/* <div className='flex-1 flex md:justify-end gap-4'>
               <p>Prev</p>
               <p>1</p>
               <p>2</p>
@@ -463,7 +498,20 @@ const submitFilter = () => {
               <p>4</p>
               <p>5</p>
               <p>Next</p>
-            </div>
+            </div> */}
+            <div className='flex flex-1 justify-end'>
+              {metaData !== null && 
+                <div className='flex gap-x-4 text-lg text-white justify center items-center'>
+                  <p className={`${metaData.prev !== "null" ? "text-black" : "text-gray-700"} text-base`}
+                  >
+                  prev</p>
+                  {renderButtons()}
+                  <button className={`${metaData.next !== null ? "text-black" : "text-gray-700"} text-base`}
+                  >
+                  next</button>
+                </div>
+                }
+              </div>
           </div>
         </section>
         </div>
