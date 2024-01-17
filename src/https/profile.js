@@ -28,7 +28,7 @@ export const updateDataUser = (body, jwt) => {
 }
 
 
-const urlSelfProfile = import.meta.env.VITE_BACKEND_HOST  + "/users/profile"
+const urlSelfProfile = import.meta.env.VITE_BACKEND_HOST  + "/user/profile"
 export const getUserProfile = (jwt) => {
     return axios.get(urlSelfProfile, {
         headers: {

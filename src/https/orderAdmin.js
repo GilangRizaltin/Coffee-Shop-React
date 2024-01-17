@@ -2,8 +2,9 @@ import axios from "axios";
 
 
 
-export const updateStatusOrder = (url, body, jwt) => {
-    return axios.post(url, body, {
+export const updateStatusOrder = (id, body, jwt) => {
+  const updateUrl = import.meta.env.VITE_BACKEND_HOST + "/order/" + id
+    return axios.post(updateUrl, body, {
         headers: {
           'Authorization': 'Bearer ' + jwt,
         },

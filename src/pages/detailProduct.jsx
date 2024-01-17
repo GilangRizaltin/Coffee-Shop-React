@@ -52,6 +52,7 @@ function detailProduct() {
     size_id: size || "Small",
     quantity: quantity,
     price: data.Price,
+    subtotal_product: data.Price * quantity
   }
   useEffect(() => {
     window.scrollTo(0, 0);

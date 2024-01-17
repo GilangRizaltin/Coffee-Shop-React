@@ -3,7 +3,7 @@ import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
 import { useState, useEffect } from 'react';
 import { insertUser, getAllUser, searchUser, updateUserByAdmin } from '../https/userAdmin';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import Title from '../components/Title';
 import AccessEnded from '../components/AccessEnded';
@@ -18,12 +18,13 @@ const [searchParams, setSearchParams] = useSearchParams({
   full_name: "",
   page: 1
 });
-
+const navigate = useNavigate()
 const [userData, setUserData] = useState(null)
 const [metaData, setMetaData] = useState(0)
-const [modal,setModal] = useState(false)
-const [id, setId] = useState()
+const [modal,setModal] = useState("")
 const [idx, setIdx] = useState()
+const [dataUserIdx, setDataUserIdx] = useState()
+
 const [resetPassword, setResetPassword] = useState(false)
 const [pwdCorrect, setPwdCorrection] = useState(false)
 const [image, setImage] = useState('')
@@ -40,7 +41,7 @@ const url = import.meta.env.VITE_BACKEND_HOST + "/user?" + searchParams.toString
 const userGet = (url, jwt) => {
   getAllUser(url, jwt)
     .then((res) => {
-      console.log(res.data.data)
+      console.log(res)
       setUserData(res.data.data);
       setMetaData(res.data.meta);
     })
@@ -53,7 +54,7 @@ const userGet = (url, jwt) => {
 
 useEffect(() => {
   userGet(url, jwt)
-}, []);
+}, [searchParams]);
 
 const cloesModal = () => {
   setModal((state) => !state)
@@ -80,15 +81,42 @@ const changeImageHandler = (e) => {
   }
 };
 
-const handleChange = (event) => {
-  event.preventDefault()
-  const { name, value } = event.target;
-  setUserData[idx]((prevData) => ({
+const handleChange = (e) => {
+  e.preventDefault()
+  const { name, value } = e.target;
+  setDataUserIdx((prevData) => ({
     ...prevData,
     [name]: value,
   }));
 };
 
+const [type, setType] = useState("user_name")
+const [input, setInput] = useState()
+const onSelect = (e) => {
+  e.preventDefault();
+  setType(e.target.value)
+  // console.log(data)
+}
+const onInput = (e) => {
+  e.preventDefault();
+  setInput(e.target.value)
+  // console.log(data)
+}
+const serchFilter = () => {
+  setSearchParams({
+    [type]: input,
+    page : 1
+  })
+  searchUser(url, jwt)
+  .then((res) => {
+    console.log(res)
+    setUserData(res.data.data);
+    setMetaData(res.data.meta)
+  })
+  .catch((err) => {
+    console.log(err)
+  })
+}
 
 const modalSubmit = (e) => {
   e.preventDefault()
@@ -127,10 +155,13 @@ const modalSubmit = (e) => {
     if (imageUpdate === true) {
       formData.append("Photo_profile", editImage);
     }
-    formData.append("user_id", id);
-    updateUserByAdmin(formData, jwt)
+    formData.append("User_name", dataUserIdx.User_name);
+    formData.append("Full_name", dataUserIdx.Full_name);
+    formData.append("Address", dataUserIdx.Address);
+    formData.append("Phone", dataUserIdx.Phone);
+    updateUserByAdmin(formData, jwt, dataUserIdx.Id)
     .then((res) => {
-      setMessage(`User ${userData[idx].Full_name} successfully updated`);
+      setMessage(`User ${dataUserIdx.Full_name} successfully updated`);
       setShowModals();
       setImage('')
     })
@@ -145,7 +176,21 @@ const modalSubmit = (e) => {
   }
 }
 
+const pagination = (page) => {
+  if (page !== metaData.page) {
+    const params = (searchParams.toString()).slice(0, 1) + page
+    navigate("/admin/user?page=" + page)
+  }
+}
 
+const renderButtons = () => {
+  return Array.from({ length: metaData.total_page }, (_, index) => (
+    <button onClick={() => {pagination(index + 1)}}
+      key={index}
+      className={`${index + 1 === metaData.page && "font-semibold"}`}
+    >{index + 1}</button>
+  ));
+};
 
 
 
@@ -159,7 +204,6 @@ const [editModals, showEditModals] = useState(false)
 const setShowEditModals = (idx) => {
   // setUserDetails(userData[idx]);
   // setValueUser(userData[idx]);
-  setId(idx)
   showEditModals((state) => !state)
 }
 
@@ -237,33 +281,6 @@ const search = (e) => {
   userGet(url, jwt)
 }
 
-const [type, setType] = useState("user_name")
-const [input, setInput] = useState()
-const onSelect = (e) => {
-  e.preventDefault();
-  setType(e.target.value)
-  // console.log(data)
-}
-const onInput = (e) => {
-  e.preventDefault();
-  setInput(e.target.value)
-  setSearchParams({
-    [type]: input,
-    page : 1
-  })
-  // console.log(data)
-}
-const serchFilter = () => {
-  searchUser(url, jwt)
-  .then((res) => {
-    console.log(res)
-    setUserData(res.data.data);
-    setMetaData(res.data.meta)
-  })
-  .catch((err) => {
-    console.log(err)
-  })
-}
 
 const body = {};
 const [modalsConfirm, setModalsConfirm] = useState(false);
@@ -314,7 +331,7 @@ const confirmUpdates = () => {
             <p className=' font-semibold text-2xl'>{modal === "add" ? "Insert User" : userData[idx].Full_name}</p>
             <p className='text-sm'>Photo User</p>
             <div id='upload-bar' className='flex flex-col gap-y-[30px]'>
-            {modal === "add" && image ? (
+            {modal === "add" && ( image ? (
               <div className="image lg:w-[50px] lg:h-[50px]">
                 <img height={"50px"} width={"50px"} src={URL.createObjectURL(image)} className='rounded-lg h-[50px] w-[50px]' alt="photo-profile" />
               </div>
@@ -322,16 +339,16 @@ const confirmUpdates = () => {
               <div className='w-[50px] h-[50px] flex items-center justify-center bg-gray-400 rounded-lg'>
                 <ion-icon name="image-outline"></ion-icon>
               </div>
-              )}
-              {modal === "edit" && editImage || userData[idx] ? (
+              ))}
+              {modal === "edit" && ( editImage || dataUserIdx.Photo_profile ? (
               <div className="image lg:w-[50px] lg:h-[50px]">
-                <img height={"50px"} width={"50px"} src={editImage ? URL.createObjectURL(editImage) : userData[idx].Photo_profile} className='rounded-lg h-[50px] w-[50px]' alt="photo-profile" />
+                <img height={"50px"} width={"50px"} src={editImage ? URL.createObjectURL(editImage) : dataUserIdx.Photo_profile} className='rounded-lg h-[50px] w-[50px]' alt="photo-profile" />
               </div>
               ) : (
               <div className='w-[50px] h-[50px] flex items-center justify-center bg-gray-400 rounded-lg'>
                 <ion-icon name="image-outline"></ion-icon>
               </div>
-              )}
+              ))}
               <input
                 type="file"
                 id="image"
@@ -347,19 +364,27 @@ const confirmUpdates = () => {
             <form onSubmit={modalSubmit} className='flex flex-col gap-y-[30px]'>
               <p className='text-sm font-semibold'>User Name</p>
               <div className='w-full p-3 border-2 border-solid border-order bg-input_bg rounded-lg'>
-                <input type="text" value={modal === "edit" ? userData[idx].User_name : null}  name="User_name" placeholder='Enter User Name' className='text-sm outline-none w-full bg-input_bg'/>
+                {/* <input type="text" value={modal === "edit" ? dataUserIdx.User_name : ""}  name="User_name" onChange={modal === "edit" && handleChange} placeholder='Enter User Name' className='text-sm outline-none w-full bg-input_bg'/> */}
+                {modal === "add" && <input type="text" name="User_name" placeholder='Enter User Name' className='text-sm outline-none w-full bg-input_bg'/>}
+                {modal === "edit" && <input type="text" value={dataUserIdx.User_name}  name="User_name" onChange={handleChange} placeholder='Enter User Name' className='text-sm outline-none w-full bg-input_bg'/>}
               </div>
               <p className='text-sm font-semibold'>Full Name</p>
               <div className='w-full p-3 border-2 border-solid border-order bg-input_bg rounded-lg'>
-                <input type="text" value={modal === "edit" ? userData[idx].Full_name : null} name="Full_name" onChange={handleChange} placeholder='Enter Full Name' className='text-sm outline-none w-full bg-input_bg'/>
+                {/* <input type="text" value={modal === "edit" ? dataUserIdx.Full_name : ""} name="Full_name" onChange={modal === "edit" && handleChange} placeholder='Enter Full Name' className='text-sm outline-none w-full bg-input_bg'/> */}
+                {modal === "add" && <input type="text" name="Full_name" placeholder='Enter Full Name' className='text-sm outline-none w-full bg-input_bg'/>}
+                {modal === "edit" && <input type="text" value={dataUserIdx.Full_name} name="Full_name" onChange={handleChange} placeholder='Enter Full Name' className='text-sm outline-none w-full bg-input_bg'/>}
               </div>
               <p className='text-sm font-semibold'>Email Name</p>
               <div className='w-full p-3 border-2 border-solid border-order bg-input_bg rounded-lg'>
-                <input type="text" value={modal === "edit" ? userData[idx].Email : null}  name="Email" placeholder='Enter User E-Mail' className='text-sm outline-none w-full bg-input_bg'/>
+                {/* <input type="text" value={modal === "edit" ? dataUserIdx.Email : ""} name="Email" placeholder='Enter User E-Mail' className='text-sm outline-none w-full bg-input_bg'/> */}
+                {modal === "add" && <input type="text" name="Email" placeholder='Enter User E-Mail' className='text-sm outline-none w-full bg-input_bg'/>}
+                {modal === "edit" && <input type="text" value={dataUserIdx.Email} readOnly name="Email" placeholder='Enter User E-Mail' className='text-sm outline-none w-full bg-input_bg'/>}
               </div>
               <p className='text-sm font-semibold'>Phone</p>
               <div className='w-full p-3 border-2 border-solid border-order bg-input_bg rounded-lg'>
-                <input type="text" value={modal === "edit" ? userData[idx].Phone : null}  name="Phone" placeholder='Enter User Phone Number' className='text-sm outline-none w-full bg-input_bg'/>
+                {/* <input type="text" value={modal === "edit" ? dataUserIdx.Phone : ""}  name="Phone" onChange={modal === "edit" && handleChange} placeholder='Enter User Phone Number' className='text-sm outline-none w-full bg-input_bg'/> */}
+                {modal === "add " && <input type="text" name="Phone" placeholder='Enter User Phone Number' className='text-sm outline-none w-full bg-input_bg'/>}
+                {modal === "edit " && <input type="text" value={dataUserIdx.Phone} name="Phone" onChange={handleChange} placeholder='Enter User Phone Number' className='text-sm outline-none w-full bg-input_bg'/>}
               </div>
               {modal === "add" && 
               <div className='flex gap-2 text-sm'>
@@ -372,7 +397,7 @@ const confirmUpdates = () => {
               </div>
               {modal === "edit" && resetPassword === false ? 
               (<div className='flex w-full p-3 border-2 border-solid border-order bg-input_bg rounded-lg'>
-                  <input type={isPwdShown ? "text" : "password"} value={"aaaaa"} name="userFirstPwd" placeholder='Enter Password' className='text-sm outline-none w-full bg-input_bg text-gray-600'/>
+                  <input type={isPwdShown ? "text" : "password"} value={"aaaaa"} readOnly name="userFirstPwd" placeholder='Enter Password' className='text-sm outline-none w-full bg-input_bg text-gray-600'/>
                 </div>) : 
               (<div className='flex flex-col gap-y-4'>
                 <div className='flex w-full p-3 border-2 border-solid border-order bg-input_bg rounded-lg'>
@@ -391,15 +416,31 @@ const confirmUpdates = () => {
               </div>)}
               <p className='text-sm font-semibold'>Address</p>
               <div className='w-full p-3 border-2 border-solid border-order bg-input_bg rounded-lg'>
-                <input 
+                {/* <input 
                   type="text" 
                   name="Address" 
                   id="description"
-                  value={modal === "edit" ? userData[idx].Address : null} 
-                  
+                  value={modal === "edit" ? dataUserIdx.Address : null} 
+                  onChange={modal === "edit" && handleChange}
                   placeholder='Enter User Address' 
                   className='text-sm outline-none w-full bg-input_bg mt-2 ' 
-                />
+                /> */}
+                {modal === "add" && <input 
+                  type="text" 
+                  name="Address" 
+                  id="description"
+                  placeholder='Enter User Address' 
+                  className='text-sm outline-none w-full bg-input_bg mt-2 ' 
+                />}
+                {modal === "edit" && <input 
+                  type="text" 
+                  name="Address" 
+                  id="description"
+                  value={dataUserIdx.Address} 
+                  onChange={handleChange}
+                  placeholder='Enter User Address' 
+                  className='text-sm outline-none w-full bg-input_bg mt-2 ' 
+                />}
               </div>
               <button type='submit' className='text-sm font-semibold w-full p-2.5 flex items-center justify-center bg-primary rounded-lg'>
                 {modal === "add" ? "Insert User" : "Edit Profile"}
@@ -472,12 +513,12 @@ const confirmUpdates = () => {
                   <thead className="">
                     <tr className="border-b border-[#E8E8E84D]">
                       <th className="p-6 text-left w-12">No</th>
-                      <th className="p-6 text-center">Image</th>
+                      <th className="p-6 text-center w-24">Image</th>
                       <th className="p-6 text-center">Full Name</th>
                       <th className="p-6 text-center">Phone</th>
                       <th className="p-6 text-center">Address</th>
                       <th className="p-6 text-center">Email</th>
-                      <th className="p-6 text-center">Action</th>
+                      <th className="p-6 text-center w-24">Action</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -507,7 +548,7 @@ const confirmUpdates = () => {
                             <div
                               className="p-1 bg-[#FF89061A] rounded-full cursor-pointer"
                             >
-                              <button onClick={() => {setModal("edit"); setIdx(idx); setId(data.Id)}} className='w-8 h-8 bg-orange-200 text-orange-800 rounded-full flex items-center justify-center'>
+                              <button onClick={() => {setModal("edit"); setIdx(idx); setDataUserIdx(userData[idx])}} className='w-8 h-8 bg-orange-200 text-orange-800 rounded-full flex items-center justify-center'>
                                 <ion-icon name="pencil-outline"></ion-icon>
                               </button>
                             </div>
@@ -530,11 +571,7 @@ const confirmUpdates = () => {
             <p className='flex-1'>Show {userData ? userData.length : 0} of {metaData.total_data} User</p>
             <div className='flex-1 flex md:justify-end gap-4'>
               <p>Prev</p>
-              <p>1</p>
-              <p>2</p>
-              <p>3</p>
-              <p>4</p>
-              <p>5</p>
+              {renderButtons()}
               <p>Next</p>
             </div>
           </div>

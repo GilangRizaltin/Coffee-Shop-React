@@ -16,6 +16,7 @@ export function productCard(props) {
     size_id: "Small",
     quantity: 1,
     price: props.price,
+    subtotal_product: props.Price
   }
   const dispatch = useDispatch();
   // const user = useSelector(state => state.user);
@@ -127,24 +128,24 @@ export function productOrder(props) {
                           id="Vector"
                           d="M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z"
                           stroke="#D00000"
-                          stroke-width="2"
-                          stroke-miterlimit="10"
+                          strokeWidth="2"
+                          strokeMiterlimit="10"
                         />
                         <path
                           id="Vector_2"
                           d="M15 9L9 15"
                           stroke="#D00000"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
                         />
                         <path
                           id="Vector_3"
                           d="M15 15L9 9"
                           stroke="#D00000"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
                         />
                       </g>
                     </svg>
@@ -296,6 +297,7 @@ export function productWithRating(props) {
     size_id: "Small",
     quantity: 1,
     price: props.price,
+    subtotal_product: props.price
   }
   const dispatch = useDispatch();
   const setOrder = () => {

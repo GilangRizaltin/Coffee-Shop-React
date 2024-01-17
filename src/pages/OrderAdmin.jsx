@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { detailProductOrder } from '../components/productCard';
 import { getAllOrder, updateStatusOrder } from '../https/orderAdmin';
 import { getAllUser } from '../https/userAdmin';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { format } from 'date-fns';
 import AccessEnded from '../components/AccessEnded';
@@ -13,19 +13,23 @@ import Title from '../components/Title';
 
 
 function OrderAdmin() {
-  //JWT
   const user = useSelector(state => state.user.userInfo);
+  const navigate = useNavigate()
   const jwt = user.token
   const [showAccessEnded, setShowAccessEnded] = useState(false);
-  //get order
+  const [searchParams, setSearchParams] = useSearchParams({
+    page: 1
+  });
   const [dataOrder, setDataOrder] = useState(null)
-  const [searchParams, setSearchParams] = useSearchParams({});
-  const url = import.meta.env.VITE_BACKEND_HOST + "/orders?" + searchParams.toString()
+  const [metaOrder, setMetaOrder] = useState({})
+
+  const url = import.meta.env.VITE_BACKEND_HOST + "/order?" + searchParams.toString()
   const getOrder = (url, jwt) => {
     getAllOrder(url, jwt)
     .then((res) => {
-      console.log(res.data.result)
-      setDataOrder(res.data.result)
+      console.log(res)
+      setDataOrder(res.data.data)
+      setMetaOrder(res.data.meta)
     })
     .catch((err) => {
       console.log(err)
@@ -34,10 +38,11 @@ function OrderAdmin() {
       setShowAccessEnded(true)
     })
   }
+
   useEffect(() => {
     getOrder(url, jwt)
   },[])
-  //edit order
+  
   const [editModals, showEditModals] = useState(false)
   const [orderDetails , setOrderDetails] = useState({})
   const [orderIdx, setOrderIdx] = useState()
@@ -46,7 +51,7 @@ function OrderAdmin() {
     setOrderIdx(no)
     showEditModals((state) => !state)
   }
-  //update order
+  
   const [status, setStatus] = useState()
   const changeStatus = (e) => {
     e.preventDefault()
@@ -55,7 +60,10 @@ function OrderAdmin() {
     })
   }
   const submitUpdate = () => {
-    updateStatusOrder(orderIdx, status, jwt)
+    const body = {
+      Status: status
+    }
+    updateStatusOrder(orderIdx, body, jwt)
     .then((res) => {
       console.log(res)
     })
@@ -63,7 +71,62 @@ function OrderAdmin() {
       console.log(err)
     })
   }
-  //modals
+
+  const pagination = (page) => {
+    if (page !== metaOrder.page) {
+      // const queryParams = searchParams.get("page")
+      // console.log(queryParams)
+      // if (!queryParams) {
+      //   const params = (searchParams.toString()) + "&page=" + page
+      //   return navigate("/admin/order?" + params)
+      // }
+      // if (queryParams) {
+      //   const params = searchParams.toString() + page
+      //   navigate("/admin/order?" + params)
+      // }
+      
+    }
+    if (page === "nextPage") {
+      if (metaOrder && metaOrder.next !== "null") {
+        return navigate("/admin/order?" + metaOrder.next)
+      }
+    }
+    if (page === "prevPage") {
+      if (metaOrder && metaOrder.next !== "null") {
+        return navigate("/admin/order?" + metaOrder.prev)
+      }
+    }
+  }
+  
+  const renderButtons = () => {
+    return Array.from({ length: metaOrder.total_page }, (_, index) => (
+      <button onClick={() => {pagination(index + 1)}}
+        key={index}
+        className={`${index + 1 === metaOrder.page && "font-semibold"}`}
+      >{index + 1}</button>
+    ));
+  };
+
+  let productArray = []
+  const productList = dataOrder.Product_list
+  if (dataOrder.Product_list && dataOrder.Product_list !== "No data product") {
+    productArray = productList.replace(/\s/g, '').split(',');
+  }
+
+  const renderOrderProduct = () => {
+    return Array.from({ length: productArray }, (_, index) => (
+      <button
+        key={index}
+        className="font-semibold"
+      >{productArray[index]}</button>
+    ));
+  }
+
+
+
+
+  
+
   const [addModals, showAddModals] = useState(false)
   const setShowAddModals = () => {
     showAddModals((state) => !state)
@@ -128,7 +191,6 @@ function OrderAdmin() {
     <main className='sm:flex'>
       <Sidebar />
       <div className='sm:w-[85%] lg:w-[80%] relative'>
-
         {editModals && 
         <div className='absolute w-full  flex  z-40'>
           <div className='flex-1 bg-black opacity-60' onClick={setShowEditModals}>
@@ -227,95 +289,11 @@ function OrderAdmin() {
           </div>
         </div>
         }
-        {addModals&& 
-        <div className='absolute w-full flex  z-40'>
-          <div className='flex-1 bg-black opacity-60' onClick={setShowAddModals}>
-          </div>
-          <div className='flex flex-col gap-y-[30px] h-full opacity right-0 w-[540px] bg-white p-8'>
-            <p className=' font-semibold text-2xl'>Add Order</p>
-            {/* for several reason, i change form below into div */}
-            <div className='flex flex-col gap-y-[30px]'>
-              <p className='text-sm font-semibold'>User Name</p>
-              <form onSubmit={inputUser} className='w-full flex p-3 border-2 border-solid border-order bg-input_bg rounded-lg'>
-                <input type="text" name="productName" id="name" placeholder='Enter User Name' className='text-sm outline-none w-full bg-input_bg'/>
-                <button type='submit'>
-                  <ion-icon name="search-outline"></ion-icon>
-                </button>
-              </form>
-              <div className='flex gap-5 flex-wrap'>
-                {dataUser && dataUser.map((data, idx) => (
-                  <p key={idx} onClick={() => {setIdUser(data.No)}} className={`${idUser === data.No ? "bg-primary" : "bg-order"} p-2 rounded-lg w-fit text-sm cursor-pointer`}>{data.Name}</p>
-                ))}
-                {/* <p className='p-2 bg-order rounded-lg w-fit text-sm cursor-pointer'>Asian Dolce Latte</p>
-                <p className='p-2 bg-order rounded-lg w-fit text-sm cursor-pointer'>Asian Dolce Latte</p>
-                <p className='p-2 bg-order rounded-lg w-fit text-sm cursor-pointer'>Asian Dolce Latte</p>
-                <p className='p-2 bg-order rounded-lg w-fit text-sm cursor-pointer'>Asian Dolce Latte</p>
-                <p className='p-2 bg-order rounded-lg w-fit text-sm cursor-pointer'>Asian Dolce Latte</p> */}
-              </div>
-              <p className='text-sm font-semibold'>Search Product</p>
-              <div className='w-full p-3 border-2 border-solid border-order bg-input_bg rounded-lg'>
-                <input type="text" name="productSearch" id="search" placeholder='Enter Product Name' className='text-sm outline-none w-full bg-input_bg'/>
-              </div>
-              <div className='flex gap-5 flex-wrap'>
-                <p className='p-2 bg-order rounded-lg w-fit text-sm cursor-pointer'>Asian Dolce Latte</p>
-                <p className='p-2 bg-order rounded-lg w-fit text-sm cursor-pointer'>Asian Dolce Latte</p>
-                <p className='p-2 bg-order rounded-lg w-fit text-sm cursor-pointer'>Asian Dolce Latte</p>
-                <p className='p-2 bg-order rounded-lg w-fit text-sm cursor-pointer'>Asian Dolce Latte</p>
-                <p className='p-2 bg-order rounded-lg w-fit text-sm cursor-pointer'>Asian Dolce Latte</p>
-              </div>
-              <div>
-                <div className='flex items-center'>
-                  <p className=' p-2 bg-order rounded-lg w-fit text-sm cursor-pointer'>Asian Dolce Latte</p>
-                  <div className='flex-1 flex justify-end'>
-                    <button className='flex justify-center items-center h-6 w-6 border-2 border-solid border-gray-700 rounded-md active:bg-primary' onClick={decreaseQty}>-</button>
-                    <div className='flex justify-center items-center h-6 w-6 border-2 border-solid border-gray-700 rounded-md text-sm'><p>{productQty}</p></div>
-                    <button className='flex justify-center items-center h-6 w-6 border-2 border-solid border-gray-700 rounded-md active:bg-primary' onClick={increaseQty}>+</button>
-                  </div>
-                </div>
-              </div>
-              <p className='text-sm font-semibold'>Hot or Ice?</p>
-              <div  className='flex gap-6 text-xs'>
-                <button className='flex-1 p-2.5 md: px-1 border-2 border-solid border-order focus:border-primary' value='Hot'>Hot</button>
-                  <button className='flex-1 p-2.5 md: px-1 border-2 border-solid border-order focus:border-primary' value='Ice'>Ice</button>
-              </div>
-              <p className='text-sm font-semibold'>Size</p>
-              <div className='flex gap-6 text-xs '>
-                    <button className='flex-1 p-2.5 md: px-1 border-2 border-solid border-order focus:border-primary' value='Regular' >Regular</button>
-                    <button className='flex-1 p-2.5 md: px-1 border-2 border-solid border-order focus:border-primary' value='Grande'>Grande</button>
-                    <button className='flex-1 p-2.5 md: px-1 border-2 border-solid border-order focus:border-primary' value='Venti'>Venti</button>
-              </div>
-              <div className='flex'>
-                <div className='flex items-center gap-2'>
-                <p className='text-sm font-semibold'>Subtotal</p>
-                </div>
-                <div className='flex-1 flex justify-end font-semibold'>
-                  <p className='text-primary font-semibold'>IDR 12000</p>
-                </div>
-              </div>
-              <p className='text-sm font-semibold'>Promo</p>
-              <div className='w-full p-3 border-2 border-solid border-order bg-input_bg rounded-lg'>
-                <input type="text" name="productPromo" id="promo" placeholder='Enter Promo' className='text-sm outline-none w-full bg-input_bg'/>
-              </div>
-              <div className='flex'>
-                <div className='flex items-center gap-2'>
-                  <p className='text-sm font-semibold'>Total Transactions</p>
-                </div>
-                <div className='flex-1 flex justify-end font-semibold'>
-                  <p className='text-primary font-semibold'>IDR 12000</p>
-                </div>
-              </div>
-              <button className='text-sm font-semibold w-full p-2.5 flex items-center justify-center bg-primary rounded-lg'>
-                Add Order
-              </button>
-            </div>
-          </div>
-        </div>
-        }
         <div className='px-2 sm:px-10 py-4'>
         <section className='flex flex-col gap-4 md:flex-row mb-8 '>
           <div className='flex-1'>
             <p className='text-2xl font-semibold'>Order List</p>
-            <button onClick={setShowAddModals} className='flex items-center gap-2 p-2.5 h-[48px] bg-primary rounded-lg'>
+            <button className='flex items-center gap-2 p-2.5 h-[48px] bg-primary rounded-lg'>
             <ion-icon name="add-outline"></ion-icon>
             <p>Add Order</p>
             </button>
@@ -363,49 +341,65 @@ function OrderAdmin() {
           </div>
         </section>
         <section className='border-2 border-solid border-order rounded-lg w-full p-2'>
-        <div className=' w-full overflow-scroll'>
-          <div className='grid grid-cols-7 gap-2  w-[1000px] lg:w-full'>
-            <div className=' flex justify-center items-center py-8'>
-              <ion-icon name="create-outline"></ion-icon>
+        <div className=''>
+          <div className="text-sm font-medium text-secondary overflow-x-scroll">
+                <table className="table-auto lg:table-fixed w-full">
+                  <thead className="">
+                    <tr className="border-b border-[#E8E8E84D]">
+                      <th className="p-6 text-left w-24">No. Order</th>
+                      <th className="p-6 text-center w-fit">Date</th>
+                      <th className="p-6 text-center">Order</th>
+                      <th className="p-6 text-center">Status</th>
+                      <th className="p-6 text-center">Total</th>
+                      <th className="p-6 text-center w-24">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {dataOrder && dataOrder.map((data, idx) => (
+                      <tr
+                        className={`border-b border-[#E8E8E84D]${
+                          idx % 2 == 0 ? " bg-[#F9FAFB]" : ""
+                        }`}
+                        key={idx}
+                      >
+                        <td className="px-6 text-left"># {data.Id}</td>
+                        <td className="p-6 flex justify-center">{format(new Date(data.Created_at), 'yyyy-MMM-dd')}</td>
+                        <td className="text-center">
+                          <div>
+                            {renderOrderProduct()}
+                          </div></td>
+                        <td className={`text-center`}>{data.Status}</td>
+                        <td className={`text-center`}>IDR {data.Total_transaction}</td>
+                        <td className="text-center">
+                          <div className="flex gap-y-2 items-center xl:flex-row xl:justify-center xl:gap-x-2">
+                            <div
+                              className="p-1 bg-[#FF89061A] rounded-full cursor-pointer"
+                            >
+                              <button className='w-8 h-8 bg-orange-200 text-orange-800 rounded-full flex items-center justify-center'>
+                                <ion-icon name="pencil-outline"></ion-icon>
+                              </button>
+                            </div>
+                            <div
+                              className="p-1 bg-[#D000001A] rounded-full cursor-pointer"
+                            >
+                              <button className='w-8 h-8 bg-red-300 text-red-800 rounded-full flex items-center justify-center'>
+                                <ion-icon name="trash-outline"></ion-icon>
+                              </button>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
-            <div className='col-span-1 flex justify-center items-center font-bold py-8'>No. Order</div>
-            <div className='col-span-1 flex justify-center items-center font-bold py-8'>Date</div>
-            <div className='col-span-1 flex justify-center items-center font-bold py-8'>Order</div>
-            <div className='col-span-1 flex justify-center items-center font-bold py-8'>Status</div>
-            <div className='col-span-1 flex justify-center items-center font-bold py-8'>Total</div>
-            <div className='col-span-1 flex justify-center items-center font-bold py-8'>Action</div> {/* Empty column for Action */}
-            {dataOrder  && dataOrder.map((data, idx) => (
-              <React.Fragment key={idx}>
-                <div className={`flex justify-center items-center`}>
-                  <ion-icon name="create-outline"></ion-icon>
-                </div>
-                <p className='col-span-1 flex justify-center items-center'># {data.No}</p>
-                <p className='col-span-1 flex justify-center items-center'>{format(new Date(data.Date), 'yyyy-MMM-dd')}</p>
-                <p className='col-span-1 flex justify-center items-center'>A</p>
-                <p className='col-span-1 flex justify-center items-center'>{data.Status}</p>
-                <p className='col-span-1 flex justify-center items-center font-semibold'>IDR {data.Total_Transactions}</p>
-                <div className='col-span-1 flex gap-2 justify-center'>
-                  <button onClick={() => {setShowEditModals(idx, data.No)}} className='w-8 h-8 bg-orange-200 text-orange-800 rounded-full flex items-center justify-center'>
-                    <ion-icon name="pencil-outline"></ion-icon>
-                  </button>
-                  <button className='w-8 h-8 bg-red-300 text-red-800 rounded-full flex items-center justify-center'>
-                    <ion-icon name="trash-outline"></ion-icon>
-                  </button>
-                </div>
-              </React.Fragment>
-              ))}
-            </div>
-          </div>
           <div className='md:flex p-4 text-footer'>
-            <p className='flex-1'>Show 5 order of 100 Order</p>
+            <p className='flex-1'>Show {dataOrder && dataOrder.length} order of {metaOrder && metaOrder.total_data} Order</p>
             <div className='flex-1 flex md:justify-end gap-4'>
-              <p>Prev</p>
-              <p>1</p>
-              <p>2</p>
-              <p>3</p>
-              <p>4</p>
-              <p>5</p>
-              <p>Next</p>
+              <p onClick={() => {pagination("prevPage")}}>Prev</p>
+              {renderButtons()}
+              <p onClick={() => {pagination("nextPage")}}>Next</p>
             </div>
           </div>
         </section>

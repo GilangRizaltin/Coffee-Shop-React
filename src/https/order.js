@@ -1,10 +1,19 @@
 import axios from "axios";
 
 
-const baseUrl = import.meta.env.VITE_BACKEND_HOST + "/orders"
+const baseUrl = import.meta.env.VITE_BACKEND_HOST + "/order"
 
 export const createOrder = (jwt, body) => {
     return axios.post(baseUrl, body, {
+        headers: {
+            'Authorization': 'Bearer ' + jwt,
+        },
+    })
+}
+
+export const generateToken = (jwt, body) => {
+    const tokenUrl = baseUrl + "/token"
+    return axios.post(tokenUrl, body, {
         headers: {
             'Authorization': 'Bearer ' + jwt,
         },
