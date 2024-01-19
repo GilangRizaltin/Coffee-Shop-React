@@ -1,5 +1,3 @@
-![Logo](https://res.cloudinary.com/doncmmfaa/image/upload/v1705476586/samples/Frame_13_ksk8wi.png)
-
 # Coffee Shop Front-End HTML CSS Project with React JS
 
 <div align="center">
@@ -11,23 +9,23 @@ Coffee Shop HTML CSS is not just a project; it's a journey to elevate the Coffee
 ## Technologies used in this project
 
 - Vite React JS \
-  Vite is a build tool designed for web development, and when paired with React JS, it provides a fast and efficient development environment. \
+  A build tool designed for web development, and when paired with React JS, it provides a fast and efficient development environment. \
   [Vite Documentation](https://vitejs.dev/guide/)
 
 - React Redux \
-  React Redux is a state management library for React applications.
+  A state management library for React applications.\
   [Redux Documentation](https://react-redux.js.org/introduction/getting-started)
 
 - React Router \
-  React Router is a library for handling navigation in React applications. \
+  Library for handling navigation in React applications. \
   [React Router Documentation](https://reactrouter.com/en/main/start/overview)
 
 - Tailwind \
-  Tailwind CSS is a utility-first CSS framework that simplifies styling in web development. \
+  A utility-first CSS framework that simplifies styling in web development. \
   [Tailwind Documentation](https://tailwindcss.com/docs/installation)
 
 - Axios \
-  Axios is a promise-based HTTP client for the browser and Node.js. \
+  Promise-based HTTP client for the browser and Node.js. \
   [Axios Documentation](https://axios-http.com/docs/intro)
 
 ## Environment Variables
@@ -90,22 +88,23 @@ The project has been deployed on Netlify
 
 Login
 
-![App Screenshot](https://res.cloudinary.com/doncmmfaa/image/upload/v1705515214/Coffee%20Shop/login-coffeeshop_nv1odl.png)
+<img src="https://res.cloudinary.com/doncmmfaa/image/upload/v1705515214/Coffee%20Shop/login-coffeeshop_nv1odl.png" alt="App Screenshot" width="400" height="225" />
 
 Home
 
-![App Screenshot](https://res.cloudinary.com/doncmmfaa/image/upload/v1705515213/Coffee%20Shop/home-coffeeshop_dbk8a0.png)
+<img src="https://res.cloudinary.com/doncmmfaa/image/upload/v1705515213/Coffee%20Shop/home-coffeeshop_dbk8a0.png" alt="App Screenshot" width="400" height="225" />
 
 Profile
 
-![App Screenshot](https://res.cloudinary.com/doncmmfaa/image/upload/v1705515209/Coffee%20Shop/profile-coffeeshop_vibg7i.png)
+<img src="https://res.cloudinary.com/doncmmfaa/image/upload/v1705515209/Coffee%20Shop/profile-coffeeshop_vibg7i.png" alt="App Screenshot" width="400" height="225" />
 
 Product
-![App Screenshot](https://res.cloudinary.com/doncmmfaa/image/upload/v1705515210/Coffee%20Shop/product-coffeeshop_hpiwsp.png)
+
+<img src="https://res.cloudinary.com/doncmmfaa/image/upload/v1705515210/Coffee%20Shop/product-coffeeshop_hpiwsp.png" alt="App Screenshot" width="400" height="225" />
 
 Detail Product
 
-<img src="https://res.cloudinary.com/doncmmfaa/image/upload/v1705515210/Coffee%20Shop/product-detail-coffeeshop_yrn2sh.png" alt="App Screenshot" width="400" height="300" />
+<img src="https://res.cloudinary.com/doncmmfaa/image/upload/v1705515210/Coffee%20Shop/product-detail-coffeeshop_yrn2sh.png" alt="App Screenshot" width="400" height="225" />
 
 ## Related Project
 
