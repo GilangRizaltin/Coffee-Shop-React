@@ -33,7 +33,7 @@ Coffee Shop HTML CSS is not just a project; it's a journey to elevate the Coffee
 To run this project, you will need to add the following environment variables to your .env file
 
 ```bash
-VITE_BACKEND_HOST = YOUR BACKEND URL
+VITE_BACKEND_HOST = "YOUR BACKEND URL"
 ```
 
 ## Run Locally
@@ -78,7 +78,7 @@ Start the server
 
 ## Deployment
 
-The project has been deployed on Netlify
+This project has been deployed on Netlify
 
 ```bash
   https://master--coffeeshop-gilang.netlify.app/
