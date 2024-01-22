@@ -3,7 +3,7 @@
 <br>
 <br>
 <div align="center">
-  <img src="https://res.cloudinary.com/doncmmfaa/image/upload/v1705476586/samples/Frame_13_ksk8wi.png" alt="Logo" width="340" height="120"/>
+  <img src="https://res.cloudinary.com/doncmmfaa/image/upload/v1705476586/samples/Frame_13_ksk8wi.png" alt="Logo" width="340" height="100"/>
 </div>
 <br>
 <br>
