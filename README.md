@@ -4,29 +4,25 @@
   <img src="https://res.cloudinary.com/doncmmfaa/image/upload/v1705476586/samples/Frame_13_ksk8wi.png" alt="Logo" />
 </div>
 
-Coffee Shop HTML CSS is not just a project; it's a journey to elevate the Coffee Shop experience on the Front-End. This immersive project unfolds a tapestry of essential pages, including the Login, Register, Home, Product, Profile, Checkout, and History Order pages. Witness the magic as Tailwind CSS gracefully dances through each element, styling the project with finesse, while Javascript orchestrates the logic behind the scenes. Brace yourself for a visual feast, as the project seamlessly embraces responsive design, catering to screens ranging from the compact elegance of Mobile-S (320px) to the expansive grandeur of Laptop-L and beyond (>1440px). Immerse yourself in a world where every pixel tells a story and every click unfolds a new chapter in the Coffee Shop HTML CSS saga.
+Coffee Shop HTML CSS is not just a project; it's a journey to elevate the Coffee Shop experience on the Front-End. This immersive project unfolds a tapestry of essential pages, including the Login, Register, Home, Product, Profile, Checkout, and History Order pages.
 
 ## Technologies used in this project
 
-- Vite React JS \
+- [Vite React Js](https://vitejs.dev/guide/) \
   A build tool designed for web development, and when paired with React JS, it provides a fast and efficient development environment. \
-  [Vite Documentation](https://vitejs.dev/guide/)
 
-- React Redux \
+- [Redux](https://react-redux.js.org/introduction/getting-started) \
   A state management library for React applications.\
   [Redux Documentation](https://react-redux.js.org/introduction/getting-started)
 
-- React Router \
+- [React Router](https://reactrouter.com/en/main/start/overview) \
   Library for handling navigation in React applications. \
-  [React Router Documentation](https://reactrouter.com/en/main/start/overview)
 
-- Tailwind \
+- [Tailwind](https://tailwindcss.com/docs/installation) \
   A utility-first CSS framework that simplifies styling in web development. \
-  [Tailwind Documentation](https://tailwindcss.com/docs/installation)
 
-- Axios \
+- [Axios](https://axios-http.com/docs/intro) \
   Promise-based HTTP client for the browser and Node.js. \
-  [Axios Documentation](https://axios-http.com/docs/intro)
 
 ## Environment Variables
 
@@ -38,25 +34,25 @@ VITE_BACKEND_HOST = "YOUR BACKEND URL"
 
 ## Run Locally
 
-Clone the project
+1. Clone the project
 
 ```bash
   $ git clone https://github.com/GilangRizaltin/Coffee-Shop-React
 ```
 
-Go to the project directory
+2. Go to the project directory
 
 ```bash
   $ cd Coffee-Shop-React
 ```
 
-Install dependencies
+3. Install dependencies
 
 ```bash
   $ npm install
 ```
 
-Start the server
+4. Start the server
 
 ```bash
   $ npm run dev
@@ -80,31 +76,25 @@ Start the server
 
 This project has been deployed on Netlify
 
-```bash
-  https://master--coffeeshop-gilang.netlify.app/
-```
+[Coffee Shop Front End Deployment](https://master--coffeeshop-gilang.netlify.app/)
 
 ## Screenshots
 
-Login
+<div>
 
-<img src="https://res.cloudinary.com/doncmmfaa/image/upload/v1705515214/Coffee%20Shop/login-coffeeshop_nv1odl.png" alt="App Screenshot" width="400" height="225" />
+</div>
 
-Home
+| Login                                                                                                                                                | Home                                                                                                                                               |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ![Login Screenshot](https://res.cloudinary.com/doncmmfaa/image/upload/v1705515214/Coffee%20Shop/login-coffeeshop_nv1odl.png){ width=400 height=200 } | ![Home Screenshot](https://res.cloudinary.com/doncmmfaa/image/upload/v1705515213/Coffee%20Shop/home-coffeeshop_dbk8a0.png){ width=400 height=200 } |
 
-<img src="https://res.cloudinary.com/doncmmfaa/image/upload/v1705515213/Coffee%20Shop/home-coffeeshop_dbk8a0.png" alt="App Screenshot" width="400" height="225" />
+| Profile                                                                                                                                                  | Product                                                                                                                                                  |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ![Profile Screenshot](https://res.cloudinary.com/doncmmfaa/image/upload/v1705515209/Coffee%20Shop/profile-coffeeshop_vibg7i.png){ width=400 height=200 } | ![Product Screenshot](https://res.cloudinary.com/doncmmfaa/image/upload/v1705515210/Coffee%20Shop/product-coffeeshop_hpiwsp.png){ width=400 height=200 } |
 
-Profile
-
-<img src="https://res.cloudinary.com/doncmmfaa/image/upload/v1705515209/Coffee%20Shop/profile-coffeeshop_vibg7i.png" alt="App Screenshot" width="400" height="225" />
-
-Product
-
-<img src="https://res.cloudinary.com/doncmmfaa/image/upload/v1705515210/Coffee%20Shop/product-coffeeshop_hpiwsp.png" alt="App Screenshot" width="400" height="225" />
-
-Detail Product
-
-<img src="https://res.cloudinary.com/doncmmfaa/image/upload/v1705515210/Coffee%20Shop/product-detail-coffeeshop_yrn2sh.png" alt="App Screenshot" width="400" height="225" />
+| Detail Product                                                                                                                                                         |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ![Detail Product Screenshot](https://res.cloudinary.com/doncmmfaa/image/upload/v1705515210/Coffee%20Shop/product-detail-coffeeshop_yrn2sh.png){ width=400 height=200 } |
 
 ## Related Project
 
@@ -114,4 +104,4 @@ Detail Product
 
 ## Support
 
-For support, email gilangzaltin@gmail.com.
+For support, email gilangzaltin@gmail.com
