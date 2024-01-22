@@ -1,13 +1,9 @@
 # Coffee Shop React JS
 
-\
-\
-
 <div align="center">
-  <img src="https://res.cloudinary.com/doncmmfaa/image/upload/v1705476586/samples/Frame_13_ksk8wi.png" alt="Logo" width="300" height="180"/>
+  <img src="https://res.cloudinary.com/doncmmfaa/image/upload/v1705476586/samples/Frame_13_ksk8wi.png" alt="Logo" width="300" height="150"/>
 </div>
-\
-\
+
 Coffee Shop HTML CSS is not just a project; it's a journey to elevate the Coffee Shop experience on the Front-End. This immersive project unfolds a tapestry of essential pages, including the Login, Register, Home, Product, Profile, Checkout, and History Order pages.
 
 ## Technologies used in this project
@@ -17,7 +13,6 @@ Coffee Shop HTML CSS is not just a project; it's a journey to elevate the Coffee
 
 - [Redux](https://react-redux.js.org/introduction/getting-started) \
   A state management library for React applications.\
-  [Redux Documentation](https://react-redux.js.org/introduction/getting-started)
 
 - [React Router](https://reactrouter.com/en/main/start/overview) \
   Library for handling navigation in React applications. \
@@ -56,7 +51,10 @@ VITE_BACKEND_HOST = "YOUR BACKEND URL"
   $ npm install
 ```
 
-4. Start the server
+4. Prepare for backend
+   You can choose one of these to running your backend : [Backend (Javascript)](https://github.com/GilangRizaltin/CoffeeShop), [Backend (Golang)](https://github.com/GilangRizaltin/backend-golang)
+
+5. Start the server
 
 ```bash
   $ npm run dev
