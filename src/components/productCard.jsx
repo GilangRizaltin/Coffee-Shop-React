@@ -51,7 +51,7 @@ export function productCard(props) {
                     <p className="text-base text-primary lg:text-xl">IDR {props.price}</p>
                   </div>
                   <div className="flex flex-col gap-y-1 desk:flex-row gap-x-2">
-                    <Link to={`/detailproduct/${props.id}`}
+                    <Link to={`/product/${props.id}`}
                       className="flex justify-center text-base p-1 w-full bg-primary rounded-xl"
                     >
                       Buy
@@ -356,7 +356,7 @@ export function productWithRating(props) {
                       <p className="text-base text-primary">IDR {props.price}</p>
                     </div>
                     <div className="flex flex-col gap-y-1 lg:flex-row lg:gap-2">
-                      <Link to={`/detailproduct/${props.id}`}
+                      <Link to={`/product/${props.id}`}
                         className="flex justify-center text-base p-1 w-full bg-primary rounded-xl"
                       >
                         Buy

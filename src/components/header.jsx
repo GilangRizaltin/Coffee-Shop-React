@@ -105,7 +105,7 @@ function header(props) {
             id="dropdownBigScreen"
             className= {`${toggle ? "block" : "hidden"} absolute bg-black min-w-[160px] right-0 top-[53px] overflow-auto z-10`}
           >
-            <p className="text-white px-3 py-4 block hover:bg-gray-300" onClick={() => navigate("/history")}>History</p>
+            <p className="text-white px-3 py-4 block hover:bg-gray-300" onClick={() => navigate("/order/history")}>History</p>
             <p className="text-white px-3 py-4 block hover:bg-gray-300" onClick={() => navigate("/profile")}>Profile</p>
             {user.type === 'Admin' && <p className="text-white px-3 py-4 hover:bg-gray-300 " onClick={() => navigate("/admin")}>Admin Page</p>}
             <p className="text-white px-3 py-4 block hover:bg-gray-300" onClick={setShowModalLogout}>log Out</p>
@@ -120,10 +120,10 @@ function header(props) {
       ) : (
       <div className='text-sm flex items-center md:gap-8 md:ml-8' id='navbarIfNotLoginYet'>
         <div>
-          <button className='hidden md:block border-2 border-solid border-white rounded-lg p-2.5' onClick={() => navigate("login")}>Sign In</button>
+          <button className='hidden md:block border-2 border-solid border-white rounded-lg p-2.5' onClick={() => navigate("/auth/login")}>Sign In</button>
         </div>
         <div>
-          <button className='hidden md:block bg-primary rounded-lg text-black p-2.5' onClick={() => navigate("register")}>Sign Up</button>
+          <button className='hidden md:block bg-primary rounded-lg text-black p-2.5' onClick={() => navigate("/auth/register")}>Sign Up</button>
         </div>
         <div className="block md:hidden pl-8">
           <div id="dropdownHamburger" className="border-0 bg-none cursor-pointer  text-2xl" onClick={setShowModalNotLogin}>
@@ -149,7 +149,7 @@ function header(props) {
     {user && user.type === 'Admin' && <p className="text-white px-3 py-4 hover:border-b-2 hover:border-b-solid hover:border-b-primary cursor-pointer" onClick={() => navigate("/admin")}>Admin Page</p>}
     <p className="text-white px-3 py-4 hover:border-b-2 hover:border-b-solid hover:border-b-primary cursor-pointer" onClick={() => navigate("/")}>Home</p>
     <p className="text-white px-3 py-4 hover:border-b-2 hover:border-b-solid hover:border-b-primary cursor-pointer" onClick={() => navigate("/product")}>Product</p>
-    <p className="text-white px-3 py-4 hover:border-b-2 hover:border-b-solid hover:border-b-primary cursor-pointer" onClick={() => navigate("/history")}>History</p>
+    <p className="text-white px-3 py-4 hover:border-b-2 hover:border-b-solid hover:border-b-primary cursor-pointer" onClick={() => navigate("/order/history")}>History</p>
     <p className="text-white px-3 py-4 hover:border-b-2 hover:border-b-solid hover:border-b-primary cursor-pointer" onClick={() => navigate("/profile")}>Profile</p>
     <p className="text-white px-3 py-4 hover:border-b-2 hover:border-b-solid hover:border-b-primary cursor-pointer " onClick={setShowModalLogout}>log Out</p>
   </div>

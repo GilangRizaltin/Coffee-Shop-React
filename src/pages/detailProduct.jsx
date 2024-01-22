@@ -62,7 +62,7 @@ function detailProduct() {
   const navigate = useNavigate();
   const setOrder = () => {
     dispatch(addOrder(dataOrder));
-    navigate("/checkout");
+    navigate("/order/checkout");
   }
   return (
     <>

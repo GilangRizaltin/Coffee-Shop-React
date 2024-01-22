@@ -1,9 +1,12 @@
 # Coffee Shop React JS
 
+<br>
+<br>
 <div align="center">
   <img src="https://res.cloudinary.com/doncmmfaa/image/upload/v1705476586/samples/Frame_13_ksk8wi.png" alt="Logo" width="300" height="150"/>
 </div>
-
+<br>
+<br>
 Coffee Shop HTML CSS is not just a project; it's a journey to elevate the Coffee Shop experience on the Front-End. This immersive project unfolds a tapestry of essential pages, including the Login, Register, Home, Product, Profile, Checkout, and History Order pages.
 
 ## Technologies used in this project
@@ -51,7 +54,7 @@ VITE_BACKEND_HOST = "YOUR BACKEND URL"
   $ npm install
 ```
 
-4. Prepare for backend
+4. Prepare for backend \
    You can choose one of these to running your backend : [Backend (Javascript)](https://github.com/GilangRizaltin/CoffeeShop), [Backend (Golang)](https://github.com/GilangRizaltin/backend-golang)
 
 5. Start the server
@@ -62,17 +65,17 @@ VITE_BACKEND_HOST = "YOUR BACKEND URL"
 
 ## Route
 
-| Route                  | Description                  |
-| :--------------------- | :--------------------------- |
-| `"/"`                  | Home page                    |
-| `"/login"`             | Login page                   |
-| `"/register"`          | register page                |
-| `"/product"`           | Product list page            |
-| `"/checkout"`          | Creating an order page       |
-| `"/history"`           | Getting hstory of order page |
-| `"/detailproduct/:id"` | Detail of produtc page       |
-| `"/detailorder/:id"`   | Detail of order page         |
-| `"/profile"`           | User's profile page          |
+| Route               | Description                  |
+| :------------------ | :--------------------------- |
+| `"/"`               | Home page                    |
+| `"/auth/login"`     | Login page                   |
+| `"/auth/register"`  | register page                |
+| `"/product"`        | Product list page            |
+| `"/order/checkout"` | Creating an order page       |
+| `"/order/history"`  | Getting hstory of order page |
+| `"/product/:id"`    | Detail of produtc page       |
+| `"/order/:id"`      | Detail of order page         |
+| `"/profile"`        | User's profile page          |
 
 ## Deployment
 
@@ -81,10 +84,6 @@ This project has been deployed on Netlify
 [Coffee Shop Front End Deployment](https://master--coffeeshop-gilang.netlify.app/)
 
 ## Screenshots
-
-<div>
-
-</div>
 
 | Login                                                                                                                        | Home                                                                                                                       |
 | ---------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |

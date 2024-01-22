@@ -31,27 +31,27 @@ const router = createBrowserRouter([
     // errorElement: "",
   },
   {
-    path: "/login",
+    path: "/auth/login",
     element: <Login />,
     // errorElement: "",
   },
   {
-    path: "/register",
+    path: "/auth/register",
     element: <Register />,
     // errorElement: "",
   },
   {
-    path: "/forget-password",
+    path: "/auth/forget-password",
     element: <ForgetPwd />,
     // errorElement: "",
   },
   {
-    path: "/resetpassword",
+    path: "/auth/resetpassword",
     element: <ResetPwd />,
     // errorElement: "",
   },
   {
-    path: "/checkout",
+    path: "/order/checkout",
     element: (
     <Private>
       <Checkout />
@@ -59,7 +59,7 @@ const router = createBrowserRouter([
     // errorElement: "",
   },
   {
-    path: "/history",
+    path: "/order/history",
     element: (
     <Private>
       <History />
@@ -83,7 +83,7 @@ const router = createBrowserRouter([
     // errorElement: "",
   },
   {
-    path: `/detailorder/:id`,
+    path: `/order/:id`,
     element: (
     <Private>
       <DetailOrder />
@@ -91,7 +91,7 @@ const router = createBrowserRouter([
     // errorElement: "",
   },
   {
-    path: "/detailproduct/:id",
+    path: "/product/:id",
     element: (
     <Private>
       <DetailProduct />
