@@ -1,9 +1,13 @@
-# Coffee Shop Front-End HTML CSS Project with React JS
+# Coffee Shop React JS
+
+\
+\
 
 <div align="center">
-  <img src="https://res.cloudinary.com/doncmmfaa/image/upload/v1705476586/samples/Frame_13_ksk8wi.png" alt="Logo" />
+  <img src="https://res.cloudinary.com/doncmmfaa/image/upload/v1705476586/samples/Frame_13_ksk8wi.png" alt="Logo" width="300" height="180"/>
 </div>
-
+\
+\
 Coffee Shop HTML CSS is not just a project; it's a journey to elevate the Coffee Shop experience on the Front-End. This immersive project unfolds a tapestry of essential pages, including the Login, Register, Home, Product, Profile, Checkout, and History Order pages.
 
 ## Technologies used in this project
