@@ -12,19 +12,19 @@ Coffee Shop HTML CSS is not just a project; it's a journey to elevate the Coffee
 ## Technologies used in this project
 
 - [Vite React Js](https://vitejs.dev/guide/) \
-  A build tool designed for web development, and when paired with React JS, it provides a fast and efficient development environment. \
+  A build tool designed for web development, and when paired with React JS, it provides a fast and efficient development environment.
 
 - [Redux](https://react-redux.js.org/introduction/getting-started) \
-  A state management library for React applications.\
+  A state management library for React applications.
 
 - [React Router](https://reactrouter.com/en/main/start/overview) \
-  Library for handling navigation in React applications. \
+  Library for handling navigation in React applications.
 
 - [Tailwind](https://tailwindcss.com/docs/installation) \
-  A utility-first CSS framework that simplifies styling in web development. \
+  A utility-first CSS framework that simplifies styling in web development.
 
 - [Axios](https://axios-http.com/docs/intro) \
-  Promise-based HTTP client for the browser and Node.js. \
+  Promise-based HTTP client for the browser and Node.js.
 
 ## Environment Variables
 
