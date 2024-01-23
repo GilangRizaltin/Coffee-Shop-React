@@ -16,7 +16,7 @@ import OrderAdmin from "./pages/OrderAdmin";
 import UserAdmin from "./pages/UserAdmin";
 import Private  from "./components/Private";
 import AdminPage from "./components/AdminPageAuth";
-import Product from "./pages/product";
+import Product from "./pages/Product";
 
 
 // import Test from "./pages/Test"
