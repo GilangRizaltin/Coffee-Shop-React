@@ -10,7 +10,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getUserProfile } from '../https/profile';
 import { cleanOrder } from '../redux/slices/orderRedux';
 
-function checkout() {
+function Checkout() {
   const [token, setToken] = useState();
   const [dataServe, setDataServe] = useState(false)
   //redux
@@ -617,4 +617,4 @@ function checkout() {
   )
 }
 
-export default checkout
+export default Checkout

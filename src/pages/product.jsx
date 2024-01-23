@@ -8,7 +8,7 @@ import { productWithRating } from '../components/productCard';
 import { searchProduct } from '../https/product';
 import Title from '../components/Title';
 
-function product() {
+function Product() {
   const [dataProduct, setDataProduct] = useState([])
   const [pages , setPage] = useState(null)
   const [minValue, setMinValue] = useState("20000")
@@ -365,4 +365,4 @@ function product() {
   );
 }
 
-export default product;
+export default Product;
