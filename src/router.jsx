@@ -3,7 +3,6 @@ import { createBrowserRouter } from "react-router-dom";
 import History from "./pages/Historyorder";
 import Checkout from "./pages/Checkout";
 import Home from "./pages/Home";
-import Product from "./pages/Product";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ForgetPwd from "./pages/ForgetPassword";
@@ -17,6 +16,7 @@ import OrderAdmin from "./pages/OrderAdmin";
 import UserAdmin from "./pages/UserAdmin";
 import Private  from "./components/Private";
 import AdminPage from "./components/AdminPageAuth";
+import Product from "./pages/product";
 
 
 // import Test from "./pages/Test"
