@@ -55,8 +55,9 @@ VITE_BACKEND_HOST = "YOUR BACKEND URL"
 ```
 
 4. Preparing backend \
-   You can choose one of these to running your backend : [Backend Coffee Shop (Javascript)](https://github.com/GilangRizaltin/CoffeeShop), [Backend Coffee Shop (Golang)](https://github.com/GilangRizaltin/backend-golang)
-
+   You can choose one of these to running your backend :
+   - [Backend Coffee Shop (Javascript)](https://github.com/GilangRizaltin/CoffeeShop)
+   - [Backend Coffee Shop (Golang)](https://github.com/GilangRizaltin/backend-golang)
 5. Start the server
 
 ```bash
@@ -83,15 +84,15 @@ VITE_BACKEND_HOST = "YOUR BACKEND URL"
 
 ## Screenshots
 
-<!-- | Login                                                                                                                                          | Home                                                                                                                             |
+| Login                                                                                                                                          | Home                                                                                                                             |
 | ---------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
 | ![Login Screenshot](https://res.cloudinary.com/doncmmfaa/image/upload/v1705515214/Coffee%20Shop/login-coffeeshop_nv1odl.png)                   | ![Home Screenshot](https://res.cloudinary.com/doncmmfaa/image/upload/v1705515213/Coffee%20Shop/home-coffeeshop_dbk8a0.png)       |
 | Profile                                                                                                                                        | Product                                                                                                                          |
 | ![Profile Screenshot](https://res.cloudinary.com/doncmmfaa/image/upload/v1705515209/Coffee%20Shop/profile-coffeeshop_vibg7i.png)               | ![Product Screenshot](https://res.cloudinary.com/doncmmfaa/image/upload/v1705515210/Coffee%20Shop/product-coffeeshop_hpiwsp.png) |
 | Detail Product                                                                                                                                 |
-| ![Detail Product Screenshot](https://res.cloudinary.com/doncmmfaa/image/upload/v1705515210/Coffee%20Shop/product-detail-coffeeshop_yrn2sh.png) | -->
+| ![Detail Product Screenshot](https://res.cloudinary.com/doncmmfaa/image/upload/v1705515210/Coffee%20Shop/product-detail-coffeeshop_yrn2sh.png) |
 
-<div>
+<!-- <div>
   <div id="grid">
     <div class="container">
       <p>Home</p>
@@ -147,7 +148,7 @@ VITE_BACKEND_HOST = "YOUR BACKEND URL"
       grid-template-columns: repeat(2, 1fr);
     }
   }
-</style>
+</style> -->
 
 ## Related Project
 
