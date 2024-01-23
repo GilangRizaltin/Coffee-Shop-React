@@ -79,17 +79,75 @@ VITE_BACKEND_HOST = "YOUR BACKEND URL"
 
 ## Deployment
 
-[Coffee Shop Front End Deployment](https://master--coffeeshop-gilang.netlify.app/home)
+[Coffee Shop Front End Deployment](https://coffee-shop-react-eorg.vercel.app/)
 
 ## Screenshots
 
-| Login                                                                                                                                          | Home                                                                                                                             |
+<!-- | Login                                                                                                                                          | Home                                                                                                                             |
 | ---------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
 | ![Login Screenshot](https://res.cloudinary.com/doncmmfaa/image/upload/v1705515214/Coffee%20Shop/login-coffeeshop_nv1odl.png)                   | ![Home Screenshot](https://res.cloudinary.com/doncmmfaa/image/upload/v1705515213/Coffee%20Shop/home-coffeeshop_dbk8a0.png)       |
 | Profile                                                                                                                                        | Product                                                                                                                          |
 | ![Profile Screenshot](https://res.cloudinary.com/doncmmfaa/image/upload/v1705515209/Coffee%20Shop/profile-coffeeshop_vibg7i.png)               | ![Product Screenshot](https://res.cloudinary.com/doncmmfaa/image/upload/v1705515210/Coffee%20Shop/product-coffeeshop_hpiwsp.png) |
 | Detail Product                                                                                                                                 |
-| ![Detail Product Screenshot](https://res.cloudinary.com/doncmmfaa/image/upload/v1705515210/Coffee%20Shop/product-detail-coffeeshop_yrn2sh.png) |
+| ![Detail Product Screenshot](https://res.cloudinary.com/doncmmfaa/image/upload/v1705515210/Coffee%20Shop/product-detail-coffeeshop_yrn2sh.png) | -->
+
+<div>
+  <div id="grid">
+    <div class="container">
+      <p>Home</p>
+      <img src="https://res.cloudinary.com/doncmmfaa/image/upload/v1705515213/Coffee%20Shop/home-coffeeshop_dbk8a0.png" alt="" />
+    </div>
+    <div class="container">
+      <p>Login</p>
+      <img src="https://res.cloudinary.com/doncmmfaa/image/upload/v1705515214/Coffee%20Shop/login-coffeeshop_nv1odl.png" alt="" />
+    </div>
+    <div class="container">
+      <p>Profile</p>
+      <img src="https://res.cloudinary.com/doncmmfaa/image/upload/v1705515209/Coffee%20Shop/profile-coffeeshop_vibg7i.png" alt="" />
+    </div>
+    <div class="container">
+      <p>Product</p>
+      <img src="https://res.cloudinary.com/doncmmfaa/image/upload/v1705515210/Coffee%20Shop/product-coffeeshop_hpiwsp.png" alt="" />
+    </div>
+    <div class="container">
+      <p>Detail Product</p>
+      <img src="https://res.cloudinary.com/doncmmfaa/image/upload/v1705515210/Coffee%20Shop/product-detail-coffeeshop_yrn2sh.png" alt="" />
+    </div>
+  </div>
+</div>
+
+<style>
+  #grid {
+    display: grid;
+    gap: 20px;
+  }
+
+  p {
+    font-size: 20px;
+  }
+
+  .container {
+    padding: 10px;
+    text-align: center;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  @media (max-width: 655px) {
+    #grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (min-width: 656px) {
+    #grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>
 
 ## Related Project
 
