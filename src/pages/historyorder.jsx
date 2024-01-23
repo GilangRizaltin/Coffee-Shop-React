@@ -3,7 +3,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { getOrderDetail } from '../https/order';
 import { useSearchParams } from 'react-router-dom';
-import { historyProduct } from '../components/productCard';
+import { historyProduct } from '../components/ProductCard';
 import { useSelector } from 'react-redux';
 
 function historyorder() {

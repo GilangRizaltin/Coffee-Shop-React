@@ -1,7 +1,7 @@
 import React from 'react'
 import Header  from '../components/Header';
 import Footer from "../components/Footer";
-import { detailProductOrder } from '../components/productCard';
+import { detailProductOrder } from '../components/ProductCard';
 import { useEffect, useState } from 'react';
 import { getOrderIdDetail } from '../https/order';
 import { useParams, useLocation } from 'react-router-dom';

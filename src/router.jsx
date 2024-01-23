@@ -2,15 +2,15 @@ import { createBrowserRouter } from "react-router-dom";
 
 import History from "./pages/Historyorder";
 import Checkout from "./pages/Checkout";
-import Home from "./pages/home";
-import Product from "./pages/product";
-import Login from "./pages/login";
-import Register from "./pages/register";
+import Home from "./pages/Home";
+import Product from "./pages/Product";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 import ForgetPwd from "./pages/ForgetPassword";
 import ResetPwd from "./pages/ResetPassword"
-import Profile from "./pages/profile";
+import Profile from "./pages/Profile";
 import DetailProduct from "./pages/DetailProduct";
-import DetailOrder from "./pages/detailOrder";
+import DetailOrder from "./pages/DetailOrder";
 import Dashboard from "./pages/Dashboard";
 import ProductAdmin from "./pages/ProductAdmin";
 import OrderAdmin from "./pages/OrderAdmin";

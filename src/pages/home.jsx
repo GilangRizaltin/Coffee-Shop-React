@@ -2,7 +2,7 @@ import React from 'react'
 import { useState, useEffect } from 'react';
 import Header  from '../components/Header';
 import Footer from "../components/Footer";
-import { productCard, productWithRating } from "../components/productCard";
+import { productCard, productWithRating } from "../components/ProductCard";
 import Title from '../components/Title';
 import { searchProduct } from '../https/product';
 

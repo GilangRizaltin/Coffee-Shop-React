@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
-import Promo from '../components/promo';
+import Promo from '../components/Promo';
 import Page from '../components/page';
 import Footer from '../components/Footer';
 import { useSearchParams } from "react-router-dom";
-import { productWithRating } from '../components/productCard';
+import { productWithRating } from '../components/ProductCard';
 import { searchProduct } from '../https/product';
 import Title from '../components/Title';
 

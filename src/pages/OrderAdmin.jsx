@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import Header from '../components/Header'
 import Sidebar from '../components/Sidebar'
 import { useState } from 'react';
-import { detailProductOrder } from '../components/productCard';
+import { detailProductOrder } from '../components/ProductCard';
 import { getAllOrder, updateStatusOrder } from '../https/orderAdmin';
 import { getAllUser } from '../https/userAdmin';
 import { useSearchParams, useNavigate } from 'react-router-dom';

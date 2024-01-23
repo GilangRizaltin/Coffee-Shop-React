@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import Header from "../components/Header";
-import { productOrder } from '../components/productCard';
+import { productOrder } from '../components/ProductCard';
 import { useState } from 'react';
 import Footer from "../components/Footer";
 import { useNavigate } from 'react-router-dom';
@@ -25,7 +25,7 @@ function Checkout() {
     getUserProfile(jwt)
     .then((res) => {
       setDataUser(res.data.data[0])
-      console.log(res.data.data[0])
+      // console.log(res.data.data[0])
     })
     .catch((err) => {
       console.log(err)

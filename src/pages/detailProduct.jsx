@@ -2,7 +2,7 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import Header  from '../components/Header';
 import Footer from "../components/Footer";
-import { productWithRating } from "../components/productCard";
+import { productWithRating } from "../components/ProductCard";
 import { getDetailProduct } from '../https/product';
 import {useNavigate, useParams} from "react-router-dom"
 import { useDispatch } from 'react-redux';
