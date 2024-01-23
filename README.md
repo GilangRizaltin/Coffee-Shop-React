@@ -65,32 +65,31 @@ VITE_BACKEND_HOST = "YOUR BACKEND URL"
 
 ## Route
 
-| Route               | Description                  |
-| :------------------ | :--------------------------- |
-| `"/"`               | Home page                    |
-| `"/auth/login"`     | Login page                   |
-| `"/auth/register"`  | register page                |
-| `"/product"`        | Product list page            |
-| `"/order/checkout"` | Creating an order page       |
-| `"/order/history"`  | Getting hstory of order page |
-| `"/product/:id"`    | Detail of produtc page       |
-| `"/order/:id"`      | Detail of order page         |
-| `"/profile"`        | User's profile page          |
+| Route               | Description                   |
+| :------------------ | :---------------------------- |
+| `"/"`               | Home page                     |
+| `"/auth/login"`     | Login page                    |
+| `"/auth/register"`  | register page                 |
+| `"/product"`        | Product list page             |
+| `"/order/checkout"` | Creating an order page        |
+| `"/order/history"`  | Getting history of order page |
+| `"/product/:id"`    | Detail of product page        |
+| `"/order/:id"`      | Detail of order page          |
+| `"/profile"`        | User's profile page           |
 
 ## Deployment
 
-[Coffee Shop Front End Deployment](https://master--coffeeshop-gilang.netlify.app/)
+[Coffee Shop Front End Deployment](https://master--coffeeshop-gilang.netlify.app/home)
 
 ## Screenshots
 
 | Login                                                                                                                                          | Home                                                                                                                             |
 | ---------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
 | ![Login Screenshot](https://res.cloudinary.com/doncmmfaa/image/upload/v1705515214/Coffee%20Shop/login-coffeeshop_nv1odl.png)                   | ![Home Screenshot](https://res.cloudinary.com/doncmmfaa/image/upload/v1705515213/Coffee%20Shop/home-coffeeshop_dbk8a0.png)       |
-| Profile                                                                                                                                        | Product                                                                                                                          |
-| --------------------------------------------------------------------------------------------------------------------------------               | -------------------------------------------------------------------------------------------------------------------------------- |
+| Profile                                                                                                                                        |
+| Product                                                                                                                                        |
 | ![Profile Screenshot](https://res.cloudinary.com/doncmmfaa/image/upload/v1705515209/Coffee%20Shop/profile-coffeeshop_vibg7i.png)               | ![Product Screenshot](https://res.cloudinary.com/doncmmfaa/image/upload/v1705515210/Coffee%20Shop/product-coffeeshop_hpiwsp.png) |
 | Detail Product                                                                                                                                 |
-| ---------------------------------------------------------------------------------------------------------------------------------------------- |
 | ![Detail Product Screenshot](https://res.cloudinary.com/doncmmfaa/image/upload/v1705515210/Coffee%20Shop/product-detail-coffeeshop_yrn2sh.png) |
 
 ## Related Project
