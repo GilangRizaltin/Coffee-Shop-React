@@ -96,7 +96,7 @@ function login() {
           <p  className='text-sm lg:text-base flex justify-center gap-2'>
             Not Have An Account? 
           </p>
-          <p className='text-sm lg:text-base text-primary cursor-pointer' onClick={() => navigate("/register")}>Register</p>
+          <p className='text-sm lg:text-base text-primary cursor-pointer' onClick={() => navigate("/auth/register")}>Register</p>
         </div> 
         <p className="flex justify-center">or</p>
         <div className="flex gap-4">

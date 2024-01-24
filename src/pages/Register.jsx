@@ -231,7 +231,7 @@ function register() {
         <div className="flex justify-end items-center gap-4 text-black">
           <button
             className="flex-1 hover:border-primary text-base border-2 border-solid border-order rounded-xl"
-            id="closeModalBtn" onClick={() => navigate("/login")}
+            id="closeModalBtn" onClick={() => navigate("/auth/login")}
           >
             Login Page
           </button>
