@@ -56,8 +56,10 @@ VITE_BACKEND_HOST = "YOUR BACKEND URL"
 
 4. Preparing backend \
    You can choose one of these to running your backend :
-   - [Backend Coffee Shop (Javascript)](https://github.com/GilangRizaltin/CoffeeShop)
-   - [Backend Coffee Shop (Golang)](https://github.com/GilangRizaltin/backend-golang)
+
+   - [Backend Coffee Shop (Javascript)](#backend)
+   - [Backend Coffee Shop (Golang)](#backend)
+
 5. Start the server
 
 ```bash
@@ -151,6 +153,8 @@ VITE_BACKEND_HOST = "YOUR BACKEND URL"
 </style> -->
 
 ## Related Project
+
+<a name="backend"></a>
 
 [Backend Coffee Shop (Javascript)](https://github.com/GilangRizaltin/CoffeeShop)
 
