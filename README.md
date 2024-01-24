@@ -86,13 +86,75 @@ VITE_BACKEND_HOST = "YOUR BACKEND URL"
 
 ## Screenshots
 
-| Login                                                                                                                                          | Home                                                                                                                             |
+<!-- | Login                                                                                                                                          | Home                                                                                                                             |
 | ---------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
 | ![Login Screenshot](https://res.cloudinary.com/doncmmfaa/image/upload/v1705515214/Coffee%20Shop/login-coffeeshop_nv1odl.png)                   | ![Home Screenshot](https://res.cloudinary.com/doncmmfaa/image/upload/v1705515213/Coffee%20Shop/home-coffeeshop_dbk8a0.png)       |
 | Profile                                                                                                                                        | Product                                                                                                                          |
 | ![Profile Screenshot](https://res.cloudinary.com/doncmmfaa/image/upload/v1705515209/Coffee%20Shop/profile-coffeeshop_vibg7i.png)               | ![Product Screenshot](https://res.cloudinary.com/doncmmfaa/image/upload/v1705515210/Coffee%20Shop/product-coffeeshop_hpiwsp.png) |
 | Detail Product                                                                                                                                 |
-| ![Detail Product Screenshot](https://res.cloudinary.com/doncmmfaa/image/upload/v1705515210/Coffee%20Shop/product-detail-coffeeshop_yrn2sh.png) |
+| ![Detail Product Screenshot](https://res.cloudinary.com/doncmmfaa/image/upload/v1705515210/Coffee%20Shop/product-detail-coffeeshop_yrn2sh.png) | -->
+
+<table>
+      <thead>
+        <tr>
+          <th>Home</th>
+          <th>Login</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <img
+              src="https://res.cloudinary.com/doncmmfaa/image/upload/v1705515213/Coffee%20Shop/home-coffeeshop_dbk8a0.png"
+              alt=""
+            />
+          </td>
+          <td>
+            <img
+              src="https://res.cloudinary.com/doncmmfaa/image/upload/v1705515214/Coffee%20Shop/login-coffeeshop_nv1odl.png"
+              alt=""
+            />
+          </td>
+        </tr>
+      </tbody>
+      <thead>
+        <tr>
+          <th>Profile</th>
+          <th>Product</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <img
+              src="https://res.cloudinary.com/doncmmfaa/image/upload/v1705515209/Coffee%20Shop/profile-coffeeshop_vibg7i.png"
+              alt=""
+            />
+          </td>
+          <td>
+            <img
+              src="https://res.cloudinary.com/doncmmfaa/image/upload/v1705515210/Coffee%20Shop/product-coffeeshop_hpiwsp.png"
+              alt=""
+            />
+          </td>
+        </tr>
+      </tbody>
+      <thead>
+        <tr>
+          <th>Detail Product</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <img
+              src="https://res.cloudinary.com/doncmmfaa/image/upload/v1705515210/Coffee%20Shop/product-detail-coffeeshop_yrn2sh.png"
+              alt=""
+            />
+          </td>
+        </tr>
+      </tbody>
+    </table>
 
 <!-- <div>
   <div id="grid">
