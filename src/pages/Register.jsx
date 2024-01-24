@@ -156,7 +156,7 @@ function register() {
           <p  className='text-sm flex justify-center gap-2 lg:text-base'>
           Have An Account? 
         </p>
-        <p className='text-sm text-primary cursor-pointer lg:text-base' >Login</p>
+        <p className='text-sm text-primary cursor-pointer lg:text-base'  onClick={() => navigate("/auth/login")}>Login</p>
         </div>
         <p className="flex justify-center">or</p>
         <div className="flex gap-4">
