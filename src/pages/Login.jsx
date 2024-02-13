@@ -26,8 +26,8 @@ function login() {
     e.preventDefault();
     const {loginThunk} = userAction
     const body = {
-      Email: e.target.user_email.value,
-      Password: e.target.pwd.value,
+      email: e.target.user_email.value,
+      password: e.target.pwd.value,
     };
     dispatch(loginThunk({
       body,
